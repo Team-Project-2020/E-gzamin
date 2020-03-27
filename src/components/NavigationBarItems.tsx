@@ -1,48 +1,57 @@
-import React from "react";
+import AddIcon from "@material-ui/icons/Add";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import LayersIcon from "@material-ui/icons/Layers";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import PeopleIcon from "@material-ui/icons/People";
-import BarChartIcon from "@material-ui/icons/BarChart";
-import LayersIcon from "@material-ui/icons/Layers";
+import PostAddIcon from "@material-ui/icons/PostAdd";
+import React from "react";
+import SettingsIcon from "@material-ui/icons/Settings";
+import { NavLink } from "react-router-dom";
+
+import "./NavigationBarItems.scss";
 
 const NavigationBarItems = () => {
   return (
-    <>
-      <ListItem button>
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary="Dashboard" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <ShoppingCartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Orders" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary="Customers" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Reports" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Integrations" />
-      </ListItem>
-    </>
+    <div className="NavigationBarItems">
+      <_MenuItem to="/" label="Home">
+        <DashboardIcon />
+      </_MenuItem>
+      <_MenuItem to="/maketest" label="Make a test">
+        <PostAddIcon />
+      </_MenuItem>
+      <_MenuItem to="/group" label="Groups">
+        <PeopleIcon />
+      </_MenuItem>
+      <_MenuItem to="/addquest" label="Add Questions">
+        <AddIcon />
+      </_MenuItem>
+      <_MenuItem to="/settings" label="Settings">
+        <SettingsIcon />
+      </_MenuItem>
+      <_MenuItem to="/tests" label="Designed tests">
+        <LayersIcon />
+      </_MenuItem>
+    </div>
   );
 };
+
+const _MenuItem = ({
+  to,
+  label,
+  children
+}: {
+  to: string;
+  label: string;
+  children: any;
+}) => (
+  <NavLink to={to}>
+    <ListItem button>
+      <ListItemIcon>{children}</ListItemIcon>
+      <ListItemText primary={label} />
+    </ListItem>
+  </NavLink>
+);
 
 export default NavigationBarItems;
