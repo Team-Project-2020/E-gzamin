@@ -1,6 +1,5 @@
-import React from 'react';
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import AddQuest from "./AddQuest";
 import Group from "./Group";
@@ -8,7 +7,6 @@ import Home from "./Home";
 import MakeTest from "./MakeTest";
 import Settings from "./Settings";
 import Tests from "./Tests";
-
 
 function MainRoute() {
   return (

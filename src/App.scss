@@ -1,0 +1,9 @@
+.App {
+  display: flex;
+
+  ._Content {
+    > div {
+      height: 64px;
+    }
+  }
+}
