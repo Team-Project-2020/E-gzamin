@@ -1,10 +1,11 @@
 ﻿using E_gzamin.Models;
+using E_gzamin.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace E_gzamin.Controllers {
-    public class UserController {
+namespace E_gzamin.Repositories {
+    public class UserRepository : IUserRepository {
         private EgzaminContext _egzaminContext;
-        public UserController(EgzaminContext ec) {
+        public UserRepository(EgzaminContext ec) {
             _egzaminContext = ec;
         }
         [Route("test")]
