@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using E_gzamin.GraphQL.Queries;
+using E_gzamin.GraphQL.GraphTypes;
+using GraphQL.Server;
+using GraphQL.Types;
 
 namespace E_gzamin {
     public class Startup {
@@ -20,6 +24,10 @@ namespace E_gzamin {
             services.AddDbContext<EgzaminContext>(
                 options => options.UseNpgsql(Configuration.GetConnectionString("MyConnectionString")),
                     ServiceLifetime.Scoped);
+            services.AddSingleton<UserQuery>();
+            services.AddSingleton<UserType>();
+
+            services.AddGraphQL();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +45,8 @@ namespace E_gzamin {
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseGraphQL<ISchema>("/graphql");
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllerRoute(
