@@ -10,9 +10,9 @@ namespace E_gzamin.GraphQL.Queries
 {
     public class UserQuery :ObjectGraphType
     {
-        private readonly IUserrepository _userRepository;
+        private readonly IUserRepository _userRepository;
         
-        public UserQuery(IUserrepository userRepository)
+        public UserQuery(IUserRepository userRepository)
         {
             _userRepository = userRepository;
 
