@@ -19,6 +19,9 @@
     <PackageReference Include="GraphQL.server" Version="1.7.0.1" />
     <PackageReference Include="GraphQL.server.Core" Version="3.4.0" />
     <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="GraphQL.Server.Ui.GraphiQL" Version="3.4.0" />
+    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="3.4.0" />
+    <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="3.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
       <PrivateAssets>all</PrivateAssets>
