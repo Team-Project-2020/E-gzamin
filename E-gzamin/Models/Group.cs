@@ -12,5 +12,6 @@ namespace E_gzamin.Models {
         public User Owner { get; set; }
         public int OwnerId { get; set; }
         public ICollection<GroupUser> GroupUsers { get; set; }
+        public ICollection<Designate> Designates { get; set; }
     }
 }

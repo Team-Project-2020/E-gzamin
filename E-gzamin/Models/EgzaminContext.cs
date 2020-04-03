@@ -15,5 +15,14 @@ namespace E_gzamin.Models {
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupUser> GroupUsers { get; set; }
+        public DbSet<Designate> Designates { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<QuestionTemplate> QuestionTemplates { get; set; }
+        public DbSet<QuestionTemplateQuestion> QuestionTemplateQuestions { get; set; }
+        public DbSet<QuestionTestResult> QuestionTestResults { get; set; }
+        public DbSet<QuestionTestTemplate> QuestionTestTemplates { get; set; }
+        public DbSet<TestResult> TestResults { get; set; }
+        public DbSet<TestTemplate> TestTemplates { get; set; }
+
     }
 }

@@ -9,5 +9,7 @@ namespace E_gzamin.Models {
         public string Salt { get; set; }
         public ICollection<Group>? GroupsOwned { get; set; }
         public ICollection<GroupUser> UserGroups { get; set; }
+        public ICollection<TestResult> TestResults { get; set; }
+        public ICollection<TestTemplate> TestTemplates { get; set; }
     }
 }
