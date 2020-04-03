@@ -6,7 +6,7 @@ using E_gzamin.Models;
 
 namespace E_gzamin.Repositories.Interfaces
 {
-    public interface IUserrepository
+    public interface IUserRepository
     {
         public User AddTestUser();
         public string GetNameById(int id);
