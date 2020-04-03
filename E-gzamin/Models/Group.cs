@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace E_gzamin.Models {
-    public class Group : BaseEntity{
+    public class Group : BaseEntity {
         public string Name { get; set; }
         public string GroupCode { get; set; }
         public DateTime OpenedAt { get; set; }
