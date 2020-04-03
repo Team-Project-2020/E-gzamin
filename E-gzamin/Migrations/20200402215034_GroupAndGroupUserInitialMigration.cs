@@ -1,17 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using System;
 
-namespace E_gzamin.Migrations
-{
-    public partial class GroupAndGroupUserInitialMigration : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+namespace E_gzamin.Migrations {
+    public partial class GroupAndGroupUserInitialMigration : Migration {
+        protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.CreateTable(
                 name: "Groups",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
@@ -22,8 +18,7 @@ namespace E_gzamin.Migrations
                     ClosedAt = table.Column<DateTime>(nullable: false),
                     OwnerId = table.Column<int>(nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Groups", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Groups_Users_OwnerId",
@@ -35,13 +30,11 @@ namespace E_gzamin.Migrations
 
             migrationBuilder.CreateTable(
                 name: "GroupUsers",
-                columns: table => new
-                {
+                columns: table => new {
                     GroupId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_GroupUsers", x => new { x.UserId, x.GroupId });
                     table.ForeignKey(
                         name: "FK_GroupUsers_Groups_GroupId",
@@ -68,8 +61,7 @@ namespace E_gzamin.Migrations
                 column: "GroupId");
         }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropTable(
                 name: "GroupUsers");
 

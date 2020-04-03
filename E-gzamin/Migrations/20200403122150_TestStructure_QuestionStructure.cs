@@ -1,32 +1,26 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using System;
 
-namespace E_gzamin.Migrations
-{
-    public partial class TestStructure_QuestionStructure : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+namespace E_gzamin.Migrations {
+    public partial class TestStructure_QuestionStructure : Migration {
+        protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.CreateTable(
                 name: "Questions",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     RemovedAt = table.Column<DateTime>(nullable: true),
                     Content = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Questions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TestTemplates",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
@@ -34,8 +28,7 @@ namespace E_gzamin.Migrations
                     Name = table.Column<string>(nullable: true),
                     OwnerId = table.Column<int>(nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_TestTemplates", x => x.Id);
                     table.ForeignKey(
                         name: "FK_TestTemplates_Users_OwnerId",
@@ -47,8 +40,7 @@ namespace E_gzamin.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Designates",
-                columns: table => new
-                {
+                columns: table => new {
                     GroupId = table.Column<int>(nullable: false),
                     TestTemplateId = table.Column<int>(nullable: false),
                     Time = table.Column<int>(nullable: false),
@@ -56,8 +48,7 @@ namespace E_gzamin.Migrations
                     EndDate = table.Column<DateTime>(nullable: false),
                     PassReq = table.Column<decimal>(nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Designates", x => new { x.TestTemplateId, x.GroupId });
                     table.ForeignKey(
                         name: "FK_Designates_Groups_GroupId",
@@ -75,8 +66,7 @@ namespace E_gzamin.Migrations
 
             migrationBuilder.CreateTable(
                 name: "QuestionTemplates",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
@@ -84,8 +74,7 @@ namespace E_gzamin.Migrations
                     QuestionsCount = table.Column<int>(nullable: false),
                     TestTemplateId = table.Column<int>(nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_QuestionTemplates", x => x.Id);
                     table.ForeignKey(
                         name: "FK_QuestionTemplates_TestTemplates_TestTemplateId",
@@ -97,13 +86,11 @@ namespace E_gzamin.Migrations
 
             migrationBuilder.CreateTable(
                 name: "QuestionTestTemplates",
-                columns: table => new
-                {
+                columns: table => new {
                     QuestionId = table.Column<int>(nullable: false),
                     TestTemplateId = table.Column<int>(nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_QuestionTestTemplates", x => new { x.QuestionId, x.TestTemplateId });
                     table.ForeignKey(
                         name: "FK_QuestionTestTemplates_Questions_QuestionId",
@@ -121,8 +108,7 @@ namespace E_gzamin.Migrations
 
             migrationBuilder.CreateTable(
                 name: "TestResults",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
@@ -136,8 +122,7 @@ namespace E_gzamin.Migrations
                     UserId = table.Column<int>(nullable: false),
                     TestTemplateId = table.Column<int>(nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_TestResults", x => x.Id);
                     table.ForeignKey(
                         name: "FK_TestResults_TestTemplates_TestTemplateId",
@@ -155,13 +140,11 @@ namespace E_gzamin.Migrations
 
             migrationBuilder.CreateTable(
                 name: "QuestionTemplateQuestions",
-                columns: table => new
-                {
+                columns: table => new {
                     QuestionId = table.Column<int>(nullable: false),
                     QuestionTemplateId = table.Column<int>(nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_QuestionTemplateQuestions", x => new { x.QuestionId, x.QuestionTemplateId });
                     table.ForeignKey(
                         name: "FK_QuestionTemplateQuestions_Questions_QuestionId",
@@ -179,13 +162,11 @@ namespace E_gzamin.Migrations
 
             migrationBuilder.CreateTable(
                 name: "QuestionTestResults",
-                columns: table => new
-                {
+                columns: table => new {
                     QuestionId = table.Column<int>(nullable: false),
                     TestResultId = table.Column<int>(nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_QuestionTestResults", x => new { x.QuestionId, x.TestResultId });
                     table.ForeignKey(
                         name: "FK_QuestionTestResults_Questions_QuestionId",
@@ -242,8 +223,7 @@ namespace E_gzamin.Migrations
                 column: "OwnerId");
         }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropTable(
                 name: "Designates");
 
