@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20200402181359_initialMigration.Designer.cs" />
     <Compile Remove="Migrations\20200403132710_test.cs" />
     <Compile Remove="Migrations\20200403132710_test.Designer.cs" />
+    <Compile Remove="Migrations\20200404140807_user_refactor.cs" />
+    <Compile Remove="Migrations\20200404140807_user_refactor.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GraphQL\GraphTypes\" />
+    <Folder Include="Controllers\" />
     <Folder Include="GraphQL\Schemas\" />
     <Folder Include="GraphQL\Queries\" />
   </ItemGroup>

@@ -41,6 +41,7 @@ namespace E_gzamin {
             services.AddSingleton<UserMutation>();
             services.AddSingleton<UserQuery>();
             services.AddSingleton<UserType>();
+            services.AddSingleton<AddUserType>();
             services.AddGraphQL();
             var sp = services.BuildServiceProvider();
             services.AddSingleton<ISchema>(new UserSchema(new FuncDependencyResolver(type => sp.GetService(type))));
