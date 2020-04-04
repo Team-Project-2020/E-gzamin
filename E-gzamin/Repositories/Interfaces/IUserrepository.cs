@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using E_gzamin.Models;
 using System.Threading.Tasks;
-using E_gzamin.Models;
 
-namespace E_gzamin.Repositories.Interfaces
-{
-    public interface IUserRepository
-    {
-        public User AddTestUser();
-        public string GetNameById(int id);
-        public User ChangeUserName(int id, string new_name);
+namespace E_gzamin.Repositories.Interfaces {
+    public interface IUserRepository {
+        public Task<User> GetUserById(int id);
+        public Task<User> ChangeUserName(int id, string new_name);
+        public Task<User> AddUser(User user);
     }
 }

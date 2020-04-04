@@ -1,6 +1,8 @@
-﻿using E_gzamin.Models;
+﻿using E_gzamin.Helpers;
+using E_gzamin.Models;
 using E_gzamin.Repositories.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace E_gzamin.Repositories {
     public class UserRepository : IUserRepository {
@@ -8,23 +10,23 @@ namespace E_gzamin.Repositories {
         public UserRepository(EgzaminContext ec) {
             _egzaminContext = ec;
         }
-        [Route("test")]
-        public User AddTestUser() {
-            var user = new User { Name = "Kamil", Surname = "NOWAK", Email = "kamilNOWAK@gmail.com", HashedPassword = "1238961iawegdawjfe6q2351268351", Salt = "sul" };
-            _egzaminContext.Add(user);
-            _egzaminContext.SaveChanges();
+        public async Task<User> AddUser(User user) {
+            var salt = Hashing.GetRandomSalt();
+            user.Password = Hashing.HashPassword(user.Password, salt);
+            user.Salt = salt;
+            await _egzaminContext.AddAsync(user);
+            await _egzaminContext.SaveChangesAsync();
             return user;
         }
-        public string GetNameById(int id)
-        {
-            return _egzaminContext.Users.Find(id).Name;
+        public async Task<User> GetUserById(int id) {
+            return await _egzaminContext.User.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public User ChangeUserName(int id, string new_name)
-        {
-            _egzaminContext.Users.Find(id).Name = new_name;
-            _egzaminContext.SaveChanges();
-            return _egzaminContext.Users.Find(id);
+        public async Task<User> ChangeUserName(int id, string new_name) {
+            var user = GetUserById(id).Result;
+            user.Name = new_name;
+            await _egzaminContext.SaveChangesAsync();
+            return await GetUserById(id);
         }
     }
 }
