@@ -9,16 +9,16 @@ namespace E_gzamin.Models {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly(), (t => t.Name != "BaseEntityConfiguration"));
         }
-        public DbSet<User> Users { get; set; }
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<GroupUser> GroupUsers { get; set; }
-        public DbSet<Designate> Designates { get; set; }
-        public DbSet<Question> Questions { get; set; }
-        public DbSet<QuestionTemplate> QuestionTemplates { get; set; }
-        public DbSet<QuestionTemplateQuestion> QuestionTemplateQuestions { get; set; }
-        public DbSet<QuestionTestResult> QuestionTestResults { get; set; }
-        public DbSet<QuestionTestTemplate> QuestionTestTemplates { get; set; }
-        public DbSet<TestResult> TestResults { get; set; }
-        public DbSet<TestTemplate> TestTemplates { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Group> Group { get; set; }
+        public DbSet<GroupUser> GroupUser { get; set; }
+        public DbSet<Designate> Designate { get; set; }
+        public DbSet<Question> Question { get; set; }
+        public DbSet<QuestionTemplate> QuestionTemplate { get; set; }
+        public DbSet<QuestionTemplateQuestion> QuestionTemplateQuestion { get; set; }
+        public DbSet<QuestionTestResult> QuestionTestResult { get; set; }
+        public DbSet<QuestionTestTemplate> QuestionTestTemplate { get; set; }
+        public DbSet<TestResult> TestResult { get; set; }
+        public DbSet<TestTemplate> TestTemplate { get; set; }
     }
 }
