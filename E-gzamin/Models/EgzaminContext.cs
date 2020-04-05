@@ -20,5 +20,13 @@ namespace E_gzamin.Models {
         public DbSet<QuestionTestTemplate> QuestionTestTemplate { get; set; }
         public DbSet<TestResult> TestResult { get; set; }
         public DbSet<TestTemplate> TestTemplate { get; set; }
+        public DbSet<Answer> Answer { get; set; }
+        public DbSet<AnswerTestResult> AnswerTestResult { get; set; }
+        public DbSet<Subject> Subject { get; set; }
+        public DbSet<Course> Course { get; set; }
+        public DbSet<QuestionSubject> QuestionSubject { get; set; }
+        public DbSet<QuestionCourse> QuestionCourse { get; set; }
+
+
     }
 }
