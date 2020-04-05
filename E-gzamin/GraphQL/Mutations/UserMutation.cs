@@ -5,7 +5,7 @@ using GraphQL.Types;
 using System;
 using System.Threading.Tasks;
 
-namespace E_gzamin.GraphQL.Queries {
+namespace E_gzamin.GraphQL.Mutations {
     public class UserMutation : ObjectGraphType {
         private readonly IUserRepository _userRepository;
         public UserMutation(IUserRepository userRepository) {

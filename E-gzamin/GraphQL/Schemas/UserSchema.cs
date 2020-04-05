@@ -1,4 +1,5 @@
 ﻿using E_gzamin.GraphQL.Queries;
+using E_gzamin.GraphQL.Mutations;
 using GraphQL;
 using GraphQL.Types;
 
