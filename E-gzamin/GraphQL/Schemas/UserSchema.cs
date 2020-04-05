@@ -2,12 +2,14 @@
 using E_gzamin.GraphQL.Mutations;
 using GraphQL;
 using GraphQL.Types;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace E_gzamin.GraphQL.Schemas {
     public class UserSchema : Schema {
-        public UserSchema(IDependencyResolver resolver) : base(resolver) {
-            Query = resolver.Resolve<UserQuery>();
-            Mutation = resolver.Resolve<UserMutation>();
+        public UserSchema(IServiceProvider provider) {
+            Query = provider.GetRequiredService<UserQuery>();
+            Mutation = provider.GetRequiredService<UserMutation>();
         }
     }
 }
