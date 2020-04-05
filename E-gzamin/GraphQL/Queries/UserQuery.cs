@@ -9,9 +9,14 @@ namespace E_gzamin.GraphQL.Queries {
 
         public UserQuery(IUserRepository userRepository) {
             _userRepository = userRepository;
-            Field<UserType>("GetUserById",
+            Field<UserType>("users",
+                resolve: context => _userRepository.GetUsers());
+            Field<UserType>("getUserById",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id" }),
                 resolve: context => _userRepository.GetUserById(context.GetArgument<int>("id")));
+            Field<UserType>("getUserByEmail",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "email" }),
+                resolve: context => _userRepository.GetUserByEmail(context.GetArgument<string>("email")));
         }
     }
 }
