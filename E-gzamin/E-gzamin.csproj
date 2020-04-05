@@ -33,8 +33,8 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="GraphQL\Schemas\" />
     <Folder Include="GraphQL\Queries\" />
+    <Folder Include="GraphQL\Schemas\" />
   </ItemGroup>
 
 
