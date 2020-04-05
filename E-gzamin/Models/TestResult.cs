@@ -14,5 +14,6 @@ namespace E_gzamin.Models {
         public TestTemplate TestTemplate { get; set; }
         public int TestTemplateId { get; set; }
         public ICollection<QuestionTestResult> QuestionTestResults { get; set; }
+        public ICollection<AnswerTestResult> AnswerTestResults { get; set; }
     }
 }

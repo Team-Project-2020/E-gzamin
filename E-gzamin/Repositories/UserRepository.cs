@@ -2,13 +2,24 @@
 using E_gzamin.Models;
 using E_gzamin.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace E_gzamin.Repositories {
     public class UserRepository : IUserRepository {
         private EgzaminContext _egzaminContext;
+        public string RepositoryLifetime = "Transient";
         public UserRepository(EgzaminContext ec) {
             _egzaminContext = ec;
+        }
+        public async Task<List<User>> GetUsers() {
+            return await _egzaminContext.User.ToListAsync();
+        }
+        public async Task<User> GetUserById(int id) {
+            return await _egzaminContext.User.FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public async Task<User> GetUserByEmail(string email) {
+            return await _egzaminContext.User.FirstOrDefaultAsync(p => p.Email == email);
         }
         public async Task<User> AddUser(User user) {
             var salt = Hashing.GetRandomSalt();
@@ -18,10 +29,6 @@ namespace E_gzamin.Repositories {
             await _egzaminContext.SaveChangesAsync();
             return user;
         }
-        public async Task<User> GetUserById(int id) {
-            return await _egzaminContext.User.FirstOrDefaultAsync(p => p.Id == id);
-        }
-
         public async Task<User> ChangeUserName(int id, string new_name) {
             var user = GetUserById(id).Result;
             user.Name = new_name;
