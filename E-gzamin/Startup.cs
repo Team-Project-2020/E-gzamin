@@ -1,6 +1,7 @@
 using E_gzamin.GraphQL.GraphTypes;
 using E_gzamin.GraphQL.Queries;
 using E_gzamin.GraphQL.Schemas;
+using E_gzamin.GraphQL.Mutations;
 using E_gzamin.Models;
 using E_gzamin.Repositories;
 using E_gzamin.Repositories.Interfaces;
@@ -27,7 +28,28 @@ namespace E_gzamin {
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services) {
+
+        //stare
+        //public void ConfigureServices(IServiceCollection services) {
+        //    services.Configure<IISServerOptions>(options => {
+        //        options.AllowSynchronousIO = true; //!!!TEMPORARY SOLUTION!!!
+        //    });
+        //    services.AddDbContext<EgzaminContext>(
+        //        options => options.UseNpgsql(Configuration.GetConnectionString("MyConnectionString")),
+        //            ServiceLifetime.Singleton);
+        //    services.AddControllers();
+        //    services.AddSingleton<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+        //    services.AddTransient<IUserRepository, UserRepository>();
+        //    services.AddSingleton<UserMutation>();
+        //    services.AddSingleton<UserQuery>();
+        //    services.AddSingleton<UserType>();
+        //    services.AddSingleton<AddUserType>();
+        //    services.AddGraphQL();
+        //    var sp = services.BuildServiceProvider();
+        //    services.AddSingleton<ISchema>(new UserSchema(new FuncDependencyResolver(type => sp.GetService(type))));
+        //}
+        public void ConfigureServices(IServiceCollection services)
+        {
             services.Configure<IISServerOptions>(options => {
                 options.AllowSynchronousIO = true; //!!!TEMPORARY SOLUTION!!!
             });
@@ -36,15 +58,37 @@ namespace E_gzamin {
                     ServiceLifetime.Singleton);
             services.AddControllers();
             services.AddSingleton<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddSingleton<UserMutation>();
-            services.AddSingleton<UserQuery>();
-            services.AddSingleton<UserType>();
-            services.AddSingleton<AddUserType>();
+
+            var assem = Assembly.GetEntryAssembly().GetTypes();
+            var repositoryTypes = assem.Where(t => ((t.Namespace == ("E_gzamin.Repositories")) && !(t.FullName.Contains('+'))));
+            foreach (var repositoryType in repositoryTypes)
+            {
+                services.AddTransient(repositoryType.GetInterface($"I{repositoryType.Name}"), repositoryType);
+            }
+
+            var mutationTypes = assem.Where(t => ((t.Namespace == ("E_gzamin.GraphQL.Mutations")) && !(t.FullName.Contains('+'))));
+            foreach (var mutationType in mutationTypes)
+            {
+                services.AddSingleton(mutationType);
+            }
+
+            var queryTypes = assem.Where(t => ((t.Namespace == ("E_gzamin.GraphQL.Queries")) && !(t.FullName.Contains('+'))));
+            foreach (var queryType in queryTypes)
+            {
+                services.AddSingleton(queryType);
+            }
+
+            var typeTypes = assem.Where(t => ((t.Namespace == ("E_gzamin.GraphQL.GraphTypes")) && !(t.FullName.Contains('+'))));
+            foreach (var typeType in typeTypes)
+            {
+                services.AddSingleton(typeType);
+            }
+
             services.AddGraphQL();
             var sp = services.BuildServiceProvider();
             services.AddSingleton<ISchema>(new UserSchema(new FuncDependencyResolver(type => sp.GetService(type))));
         }
+        //szymka syf
         //public void ConfigureServices(IServiceCollection services) {
         //    services.AddControllers();
         //    services.Configure<IISServerOptions>(options => {
