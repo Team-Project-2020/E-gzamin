@@ -1,6 +1,5 @@
 using E_gzamin.GraphQL.GraphTypes;
 using E_gzamin.GraphQL.Queries;
-using E_gzamin.GraphQL.Schemas;
 using E_gzamin.GraphQL.Mutations;
 using E_gzamin.Models;
 using E_gzamin.Repositories;
@@ -63,9 +62,9 @@ namespace E_gzamin {
             {
                 services.AddSingleton(typeType);
             }
-
             services.AddGraphQL();
             services.AddSingleton<ISchema, MergedSchema>();
+
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

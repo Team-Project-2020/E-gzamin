@@ -34,6 +34,7 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="GraphQL\Queries\" />
+    <Folder Include="GraphQL\Schemas\" />
   </ItemGroup>
 
 
