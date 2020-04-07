@@ -17,6 +17,12 @@ namespace E_gzamin.GraphQL.Queries {
             FieldAsync<UserType>("getUserByEmail",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "email" }),
                 resolve: async context => await _userRepository.GetUserByEmail(context.GetArgument<string>("email")));
+            FieldAsync<LoginSessionType>("login",
+                arguments: new QueryArguments( 
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "email" } ,
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "password"}
+                ),
+                resolve: async context => await _userRepository.Login(await _userRepository.GetUserByEmail(context.GetArgument<string>("email")), context.GetArgument<string>("password")));
         }
     }
 }

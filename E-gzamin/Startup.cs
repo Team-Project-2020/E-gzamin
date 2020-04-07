@@ -18,6 +18,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using E_gzamin.GraphQL;
+using JWT;
 
 namespace E_gzamin {
     public class Startup {
@@ -31,6 +32,19 @@ namespace E_gzamin {
         {
             services.Configure<IISServerOptions>(options => {
                 options.AllowSynchronousIO = true; //!!!TEMPORARY SOLUTION!!!
+            });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddJwt(options =>
+            {
+                    // secrets
+                    options.Keys = new[] { System.Environment.GetEnvironmentVariable("SECRET_KEY") };
+
+                    // force JwtDecoder to throw exception if JWT signature is invalid
+                    options.VerifySignature = true;
             });
             services.AddDbContext<EgzaminContext>(
                 options => options.UseNpgsql(Configuration.GetConnectionString("MyConnectionString")),
@@ -79,6 +93,8 @@ namespace E_gzamin {
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

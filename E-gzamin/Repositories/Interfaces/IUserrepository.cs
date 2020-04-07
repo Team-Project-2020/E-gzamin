@@ -9,5 +9,6 @@ namespace E_gzamin.Repositories.Interfaces {
         public Task<User> GetUserByEmail(string email);
         public Task<User> ChangeUserName(int id, string new_name);
         public Task<User> AddUser(User user);
+        public Task<string> Login(User user, string password);
     }
 }
