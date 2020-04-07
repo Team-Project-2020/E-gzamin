@@ -12,5 +12,7 @@ namespace E_gzamin.Models {
         public ICollection<GroupUser> UserGroups { get; set; }
         public ICollection<TestResult> TestResults { get; set; }
         public ICollection<TestTemplate> TestTemplates { get; set; }
+        [NotMapped]
+        public object SessionToken;
     }
 }
