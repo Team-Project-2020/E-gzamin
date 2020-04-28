@@ -5,7 +5,7 @@ using GraphQL.Types;
 using System;
 using System.Threading.Tasks;
 
-namespace E_gzamin.GraphQL.Queries {
+namespace E_gzamin.GraphQL.Mutations {
     public class UserMutation : ObjectGraphType {
         private readonly IUserRepository _userRepository;
         public UserMutation(IUserRepository userRepository) {
@@ -13,9 +13,8 @@ namespace E_gzamin.GraphQL.Queries {
 
             FieldAsync<UserType>("addUser",
                 arguments: new QueryArguments(
-                            new QueryArgument<NonNullGraphType<AddUserType>> { Name = "user"} ),
+                            new QueryArgument<NonNullGraphType<AddUserType>> { Name = "user" } ),
                 resolve: async context => {
-                    Console.WriteLine("test");
                     return await _userRepository.AddUser(context.GetArgument<User>("user"));
                 });
             //Field<UserType>("changeName",

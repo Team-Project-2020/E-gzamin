@@ -1,6 +1,6 @@
 using E_gzamin.GraphQL.GraphTypes;
 using E_gzamin.GraphQL.Queries;
-using E_gzamin.GraphQL.Schemas;
+using E_gzamin.GraphQL.Mutations;
 using E_gzamin.Models;
 using E_gzamin.Repositories;
 using E_gzamin.Repositories.Interfaces;
@@ -14,6 +14,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Linq;
+using System.Reflection;
+using E_gzamin.GraphQL;
+using JWT;
 
 namespace E_gzamin {
     public class Startup {
@@ -23,30 +28,58 @@ namespace E_gzamin {
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services) {
-            //services.AddMvc();
-            services.Configure<IISServerOptions>(options =>
-            {
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.Configure<IISServerOptions>(options => {
                 options.AllowSynchronousIO = true; //!!!TEMPORARY SOLUTION!!!
             });
-            services.AddControllers();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddJwt(options =>
+            {
+                    // secrets
+                    options.Keys = new[] { System.Environment.GetEnvironmentVariable("SECRET_KEY") };
+
+                    // force JwtDecoder to throw exception if JWT signature is invalid
+                    options.VerifySignature = true;
+            });
             services.AddDbContext<EgzaminContext>(
                 options => options.UseNpgsql(Configuration.GetConnectionString("MyConnectionString")),
                     ServiceLifetime.Singleton);
             services.AddControllers();
             services.AddSingleton<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
-            services.AddTransient<IUserRepository, UserRepository>();
-            //services.AddControllersWithViews();
-            services.AddSingleton<UserMutation>();
-            services.AddSingleton<UserQuery>();
-            services.AddSingleton<UserType>();
-            services.AddSingleton<AddUserType>();
-            services.AddGraphQL();
-            var sp = services.BuildServiceProvider();
-            services.AddSingleton<ISchema>(new UserSchema(new FuncDependencyResolver(type => sp.GetService(type))));
-        }
 
+            var assem = Assembly.GetExecutingAssembly().GetExportedTypes();
+            var repositoryTypes = assem.Where(t => (t.Namespace == ("E_gzamin.Repositories")));
+            foreach (var repositoryType in repositoryTypes)
+            {
+                services.AddTransient(repositoryType.GetInterface($"I{repositoryType.Name}"), repositoryType);
+            }
+
+            var mutationTypes = assem.Where(t => (t.Namespace == ("E_gzamin.GraphQL.Mutations")));
+            foreach (var mutationType in mutationTypes)
+            {
+                services.AddSingleton(mutationType);
+            }
+
+            var queryTypes = assem.Where(t => (t.Namespace == ("E_gzamin.GraphQL.Queries")));
+            foreach (var queryType in queryTypes)
+            {
+                services.AddSingleton(queryType);
+            }
+
+            var typeTypes = assem.Where(t => (t.Namespace == ("E_gzamin.GraphQL.GraphTypes")));
+            foreach (var typeType in typeTypes)
+            {
+                services.AddSingleton(typeType);
+            }
+            services.AddGraphQL();
+            services.AddSingleton<ISchema, MergedSchema>();
+
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
@@ -61,13 +94,13 @@ namespace E_gzamin {
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseGraphQL<ISchema>("/graphql");
 
             app.UseGraphiQl("/graphiql", "/graphql");
-
-            //app.UseMvc();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllerRoute(
