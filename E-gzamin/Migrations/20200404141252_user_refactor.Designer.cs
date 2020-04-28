@@ -3,90 +3,23 @@ using System;
 using E_gzamin.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace E_gzamin.Migrations
 {
     [DbContext(typeof(EgzaminContext))]
-    partial class EgzaminContextModelSnapshot : ModelSnapshot
+    [Migration("20200404141252_user_refactor")]
+    partial class user_refactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            modelBuilder.Entity("E_gzamin.Models.Answer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Content")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("boolean");
-
-                    b.Property<int?>("QuestionId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("RemovedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("Answer");
-                });
-
-            modelBuilder.Entity("E_gzamin.Models.AnswerTestResult", b =>
-                {
-                    b.Property<int>("AnswerId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TestResultId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AnswerId", "TestResultId");
-
-                    b.HasIndex("TestResultId");
-
-                    b.ToTable("AnswerTestResult");
-                });
-
-            modelBuilder.Entity("E_gzamin.Models.Course", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("RemovedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Course");
-                });
 
             modelBuilder.Entity("E_gzamin.Models.Designate", b =>
                 {
@@ -190,36 +123,6 @@ namespace E_gzamin.Migrations
                     b.ToTable("Question");
                 });
 
-            modelBuilder.Entity("E_gzamin.Models.QuestionCourse", b =>
-                {
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("QuestionId", "CourseId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("QuestionCourse");
-                });
-
-            modelBuilder.Entity("E_gzamin.Models.QuestionSubject", b =>
-                {
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("QuestionId", "SubjectId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("QuestionSubject");
-                });
-
             modelBuilder.Entity("E_gzamin.Models.QuestionTemplate", b =>
                 {
                     b.Property<int>("Id")
@@ -291,29 +194,6 @@ namespace E_gzamin.Migrations
                     b.HasIndex("TestTemplateId");
 
                     b.ToTable("QuestionTestTemplate");
-                });
-
-            modelBuilder.Entity("E_gzamin.Models.Subject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("RemovedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Subject");
                 });
 
             modelBuilder.Entity("E_gzamin.Models.TestResult", b =>
@@ -427,28 +307,6 @@ namespace E_gzamin.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("E_gzamin.Models.Answer", b =>
-                {
-                    b.HasOne("E_gzamin.Models.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId");
-                });
-
-            modelBuilder.Entity("E_gzamin.Models.AnswerTestResult", b =>
-                {
-                    b.HasOne("E_gzamin.Models.Answer", "Answer")
-                        .WithMany("AnswerTestResults")
-                        .HasForeignKey("AnswerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_gzamin.Models.TestResult", "TestResult")
-                        .WithMany("AnswerTestResults")
-                        .HasForeignKey("TestResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("E_gzamin.Models.Designate", b =>
                 {
                     b.HasOne("E_gzamin.Models.Group", "Group")
@@ -484,36 +342,6 @@ namespace E_gzamin.Migrations
                     b.HasOne("E_gzamin.Models.User", "User")
                         .WithMany("UserGroups")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("E_gzamin.Models.QuestionCourse", b =>
-                {
-                    b.HasOne("E_gzamin.Models.Course", "Course")
-                        .WithMany("QuestionCourses")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_gzamin.Models.Question", "Question")
-                        .WithMany("QuestionCourses")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("E_gzamin.Models.QuestionSubject", b =>
-                {
-                    b.HasOne("E_gzamin.Models.Question", "Question")
-                        .WithMany("QuestionSubjects")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_gzamin.Models.Subject", "Subject")
-                        .WithMany("QuestionSubjects")
-                        .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

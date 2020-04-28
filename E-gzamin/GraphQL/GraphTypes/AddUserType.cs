@@ -2,12 +2,12 @@
 using GraphQL.Types;
 
 namespace E_gzamin.GraphQL.GraphTypes {
-    public class UserType : ObjectGraphType<User> {
-        public UserType() {
-            Field(user => user.Id);
+    public class AddUserType : InputObjectGraphType<User> {
+        public AddUserType() {
             Field(user => user.Name);
             Field(user => user.Surname);
             Field(user => user.Email);
+            Field(user => user.Password);
         }
     }
 }
