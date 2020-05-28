@@ -1,17 +1,15 @@
-import React, { useState } from "react";
-
-import MainRoute from "./components/MainRoute";
+import React from "react";
 
 import "./App.scss";
+import ApplicationLayout from "./components/ApplicationLayout";
+import { ThemeModeProvider } from "./contexts/ThemeModeContext";
 
 const App = () => {
-  const [isDrawerOpened, setIsDrawerOpened] = useState<boolean>(true);
   return (
     <div className="App">
-      <MainRoute
-        isDrawerOpened={isDrawerOpened}
-        setIsDrawerOpened={setIsDrawerOpened}
-      />
+      <ThemeModeProvider>
+        <ApplicationLayout />
+      </ThemeModeProvider>
     </div>
   );
 };
