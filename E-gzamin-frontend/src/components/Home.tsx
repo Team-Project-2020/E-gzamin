@@ -7,12 +7,17 @@ import HelpOutlineTwoToneIcon from "@material-ui/icons/HelpOutlineTwoTone";
 import test_icon from "../pictures/test_icon.svg";
 import Paper from "@material-ui/core/Paper";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
     width: "100%",
     backgroundColor: theme.palette.background.default,
   },
+  mainHeaders:{
+    color: theme.palette.text.primary,
+    marginLeft: "3rem",
+  }
 }));
 
 
@@ -111,9 +116,10 @@ function TestField(props: TestFieldType) {
 }
 
 function Home() {
+  const styles = useStyles();
   return (
     <div className="Home-content">
-      <h1>TODO</h1>
+      <h1 className={styles.mainHeaders}>TODO</h1>
       <TestField
         subject="Pszyrka"
         owner="Janusz"
