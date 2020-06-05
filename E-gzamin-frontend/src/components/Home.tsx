@@ -111,10 +111,8 @@ function TestField(props: TestFieldType) {
 }
 
 function Home() {
-  const x: string = "Home";
   return (
     <div className="Home-content">
-      <p>Hello World {x}</p>
       <h1>TODO</h1>
       <TestField
         subject="Pszyrka"
@@ -126,6 +124,28 @@ function Home() {
         available_attempts={3}
         deadline="29.02.2021"
         time={20}
+      />
+      <TestField
+        subject="Demonologia"
+        owner="Seweryn"
+        pub_date="11.12.1499"
+        result="123/134"
+        result_positive={true}
+        attempts={2}
+        available_attempts={3}
+        deadline="30.02.2021"
+        time={15}
+      />
+      <TestField
+        subject="Yerbomancja"
+        owner="Cejrowski"
+        pub_date="06.06.1944"
+        result="15/16"
+        result_positive={false}
+        attempts={1}
+        available_attempts={3}
+        deadline="31.10.2026"
+        time={99}
       />
     </div>
   );
