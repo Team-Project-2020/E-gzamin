@@ -1,9 +1,4 @@
 .App {
   display: flex;
-
-  .main-content {
-    > div {
-      height: 64px;
-    }
-  }
+  height: 100vh;
 }
