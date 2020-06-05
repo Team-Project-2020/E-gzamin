@@ -27,10 +27,13 @@ const useStyles = makeStyles((theme) => ({
   },
   question: {
     cursor: "pointer",
-    color: "#666666",
+    color: theme.palette.text.secondary,
     "&:hover": {
-      color: "#000000",
+      color: theme.palette.text.primary,
     },
+  },
+  search: {
+    width: "100%",
   },
 }));
 
@@ -39,7 +42,12 @@ const QuestionsTable = ({ questions }: QuestionsTableType) => {
 
   return (
     <Paper elevation={2} className={styles.paper}>
-      <TextField id="filled-basic" label="Filled" variant="filled" />
+      <TextField
+        className={styles.search}
+        id="filled-basic"
+        label="Filled"
+        variant="filled"
+      />
       <div className={styles.questions}>
         {questions.map(({ question }) => {
           return (
