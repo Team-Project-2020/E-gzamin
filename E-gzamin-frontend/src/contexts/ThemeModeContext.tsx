@@ -41,7 +41,7 @@ const darkTheme = createMuiTheme({
       primary: "#eeeeee",
       secondary: "#666666",
     },
-  },
+  }
 });
 
 const theme = createMuiTheme({
@@ -66,7 +66,7 @@ const theme = createMuiTheme({
       primary: "#111111",
       secondary: "#666666",
     },
-  },
+  }
 });
 
 export const ThemeModeProvider: React.FC<Props> = ({ children }) => {
