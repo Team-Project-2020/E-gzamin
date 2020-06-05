@@ -1,12 +1,15 @@
 import React from "react";
 
 import "./App.scss";
-import MainRoute from "./components/MainRoute";
+import ApplicationLayout from "./components/ApplicationLayout";
+import { ThemeModeProvider } from "./contexts/ThemeModeContext";
 
 const App = () => {
   return (
     <div className="App">
-      <MainRoute />
+      <ThemeModeProvider>
+        <ApplicationLayout />
+      </ThemeModeProvider>
     </div>
   );
 };
