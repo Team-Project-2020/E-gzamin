@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'E_gzamin_app'
+    'E_gzamin_app',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -81,8 +82,8 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'password',
-        'HOST': '192.168.0.234',
-        'PORT': '32768',
+        'HOST': '89.74.58.171',
+        'PORT': '5432',
     }
 }
 
