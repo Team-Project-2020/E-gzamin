@@ -52,6 +52,21 @@ function TestIcon(props: TestIconType) {
   );
 }
 
+type TestFieldCellType = {
+  label: string;
+  value: string|boolean;
+}
+
+function TestFieldCell(props:TestFieldCellType){
+  const label = props.label;
+  const value = props.value;
+
+  return <div style={{display:'flex', flexDirection:'column'}}>
+    <p>{label+":"}</p>
+    <p>{value}</p>
+  </div>
+}
+
 function TestField(props: TestFieldType) {
   const {
     subject,
@@ -69,16 +84,15 @@ function TestField(props: TestFieldType) {
     <div className="paper">
       <Paper elevation={2}>
         <div className="flex-container">
-          <TestIcon status="passed" />
-          <p>{subject}</p>
-          <p>{owner}</p>
-          <p>{pub_date}</p>
-          <p>{result}</p>
-          <p>{result_positive}</p>
-          <p>{attempts}</p>
-          <p>{available_attempts}</p>
-          <p>{deadline}</p>
-          <p>{time}</p>
+        <TestIcon status={result_positive?"passed":"failed"} />
+          <TestFieldCell label="Subject" value={subject}/>
+          <TestFieldCell label="Author" value={owner}/>
+          <TestFieldCell label="Publicated" value={pub_date}/>
+          <TestFieldCell label="Deadline" value={deadline}/>
+          <TestFieldCell label="Score" value={result}/>
+          <TestFieldCell label="Result" value={result_positive?"Passed":"Failed"}/>
+          <TestFieldCell label="Attempts" value={attempts+"/"+available_attempts}/>
+          <TestFieldCell label="Time" value={time+" min"}/>
         </div>
       </Paper>
     </div>
@@ -97,7 +111,7 @@ function Home() {
         subject="Pszyrka"
         owner="Janusz"
         pub_date="21.37.1410"
-        result="123/151900"
+        result="123/1500"
         result_positive={false}
         attempts={1}
         available_attempts={3}
