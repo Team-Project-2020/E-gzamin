@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import "./AddQuest.css";
 import QuestionsTable from "./QuestionsTable";
+import CategoryFilter from "./CategoryFilter";
 
 const questions = [
   {
@@ -38,6 +39,27 @@ const questions = [
   { id: 23, question: "fdsfgsdgsfdgsdgfsd" },
 ];
 
+const categories = [
+  { id: 0, name: "math" },
+  { id: 1, name: "physics" },
+  { id: 2, name: "math" },
+  { id: 3, name: "physics" },
+  { id: 4, name: "math" },
+  { id: 5, name: "math" },
+  { id: 6, name: "math" },
+  { id: 7, name: "physics" },
+  { id: 8, name: "math" },
+  { id: 9, name: "physics" },
+  { id: 10, name: "math" },
+  { id: 11, name: "math" },
+  { id: 12, name: "math" },
+  { id: 13, name: "physics" },
+  { id: 14, name: "math" },
+  { id: 15, name: "physics" },
+  { id: 16, name: "math" },
+  { id: 17, name: "math" },
+];
+
 const useStyles = makeStyles((theme) => ({
   addQuest: {
     width: "inherit",
@@ -51,6 +73,10 @@ function AddQuest() {
   const x: string = "AddQuest";
   return (
     <div className={styles.addQuest}>
+      <CategoryFilter
+        categories={categories}
+        onCategoryClick={(c) => () => {}}
+      />
       <QuestionsTable questions={questions} />
     </div>
   );
