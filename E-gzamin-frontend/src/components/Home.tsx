@@ -1,5 +1,6 @@
 import React from "react";
 import "./Home.scss";
+import Header from "./Header";
 import { Link } from "react-router-dom";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import HighlightOffTwoToneIcon from "@material-ui/icons/HighlightOffTwoTone";
@@ -23,19 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
 }));
-
-type HeaderType = {
-  content: string;
-}
-
-function Header(props: HeaderType){
-const {content} = props;
-const styles = useStyles();
-
-return <Typography className={styles.mainHeaders} variant="h3" component="h2" style={{margin:"1vh 3vw"}}>
-  {content}
-</Typography>
-}
 
 type TestFieldType = {
   subject: string;
