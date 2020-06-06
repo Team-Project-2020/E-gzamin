@@ -3,10 +3,10 @@ from django.conf import settings
 
 
 class BaseEntity(models.Model):
-    createdAt = models.DateTimeField(auto_now_add=True)
-    removedAt = models.DateTimeField(null=True)
     class Meta:
         abstract = True
+    createdAt = models.DateTimeField(auto_now_add=True)
+    removedAt = models.DateTimeField(null=True)
 
 
 class Answer(BaseEntity):
