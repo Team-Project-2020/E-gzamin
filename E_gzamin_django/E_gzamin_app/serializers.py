@@ -19,6 +19,7 @@ class AnswerSerializer(BaseEntitySerializer):
 
     def update(self, instance, validated_data):
         instance.content = validated_data.get('content', instance.content)
+        instance.save()
         return instance
 
 
@@ -26,6 +27,15 @@ class CourseSerializer(BaseEntitySerializer):
     class Meta:
         model = Course
         fields = BaseEntitySerializer.Meta.fields + ['name']
+
+    def create(self, validated_data):
+        course = Course.objects.create(**validated_data)
+        return course
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.save()
+        return instance
 
 
 class DesignateSerializer(serializers.HyperlinkedModelSerializer):
