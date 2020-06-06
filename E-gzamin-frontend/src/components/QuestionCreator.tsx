@@ -7,6 +7,8 @@ import React, { useState, ReactElement } from "react";
 import { sortBy } from "lodash";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -62,9 +64,16 @@ const QuestionCreator = (): ReactElement => {
   const addAnswer = (): void => {
     const newAnswers = [
       ...answers,
-      { text: "", isCorrect: false, id: answers[answers.length - 1].id + 1 },
+      {
+        text: "",
+        isCorrect: false,
+        id: answers[answers?.length - 1]?.id + 1 || 0,
+      },
     ];
     setAnswers(newAnswers);
+  };
+  const onRemoveAnswer = (id: number) => () => {
+    setAnswers(answers.filter((ans) => ans.id !== id));
   };
   const onSubmit = () => {};
   return (
@@ -83,6 +92,7 @@ const QuestionCreator = (): ReactElement => {
             isCorrect={isCorrect}
             key={id}
             updateAnswer={updateAnswer(id)}
+            onRemoveAnswer={onRemoveAnswer(id)}
             styles={styles}
           />
         ))}
@@ -94,7 +104,7 @@ const QuestionCreator = (): ReactElement => {
           variant="contained"
           color="primary"
         >
-          ADD
+          ADD ANSWER
         </Button>
         <Button
           onClick={onSubmit}
@@ -125,6 +135,7 @@ type _AnswerRowType = {
     "paper" | "questionInput" | "answers" | "answerRow" | "answerRowAnswer",
     string
   >;
+  onRemoveAnswer: () => void;
 };
 
 const _AnswerRow = ({
@@ -132,6 +143,7 @@ const _AnswerRow = ({
   isCorrect,
   updateAnswer,
   styles,
+  onRemoveAnswer,
 }: _AnswerRowType): ReactElement => {
   return (
     <div className={styles.answerRow}>
@@ -157,6 +169,9 @@ const _AnswerRow = ({
           />
         }
       />
+      <IconButton aria-label="delete" color="primary" onClick={onRemoveAnswer}>
+        <DeleteIcon />
+      </IconButton>
     </div>
   );
 };
