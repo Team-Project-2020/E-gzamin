@@ -1,5 +1,4 @@
 import React from "react";
-import "./MakeTest.css";
 import { Link } from "react-router-dom";
 
 function MakeTest() {
