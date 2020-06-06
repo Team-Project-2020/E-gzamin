@@ -141,7 +141,7 @@ function Home() {
   const styles = useStyles();
   return (
     <div className="Home-content">
-      <Header content="TODO"/>
+      <Header content="TODO" variant="h3"/>
       <TestField
         subject="Pszyrka"
         owner="Janusz"
@@ -153,7 +153,7 @@ function Home() {
         deadline="29.02.2021"
         time={20}
       />
-      <Header content="COMPLETED"/>
+      <Header content="COMPLETED" variant="h3"/>
       <TestField
         subject="Demonologia"
         owner="Seweryn"
@@ -165,7 +165,7 @@ function Home() {
         deadline="30.02.2021"
         time={15}
       />
-        <Header content="FAILED"/>
+        <Header content="FAILED" variant="h3"/>
         <TestField
         subject="Yerbomancja"
         owner="Cejrowski"
