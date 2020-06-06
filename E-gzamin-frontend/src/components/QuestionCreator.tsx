@@ -37,6 +37,11 @@ const useStyles = makeStyles(() => ({
   answerRowAnswer: {
     width: "60%",
   },
+  buttons: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 }));
 
 const QuestionCreator = (): ReactElement => {
@@ -61,7 +66,7 @@ const QuestionCreator = (): ReactElement => {
     ];
     setAnswers(newAnswers);
   };
-
+  const onSubmit = () => {};
   return (
     <Paper elevation={2} className={styles.paper}>
       <TextField
@@ -82,14 +87,24 @@ const QuestionCreator = (): ReactElement => {
           />
         ))}
       </div>
-      <Button
-        onClick={addAnswer}
-        className={styles.addButton}
-        variant="contained"
-        color="primary"
-      >
-        ADD
-      </Button>
+      <div className={styles.buttons}>
+        <Button
+          onClick={addAnswer}
+          className={styles.addButton}
+          variant="contained"
+          color="primary"
+        >
+          ADD
+        </Button>
+        <Button
+          onClick={onSubmit}
+          className={styles.addButton}
+          variant="contained"
+          color="primary"
+        >
+          Submit
+        </Button>
+      </div>
     </Paper>
   );
 };
