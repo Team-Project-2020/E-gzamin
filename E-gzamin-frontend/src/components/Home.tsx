@@ -16,13 +16,26 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
   },
   mainHeaders:{
-    color: theme.palette.text.primary,
-    marginLeft: "3rem",
+    color: theme.palette.text.primary
   },
   testIcon: {
     fill: theme.palette.text.primary,
   },
+
 }));
+
+type HeaderType = {
+  content: string;
+}
+
+function Header(props: HeaderType){
+const {content} = props;
+const styles = useStyles();
+
+return <Typography className={styles.mainHeaders} variant="h3" component="h2" style={{margin:"1vh 3vw"}}>
+  {content}
+</Typography>
+}
 
 type TestFieldType = {
   subject: string;
@@ -65,7 +78,6 @@ function _TestIcon(props: TestIconType) {
   return (
     <div className="test-icon">
       <TestIcon className={styles.testIcon} />
-
       <StatusIcon status={status} />
     </div>
   );
@@ -141,7 +153,7 @@ function Home() {
   const styles = useStyles();
   return (
     <div className="Home-content">
-      <h1 className={styles.mainHeaders}>TODO</h1>
+      <Header content="TODO"/>
       <TestField
         subject="Pszyrka"
         owner="Janusz"
@@ -153,6 +165,7 @@ function Home() {
         deadline="29.02.2021"
         time={20}
       />
+      <Header content="COMPLETED"/>
       <TestField
         subject="Demonologia"
         owner="Seweryn"
@@ -164,7 +177,8 @@ function Home() {
         deadline="30.02.2021"
         time={15}
       />
-      <TestField
+        <Header content="FAILED"/>
+        <TestField
         subject="Yerbomancja"
         owner="Cejrowski"
         pub_date="06.06.1944"
