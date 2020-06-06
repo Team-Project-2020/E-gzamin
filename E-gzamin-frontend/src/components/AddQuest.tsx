@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import "./AddQuest.css";
 import QuestionsTable from "./QuestionsTable";
 import CategoryFilter from "./CategoryFilter";
+import QuestionCreator from "./QuestionCreator";
 
 const questions = [
   {
@@ -65,6 +66,10 @@ const useStyles = makeStyles((theme) => ({
     width: "inherit",
     backgroundColor: theme.palette.background.default,
   },
+  questionDetails: {
+    display: "flex",
+    flexDirection: "row",
+  },
 }));
 
 function AddQuest() {
@@ -77,7 +82,10 @@ function AddQuest() {
         categories={categories}
         onCategoryClick={(c) => () => {}}
       />
-      <QuestionsTable questions={questions} />
+      <div className={styles.questionDetails}>
+        <QuestionsTable questions={questions} />
+        <QuestionCreator />
+      </div>
     </div>
   );
 }
