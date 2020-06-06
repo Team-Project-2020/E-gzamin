@@ -37,6 +37,14 @@ class QuestionSerializer(BaseEntitySerializer):
         model = Question
         fields = BaseEntitySerializer.Meta.fields + ['content']
 
+    def create(self, validated_data):
+        question = Question.objects.create(user=current,**validated_data)
+        return question
+
+    def update(self, instance, validated_data):
+        instance.content = validated_data.get('content', instance.content)
+        return instance
+
 
 class QuestionTemplateSerializer(BaseEntitySerializer):
     class Meta:

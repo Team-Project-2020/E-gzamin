@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
-import "./AddQuest.css";
 import QuestionsTable from "./QuestionsTable";
 import CategoryFilter from "./CategoryFilter";
 import QuestionCreator from "./QuestionCreator";

@@ -1,5 +1,6 @@
 import React from "react";
 import "./Home.scss";
+import Header from "./Header";
 import { Link } from "react-router-dom";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import HighlightOffTwoToneIcon from "@material-ui/icons/HighlightOffTwoTone";
@@ -23,19 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
 }));
-
-type HeaderType = {
-  content: string;
-}
-
-function Header(props: HeaderType){
-const {content} = props;
-const styles = useStyles();
-
-return <Typography className={styles.mainHeaders} variant="h3" component="h2" style={{margin:"1vh 3vw"}}>
-  {content}
-</Typography>
-}
 
 type TestFieldType = {
   subject: string;
@@ -153,7 +141,7 @@ function Home() {
   const styles = useStyles();
   return (
     <div className="Home-content">
-      <Header content="TODO"/>
+      <Header content="TODO" variant="h3"/>
       <TestField
         subject="Pszyrka"
         owner="Janusz"
@@ -165,7 +153,7 @@ function Home() {
         deadline="29.02.2021"
         time={20}
       />
-      <Header content="COMPLETED"/>
+      <Header content="COMPLETED" variant="h3"/>
       <TestField
         subject="Demonologia"
         owner="Seweryn"
@@ -177,7 +165,7 @@ function Home() {
         deadline="30.02.2021"
         time={15}
       />
-        <Header content="FAILED"/>
+        <Header content="FAILED" variant="h3"/>
         <TestField
         subject="Yerbomancja"
         owner="Cejrowski"
