@@ -30,7 +30,8 @@ class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = super().get_queryset()
         if self.request.user.is_superuser:
             return qs
-        return qs.filter(owner=self.request.user)
+        print(self.request.user.id, "Question \n")
+        return qs.filter(owner=self.request.user.id)
 
 class CoursesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -42,4 +43,5 @@ class CoursesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = super().get_queryset()
         if self.request.user.is_superuser:
             return qs
-        return qs.filter(owner=self.request.user)
+        print(self.request.user.id,"Course \n")
+        return qs.filter(owner=self.request.user.id)
