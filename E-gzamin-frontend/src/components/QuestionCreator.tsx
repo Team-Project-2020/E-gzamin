@@ -9,6 +9,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { QuestionType } from "../types";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -46,14 +47,19 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const QuestionCreator = (): ReactElement => {
+type QuestionCreatorType = {
+  editedQuestion: QuestionType | undefined;
+};
+const QuestionCreator = ({
+  editedQuestion,
+}: QuestionCreatorType): ReactElement => {
   const styles = useStyles();
-  const [question, setQuestion] = useState<string>("");
-  const [answers, setAnswers] = useState<Array<AnswerStateType>>([
-    { id: 1, text: "30kg", isCorrect: false },
-    { id: 2, text: "20kg", isCorrect: false },
-    { id: 3, text: "40kg", isCorrect: true },
-  ]);
+  const [question, setQuestion] = useState<string>(
+    editedQuestion?.question || ""
+  );
+  const [answers, setAnswers] = useState<Array<AnswerStateType>>(
+    editedQuestion?.answers || []
+  );
   const updateAnswer = (id: number) => (answer: AnswerType): void =>
     setAnswers(
       sortBy(
