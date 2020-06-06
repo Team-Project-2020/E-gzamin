@@ -44,12 +44,6 @@ class QuestionTemplateSerializer(BaseEntitySerializer):
         fields = BaseEntitySerializer.Meta.fields + ['questionsCount']
 
 
-class SubjectSerializer(BaseEntitySerializer):
-    class Meta:
-        model = Subject
-        fields = BaseEntitySerializer.Meta.fields + ['name']
-
-
 class TestResultSerializer(BaseEntitySerializer):
     class Meta:
         model = TestResult
