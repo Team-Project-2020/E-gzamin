@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, ReactElement } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
+import { QuestionType } from "../types";
+import classnames from "classnames";
 
-type Question = {
-  id: number;
-  question: string;
-};
 type QuestionsTableType = {
-  questions: Array<Question>;
+  questions: Array<QuestionType>;
+  selectedQuestions: Array<QuestionType | undefined>;
+  onSelect: (question: QuestionType) => void;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -31,13 +31,20 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       color: theme.palette.text.primary,
     },
+    "&.isSelected": {
+      color: theme.palette.text.primary,
+    },
   },
   search: {
     width: "100%",
   },
 }));
 
-const QuestionsTable = ({ questions }: QuestionsTableType) => {
+const QuestionsTable = ({
+  questions,
+  selectedQuestions,
+  onSelect,
+}: QuestionsTableType): ReactElement => {
   const styles = useStyles();
 
   return (
@@ -49,15 +56,20 @@ const QuestionsTable = ({ questions }: QuestionsTableType) => {
         variant="filled"
       />
       <div className={styles.questions}>
-        {questions.map(({ question }) => {
+        {questions.map((question) => {
           return (
             <Box
-              className={styles.question}
+              className={classnames(styles.question, {
+                isSelected: selectedQuestions?.find(
+                  (q) => q?.id === question.id
+                ),
+              })}
               component="span"
               m={1}
-              onClick={() => console.log("question click")}
+              key={question.id}
+              onClick={(): void => onSelect(question)}
             >
-              {question}
+              {question.question}
             </Box>
           );
         })}

@@ -1,5 +1,4 @@
 import React from "react";
-import "./Tests.css";
 import { Link } from "react-router-dom";
 
 function Tests() {
