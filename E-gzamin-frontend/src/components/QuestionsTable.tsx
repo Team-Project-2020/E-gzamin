@@ -8,7 +8,7 @@ import classnames from "classnames";
 
 type QuestionsTableType = {
   questions: Array<QuestionType>;
-  selected: QuestionType | undefined;
+  selectedQuestions: Array<QuestionType | undefined>;
   onSelect: (question: QuestionType) => void;
 };
 
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestionsTable = ({
   questions,
-  selected,
+  selectedQuestions,
   onSelect,
 }: QuestionsTableType): ReactElement => {
   const styles = useStyles();
@@ -60,7 +60,9 @@ const QuestionsTable = ({
           return (
             <Box
               className={classnames(styles.question, {
-                isSelected: selected?.id === question.id,
+                isSelected: selectedQuestions?.find(
+                  (q) => q?.id === question.id
+                ),
               })}
               component="span"
               m={1}
