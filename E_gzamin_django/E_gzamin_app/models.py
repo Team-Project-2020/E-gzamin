@@ -17,6 +17,7 @@ class Answer(BaseEntity):
 
 class Course(BaseEntity):
     name = models.CharField(max_length=64)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class Designate(models.Model):
@@ -43,17 +44,13 @@ class Group(BaseEntity):
 class Question(BaseEntity):
     content = models.TextField()
     questionTemplates = models.ManyToManyField("QuestionTemplate")
-    subjects = models.ManyToManyField("Subject")
     courses = models.ManyToManyField("Course")
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class QuestionTemplate(BaseEntity):
     questionsCount = models.IntegerField()
     testTemplate = models.ForeignKey("TestTemplate", on_delete=models.DO_NOTHING)
-
-
-class Subject(BaseEntity):
-    name = models.CharField(max_length=64)
 
 
 class TestResult(BaseEntity):
@@ -65,8 +62,6 @@ class TestResult(BaseEntity):
     finishedAt = models.DateTimeField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     testTemplate = models.ForeignKey("TestTemplate", on_delete=models.DO_NOTHING)
-    answers = models.ManyToManyField(Answer)
-    questions = models.ManyToManyField(Question)
 
 
 class TestTemplate(BaseEntity):
