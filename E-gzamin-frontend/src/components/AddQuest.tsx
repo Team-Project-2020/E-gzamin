@@ -49,7 +49,7 @@ function AddQuest() {
       <div className={styles.questionDetails}>
         <QuestionsTable
           questions={questions}
-          selected={selectedQuestion}
+          selectedQuestions={[selectedQuestion]}
           onSelect={(question: QuestionType): void =>
             setSelectedQuestion(question)
           }
