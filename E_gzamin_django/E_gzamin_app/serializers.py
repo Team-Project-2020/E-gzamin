@@ -11,7 +11,15 @@ class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
 class AnswerSerializer(BaseEntitySerializer):
     class Meta:
         model = Answer
-        fields = BaseEntitySerializer.Meta.fields + ['content', 'isCorrect']
+        fields = BaseEntitySerializer.Meta.fields + ['content', 'isCorrect', 'question']
+
+    def create(self, validated_data):
+        answer = Answer.objects.create(**validated_data)
+        return answer
+
+    def update(self, instance, validated_data):
+        instance.content = validated_data.get('content', instance.content)
+        return instance
 
 
 class CourseSerializer(BaseEntitySerializer):
@@ -36,6 +44,15 @@ class QuestionSerializer(BaseEntitySerializer):
     class Meta:
         model = Question
         fields = BaseEntitySerializer.Meta.fields + ['content']
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        question = Question.objects.create(owner=user, **validated_data)
+        return question
+
+    def update(self, instance, validated_data):
+        instance.content = validated_data.get('content', instance.content)
+        return instance
 
 
 class QuestionTemplateSerializer(BaseEntitySerializer):

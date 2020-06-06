@@ -1,10 +1,11 @@
 import React from "react";
 import "./Home.scss";
+import Header from "./Header";
 import { Link } from "react-router-dom";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import HighlightOffTwoToneIcon from "@material-ui/icons/HighlightOffTwoTone";
 import HelpOutlineTwoToneIcon from "@material-ui/icons/HelpOutlineTwoTone";
-
+import Grid from '@material-ui/core/Grid';
 import TestIcon from "../pictures/TestIcon";
 import Paper from "@material-ui/core/Paper";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
@@ -16,12 +17,15 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
   },
   mainHeaders:{
-    color: theme.palette.text.primary,
-    marginLeft: "3rem",
+    color: theme.palette.text.primary
   },
   testIcon: {
     fill: theme.palette.text.primary,
   },
+  root: {
+    flexGrow: 1,
+  },
+
 }));
 
 type TestFieldType = {
@@ -65,7 +69,6 @@ function _TestIcon(props: TestIconType) {
   return (
     <div className="test-icon">
       <TestIcon className={styles.testIcon} />
-
       <StatusIcon status={status} />
     </div>
   );
@@ -105,30 +108,50 @@ function TestField(props: TestFieldType) {
   const field = (
     <div className={`styles.mainContent, paper`}>
       <Paper elevation={2}>
-        <div className="flex-container">
-          <_TestIcon
-            status={
-              available_attempts == attempts
-                ? "todo"
-                : result_positive
-                ? "passed"
-                : "failed"
-            }
-          />
-          <TestFieldCell label="Subject" value={subject} />
-          <TestFieldCell label="Author" value={owner} />
-          <TestFieldCell label="Publicated" value={pub_date} />
-          <TestFieldCell label="Deadline" value={deadline} />
-          <TestFieldCell label="Score" value={result} />
-          <TestFieldCell
-            label="Result"
-            value={result_positive ? "Passed" : "Failed"}
-          />
-          <TestFieldCell
-            label="Attempts"
-            value={attempts + "/" + available_attempts}
-          />
-          <TestFieldCell label="Time" value={time + " min"} />
+        <div className={"flex-container, styles.root"}>
+          <Grid container item xs={12} spacing={0}>
+          <Grid  container item xs={1} spacing={0}>
+            <_TestIcon
+              status={
+                available_attempts == attempts
+                  ? "todo"
+                  : result_positive
+                  ? "passed"
+                  : "failed"
+              }
+            />
+          </Grid>
+          <Grid  container item xs={2} spacing={0}>
+            <TestFieldCell label="Subject" value={subject} />
+          </Grid>
+          <Grid container item xs={2} spacing={0}>
+            <TestFieldCell label="Author" value={owner} />
+          </Grid>
+          <Grid container item xs={1} spacing={0}>
+            <TestFieldCell label="Publicated" value={pub_date} />
+          </Grid>
+          <Grid container item xs={1} spacing={0}>
+            <TestFieldCell label="Deadline" value={deadline} />
+          </Grid>
+          <Grid container item xs={1} spacing={0}>
+            <TestFieldCell label="Score" value={result} />
+          </Grid>
+          <Grid container item xs={1} spacing={0}>
+            <TestFieldCell
+              label="Result"
+              value={result_positive ? "Passed" : "Failed"}
+            />
+          </Grid>
+          <Grid container item xs={1} spacing={0}>
+            <TestFieldCell
+              label="Attempts"
+              value={attempts + "/" + available_attempts}
+            />
+          </Grid>
+          <Grid container item xs={1} spacing={0}>
+            <TestFieldCell label="Time" value={time + " min"} />
+          </Grid>
+          </Grid>
         </div>
       </Paper>
     </div>
@@ -141,7 +164,7 @@ function Home() {
   const styles = useStyles();
   return (
     <div className="Home-content">
-      <h1 className={styles.mainHeaders}>TODO</h1>
+      <Header content="TODO" variant="h3"/>
       <TestField
         subject="Pszyrka"
         owner="Janusz"
@@ -153,6 +176,7 @@ function Home() {
         deadline="29.02.2021"
         time={20}
       />
+      <Header content="COMPLETED" variant="h3"/>
       <TestField
         subject="Demonologia"
         owner="Seweryn"
@@ -164,7 +188,8 @@ function Home() {
         deadline="30.02.2021"
         time={15}
       />
-      <TestField
+        <Header content="FAILED" variant="h3"/>
+        <TestField
         subject="Yerbomancja"
         owner="Cejrowski"
         pub_date="06.06.1944"
