@@ -32,14 +32,15 @@ class Designate(models.Model):
 
 class Group(BaseEntity):
     name = models.CharField(max_length=64)
-    groupCode = models.CharField(max_length=16)
+    groupCode = models.CharField(max_length=16, unique=True)
     openedAt = models.DateTimeField(null=True)
     closedAt = models.DateTimeField(null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE,
                               related_name="owner")
     members = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                     related_name="is_member_of")
+                                     related_name="is_member_of",
+                                     blank=True)
 
 
 class Question(BaseEntity):

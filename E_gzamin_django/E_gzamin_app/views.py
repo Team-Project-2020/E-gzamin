@@ -5,10 +5,11 @@ from django.contrib.auth.models import User
 from E_gzamin_app.models import *
 from E_gzamin_app.serializers import *
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 
 class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
@@ -66,6 +67,16 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = Group.objects.filter(members__in=User.objects.filter(id=self.request.user.id))
         return qs
 
+    @action(detail=False, methods=['patch'])
+    def add_user(self, request, pk=None):
+        group = get_object_or_404(Group.objects.all(), groupCode=request.data.get('groupCode'))
+        if self.request.user.is_superuser:
+            group.members.add(User.objects.get(username=request.data.get('username')))
+            group.save()
+            return Response({'status': 'user added'})
+        group.members.add(User.objects.get(id=self.request.user.id))
+        group.save()
+        return Response({'status': 'user added'})
 
 class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -86,5 +97,8 @@ class MemberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def get_queryset(self):
+        group = self.request.query_params.get('group', None)
+        if group is not None:
+            return User.objects.filter(is_member_of__in=[group])
         qs = User.objects.filter(is_member_of__in=Group.objects.filter(members__in=[self.request.user.id]))
         return qs
