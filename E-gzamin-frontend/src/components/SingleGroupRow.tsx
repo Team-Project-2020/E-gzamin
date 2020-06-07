@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Collapse from "@material-ui/core/Collapse";
+import GroupMembersTable from "./GroupMembersTable";
 
 type SingleGroupRowProps = {
   name: string;
   code: string;
-  members: Array<{ email: string }>;
+  members: Array<{
+    id: number;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  }>;
   onDelete?: () => void | undefined;
   index: number;
 };
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   groupRowItem: {
     margin: "auto",
   },
@@ -22,6 +29,9 @@ const useStyles = makeStyles(() => ({
     margin: "auto",
     gridColumn: "2",
     padding: "10px 0px",
+  },
+  clickable: {
+    cursor: "pointer",
   },
   itemName: {
     gridArea: "name",
@@ -34,21 +44,33 @@ const useStyles = makeStyles(() => ({
     margin: "auto",
     gridColumn: "3",
   },
+  singleGroupSpace: {
+    borderBottomWidth: "2px",
+    borderBottomStyle: "solid",
+    borderBottomColor: theme.palette.primary.main,
+    gridArea: "space",
+    gridColumn: "1 / 4",
+  },
 }));
 const SingleGroupRow: React.FC<SingleGroupRowProps> = (props) => {
   const { name, code, members, onDelete, index } = props;
   const styles = useStyles();
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const toggleOpen = (): void => setOpen(!isOpen);
+
   return (
     <>
       <GroupRowItem
         content={name}
-        className={styles.itemName}
-        style={{ gridRow: index * 2 + 1 }}
+        className={`${styles.itemName} ${onDelete && styles.clickable}`}
+        style={{ gridRow: index * 3 + 1 }}
+        onClick={toggleOpen}
       />
       <GroupRowItem
         content={code}
-        className={styles.itemCode}
-        style={{ gridRow: index * 2 + 1 }}
+        className={`${styles.itemCode} ${onDelete && styles.clickable}`}
+        style={{ gridRow: index * 3 + 1 }}
+        onClick={toggleOpen}
       />
       {onDelete && (
         <IconButton
@@ -56,10 +78,24 @@ const SingleGroupRow: React.FC<SingleGroupRowProps> = (props) => {
           aria-label="delete"
           color="default"
           onClick={onDelete}
-          style={{ gridRow: index * 2 + 1 }}
+          style={{ gridRow: index * 3 + 1 }}
         >
           <DeleteIcon />
         </IconButton>
+      )}
+      {index * 2 !== 0 && (
+        <div
+          className={styles.singleGroupSpace}
+          style={{ gridRow: index * 3 }}
+        ></div>
+      )}
+      {onDelete && (
+        <Collapse
+          style={{ gridColumn: "1 / 4", gridRow: index * 3 + 2 }}
+          in={isOpen}
+        >
+          <GroupMembersTable members={members} />
+        </Collapse>
       )}
     </>
   );
@@ -69,14 +105,16 @@ type GroupRowItemProps = {
   content: string;
   className: string;
   style: any;
+  onClick?: () => void;
 };
 const GroupRowItem: React.FC<GroupRowItemProps> = ({
   content,
   className,
   style,
+  onClick,
 }) => {
   return (
-    <div className={className} style={style}>
+    <div className={className} onClick={onClick} style={style}>
       {content}
     </div>
   );

@@ -28,14 +28,18 @@ type HeaderType = {
     | "overline"
     | "srOnly"
     | undefined;
+  className?: string;
 };
 
 function Header(props: HeaderType) {
-  const { content, variant = "h3" } = props;
+  const { content, variant = "h3", className } = props;
   const styles = useStyles();
 
   return (
-    <Typography className={styles.mainHeaders} variant={variant}>
+    <Typography
+      className={`${styles.mainHeaders} ${className}`}
+      variant={variant}
+    >
       {content}
     </Typography>
   );

@@ -33,25 +33,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   createGroupButton: {
     margin: "15px",
   },
-  group: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomWidth: "2px",
-    marginTop: "20px",
-    borderBottomStyle: "solid",
-    borderBottomColor: theme.palette.primary.main,
-  },
-  groupRowItem: {
-    margin: "auto",
-  },
-  singleGroupSpace: {
-    borderBottomWidth: "2px",
-    borderBottomStyle: "solid",
-    borderBottomColor: theme.palette.primary.main,
-    gridArea: "space",
-    gridColumn: "1 / 4",
-  },
   grid: {
     display: "grid",
     gridTemplateRows: "50px",
@@ -69,14 +50,11 @@ function Group() {
 type _CreatedGroupsPropsType = {
   styles: Record<
     | "groupContent"
+    | "grid"
     | "paper"
     | "createGroup"
     | "createGroupInput"
-    | "createGroupButton"
-    | "group"
-    | "groupRowItem"
-    | "grid"
-    | "singleGroupSpace",
+    | "createGroupButton",
     string
   >;
 };
@@ -100,11 +78,27 @@ const _CreatedGroups: React.FC<_CreatedGroupsPropsType> = (props) => {
       name: "gfd",
       code: "50422",
       members: [
-        { email: "xd@fds.pl" },
-        { email: "fdsghdf@fdfsd.pl" },
-        { email: "ffdsgsdfghdf@fdfsd.pl" },
+        {
+          id: 1,
+          email: "xd@fds.pl",
+          firstName: "dfasfasd",
+          lastName: "dasfsedrfwe",
+        },
+        {
+          id: 2,
+          email: "fdsghdf@fdfsd.pl",
+          firstName: "dfasfasd",
+          lastName: "dasfsedrfwe",
+        },
+        {
+          id: 3,
+          email: "ffdsgsdfghdf@fdfsd.pl",
+          firstName: "dfasfasd",
+          lastName: "dasfsedrfwe",
+        },
       ],
     },
+    { id: 15, name: "xdfvdsfgfdsfsdfsdf", code: "50421", members: [] },
   ];
   return (
     <>
@@ -134,15 +128,9 @@ const _CreatedGroups: React.FC<_CreatedGroupsPropsType> = (props) => {
                 name={name}
                 code={code}
                 members={members}
-                onDelete={id ? () => {} : undefined}
+                onDelete={id ? (): void => {} : undefined}
                 index={index}
               />
-              {index * 2 !== 0 && (
-                <div
-                  className={styles.singleGroupSpace}
-                  style={{ gridRow: index * 2 }}
-                ></div>
-              )}
             </>
           ))}
         </div>
