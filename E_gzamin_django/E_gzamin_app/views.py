@@ -27,13 +27,13 @@ class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return lst
 
     def retrieve(self, request, pk=None):
-        qs = Answer.objects.filter(question__in=Question.objects.filter(owner=self.request.user.id))
+        qs = self.get_queryset()
         answer = get_object_or_404(qs, pk=pk)
         serializer = AnswerSerializer(answer, context={'request': request})
         return Response(serializer.data)
 
     def update(self, request, pk=None):
-        qs = Answer.objects.filter(question__in=Question.objects.filter(owner=self.request.user.id))
+        qs = self.get_queryset()
         answer = get_object_or_404(qs, pk=pk)
         answer.content = request.data.get("content", answer.content)
         answer.isCorrect = request.data.get("isCorrect", answer.isCorrect)
