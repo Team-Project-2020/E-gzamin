@@ -16,4 +16,3 @@ courses_router = router.register(r'courses', CoursesViewSet)
 courses_router.register('questions', QuestionViewSet,basename='course-questions',parents_query_lookups=['courses'])
 
 groups_router = router.register(r'groups', GroupViewSet)
-groups_router.register('members', MemberViewSet, basename='group-members', parents_query_lookups=['groups'])
