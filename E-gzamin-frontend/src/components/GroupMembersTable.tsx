@@ -2,12 +2,8 @@ import React, { useState, ReactElement } from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Header from "./Header";
 
-type Member = {
-  id?: number;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-};
+import { Member } from "../types";
+
 type MembersTableProps = {
   members: Array<Member>;
 };
@@ -41,7 +37,11 @@ const GroupMembersTable: React.FC<MembersTableProps> = ({ members }) => {
     email: "Email",
   };
   if (!members.length)
-    return <div className={styles.rowItem}>This group is empty</div>;
+    return (
+      <div className={styles.rowItem}>
+        This group is empty or you don't have the privileges to see the members
+      </div>
+    );
 
   return (
     <>

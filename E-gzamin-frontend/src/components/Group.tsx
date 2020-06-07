@@ -1,4 +1,4 @@
-import React, { Props } from "react";
+import React, { useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -8,12 +8,13 @@ import Header from "./Header";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SingleGroupRow from "./SingleGroupRow";
+import { Member } from "../types";
 
 const useStyles = makeStyles((theme: Theme) => ({
   groupContent: {
     color: theme.palette.text.primary,
     padding: "20px",
-    width: "80%",
+    minWidth: "1100px",
   },
   paper: {
     padding: "20px",
@@ -100,43 +101,121 @@ const _CreatedGroups: React.FC<_CreatedGroupsPropsType> = (props) => {
     },
     { id: 15, name: "xdfvdsfgfdsfsdfsdf", code: "50421", members: [] },
   ];
+
+  const onRemoveGroup = (groupId) => {
+    console.log("remove group", groupId);
+  };
+  const onLeaveGroup = (groupId) => {
+    console.log("leave group", groupId);
+  };
+  const onCreateGroup = (groupName) => {
+    console.log("create group", groupName);
+  };
+  const onJoinGroup = (groupCode) => {
+    console.log("join to the group", groupCode);
+  };
   return (
     <>
-      <Header content="Created Groups" />
+      <GroupTable
+        groups={groups}
+        styles={styles}
+        headerContent="Created Groups"
+        inputPrompt="Group name"
+        onRemove={onRemoveGroup}
+        onButtonClick={onCreateGroup}
+        buttonText="Create group"
+        onDeletePrompt="remove group"
+      />
+      <GroupTable
+        groups={groups}
+        styles={styles}
+        inputPrompt="Group code"
+        headerContent="Groups you joined"
+        buttonText="Join Group"
+        onDeletePrompt="leave"
+        onRemove={onLeaveGroup}
+        onButtonClick={onJoinGroup}
+      />
+    </>
+  );
+};
+type Group = {
+  id: number;
+  name: string;
+  code: string;
+  members: Array<Member>;
+};
+
+type GroupTableProps = {
+  groups: Array<Group>;
+  styles: Record<
+    | "groupContent"
+    | "grid"
+    | "paper"
+    | "createGroup"
+    | "createGroupInput"
+    | "createGroupButton",
+    string
+  >;
+  buttonText: string;
+  inputPrompt: string;
+  headerContent: string;
+  onRemove: (groupId: number) => void;
+  onButtonClick: (input: string) => void;
+  onDeletePrompt?: string;
+};
+const GroupTable = ({
+  groups,
+  styles,
+  headerContent,
+  onRemove,
+  buttonText,
+  inputPrompt,
+  onButtonClick,
+  onDeletePrompt,
+}: GroupTableProps) => {
+  const [textFieldValue, setTextFieldValue] = useState<string | undefined>(
+    undefined
+  );
+  return (
+    <>
+      <Header content={headerContent} />
       <Paper className={styles.paper}>
         <div className={styles.createGroup}>
           <TextField
             className={styles.createGroupInput}
             id="standard-basic"
-            value={""}
-            onChange={({ target }): void => {}}
-            label="Group name"
+            value={textFieldValue}
+            onChange={({ target }): void => setTextFieldValue(target.value)}
+            label={inputPrompt}
           />
           <Button
             className={styles.createGroupButton}
-            onClick={() => {}}
+            onClick={() => onButtonClick(textFieldValue)}
             variant="contained"
             color="primary"
           >
-            CREATE A GROUP
+            {buttonText}
           </Button>
         </div>
         <div className={styles.grid}>
-          {groups.map(({ id, name, code, members }, index) => (
-            <>
-              <SingleGroupRow
-                name={name}
-                code={code}
-                members={members}
-                onDelete={id ? (): void => {} : undefined}
-                index={index}
-              />
-            </>
-          ))}
+          {groups.map(({ id, name, code, members }, index) => {
+            return (
+              <>
+                <SingleGroupRow
+                  name={name}
+                  code={code}
+                  members={members}
+                  onDelete={id ? () => onRemove(id) : undefined}
+                  index={index}
+                  onDeletePrompt={onDeletePrompt}
+                />
+              </>
+            );
+          })}
         </div>
       </Paper>
     </>
   );
 };
-
 export default Group;
