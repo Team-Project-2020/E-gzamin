@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from E_gzamin_app.models import *
+from django.contrib.auth.models import User
 
 
 class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
@@ -19,6 +20,7 @@ class AnswerSerializer(BaseEntitySerializer):
 
     def update(self, instance, validated_data):
         instance.content = validated_data.get('content', instance.content)
+        instance.save()
         return instance
 
 
@@ -26,6 +28,15 @@ class CourseSerializer(BaseEntitySerializer):
     class Meta:
         model = Course
         fields = BaseEntitySerializer.Meta.fields + ['name']
+
+    def create(self, validated_data):
+        course = Course.objects.create(**validated_data)
+        return course
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.save()
+        return instance
 
 
 class DesignateSerializer(serializers.HyperlinkedModelSerializer):
@@ -37,7 +48,11 @@ class DesignateSerializer(serializers.HyperlinkedModelSerializer):
 class GroupSerializer(BaseEntitySerializer):
     class Meta:
         model = Group
-        fields = BaseEntitySerializer.Meta.fields + ['name', 'groupCode', 'openedAt', 'closedAt']
+        fields = BaseEntitySerializer.Meta.fields + ['name', 'groupCode', 'openedAt', 'closedAt', 'members']
+
+    def create(self, validated_data):
+        group = Group.objects.create(**validated_data)
+        return group
 
 
 class QuestionSerializer(BaseEntitySerializer):
@@ -55,12 +70,6 @@ class QuestionSerializer(BaseEntitySerializer):
         return instance
 
 
-class QuestionTemplateSerializer(BaseEntitySerializer):
-    class Meta:
-        model = QuestionTemplate
-        fields = BaseEntitySerializer.Meta.fields + ['questionsCount']
-
-
 class TestResultSerializer(BaseEntitySerializer):
     class Meta:
         model = TestResult
@@ -72,3 +81,9 @@ class TestTemplateSerializer(BaseEntitySerializer):
     class Meta:
         model = TestTemplate
         fields = BaseEntitySerializer.Meta.fields + ['name']
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'is_member_of']
