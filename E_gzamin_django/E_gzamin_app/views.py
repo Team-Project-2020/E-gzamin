@@ -116,3 +116,94 @@ class MemberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             return User.objects.filter(is_member_of__in=[group])
         qs = User.objects.filter(is_member_of__in=Group.objects.filter(members__in=[self.request.user.id]))
         return qs
+
+class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = TestTemplate.objects.all()
+    serializer_class = TestTemplateSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.is_superuser:
+            return qs
+        return qs.filter(owned_by=self.request.user.id)
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset()
+        template = get_object_or_404(qs, pk=pk)
+        serializer = TestTemplateSerializer(template, context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        qs = self.get_queryset()
+        template = get_object_or_404(qs, pk=pk)
+        if 'questions' in request.data:
+            template.questions.clear()
+            for question_id in request.data[questions]:
+                template.questions.add(question_id)
+        template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
+        template.save()
+        serializer = TestTemplateSerializer(template, context={'request': request})
+        return Response(serializer.data)
+
+class TestResultViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = TestResult.objects.all()
+    serializer_class = TestResultSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.is_superuser:
+            return qs
+        qs2 = qs.filter(testtemplate__in=TestTemplate.objects.filter(owned_by=[self.request.user.id]))
+        return qs2.union(qs.filter(user=self.request.user.id))
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset()
+        result = get_object_or_404(qs, pk=pk)
+        serializer = TestTemplateSerializer(result, context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        qs = self.get_queryset()
+        result = get_object_or_404(qs, pk=pk)
+        result.maxPoints = request.data.get("maxPoints", 0.00)
+        result.isPassed = request.data.get("isPassed", False)
+        result.completedAt = request.data.get("completedAt", result.completedAt)
+        result.startedAt = request.data.get("startedAt", result.startedAt)
+        result.finishedAt = request.data.get("finishedAt", result.finishedAt)
+        result.testTemplate = request.data.get("testTemplate", result.testTemplate)
+        result.save()
+        serializer = TestResultSerializer(result, context={'request': request})
+        return Response(serializer.data)
+
+class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = Designate.objects.all()
+    serializer_class = DesignateSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.is_superuser:
+            return qs
+        qs2 = qs.filter(group__in=Group.objects.filter(members__in=[self.request.user.id]))
+        return qs2.union(qs.filter(user=self.request.user.id))
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset()
+        designate = get_object_or_404(qs, pk=pk)
+        serializer = DesignateSerializer(designate, context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        qs = self.get_queryset()
+        designate = get_object_or_404(qs, pk=pk)
+        designate.time = request.data.get("time", result.time)
+        designate.startDate = request.data.get("startDate", result.startDate)
+        designate.endDate = request.data.get("endDate", result.endDate)
+        designate.passReq = request.data.get("passReq", result.passReq)
+        designate.group = request.data.get("group", result.group)
+        designate.testTemplate = request.data.get("testTemplate", result.testTemplate)
+        designate.save()
+        serializer = DesignateSerializer(designate, context={'request': request})
+        return Response(serializer.data)
