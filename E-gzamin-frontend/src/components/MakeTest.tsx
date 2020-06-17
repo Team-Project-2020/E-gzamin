@@ -25,12 +25,20 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
   },
-  generateTestButton: {
-    margin: "20px",
+
+  courseSelect: {
+    minWidth: "250px",
+    marginTop: "0px",
+    marginLeft: "0px",
+    marginRight: "0px",
+    marginBottom: "20px",
+  },
+  courseSelectSelect: {
+    width: "100%",
   },
 }));
 
-function MakeTest() {
+function MakeTest(): ReactElement {
   const styles = useStyles();
   const [selectedQuestions, setSelectedQuestions] = useState<
     Array<QuestionType>
@@ -38,8 +46,9 @@ function MakeTest() {
   const [isMakeTestPopupOpened, setMakeTestPopupOpened] = useState<boolean>(
     false
   );
-  const togglePopup = () => setMakeTestPopupOpened(!isMakeTestPopupOpened);
-  const updateSelectedQuestions = (question: QuestionType) => {
+  const togglePopup = (): void =>
+    setMakeTestPopupOpened(!isMakeTestPopupOpened);
+  const updateSelectedQuestions = (question: QuestionType): void => {
     if (selectedQuestions.includes(question)) {
       setSelectedQuestions(
         selectedQuestions.filter((q) => q?.id !== question.id)
@@ -52,29 +61,17 @@ function MakeTest() {
   return (
     <div className={styles.makeTest}>
       <div className={styles.header}>
-        <CategoryFilter
-          categories={categories}
-          onCategoryClick={(c) => (): void => {}}
-        />
-        <div>
-          <CourseSelect courses={courses} />
-          <Button
-            onClick={togglePopup}
-            className={styles.generateTestButton}
-            variant="contained"
-            color="primary"
-          >
-            GENERATE TEST
-          </Button>
-        </div>
+        <div></div>
       </div>
       <div className={styles.test}>
         <QuestionsTable
+          header={<CourseSelect styles={styles} courses={courses} />}
           questions={questions}
           selectedQuestions={selectedQuestions}
           onSelect={updateSelectedQuestions}
         />
         <TestCreator
+          onGenerateTestClick={togglePopup}
           selectedQuestions={selectedQuestions}
           onDelete={updateSelectedQuestions}
         />

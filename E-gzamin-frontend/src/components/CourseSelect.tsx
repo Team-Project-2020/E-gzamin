@@ -21,21 +21,24 @@ type CourseType = {
 };
 type CourseSelectType = {
   courses: Array<CourseType>;
+  styles?: Record<"courseSelect" | "courseSelectSelect", string>;
 };
 const CourseSelect: React.FC<CourseSelectType> = ({
   courses,
+  styles,
 }: CourseSelectType) => {
-  const styles = useStyles();
+  const defaultStyles = useStyles();
+  const componentStyles = styles || defaultStyles;
 
   const [selected, setSelected] = useState<undefined | CourseType>(undefined);
   return (
-    <div className={styles.courseSelect}>
+    <div className={componentStyles.courseSelect}>
       <InputLabel>Course</InputLabel>
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         value={selected}
-        className={styles.courseSelectSelect}
+        className={componentStyles.courseSelectSelect}
         onChange={({ target }): void =>
           setSelected(courses.find(({ id }) => id === target.value))
         }
