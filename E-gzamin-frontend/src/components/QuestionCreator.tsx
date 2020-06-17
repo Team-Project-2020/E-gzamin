@@ -10,6 +10,8 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { QuestionType } from "../types";
+import CategoryFilter from "./CategoryFilter";
+import { courses, questions, categories } from "../Constants";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -18,7 +20,6 @@ const useStyles = makeStyles(() => ({
     height: "80%",
     minWidth: "40%",
     maxWidth: "65%",
-    marginLeft: "auto",
   },
   questionInput: {
     width: "100%",
@@ -84,6 +85,11 @@ const QuestionCreator = ({
   const onSubmit = () => {};
   return (
     <Paper elevation={2} className={styles.paper}>
+      <CategoryFilter
+        categories={categories}
+        onCategoryClick={(c) => () => {}}
+      />
+
       <TextField
         className={styles.questionInput}
         id="standard-basic"

@@ -14,5 +14,10 @@ type AnswerType = {
   text: string;
   isCorrect: boolean;
 };
-
-export type { QuestionType, CourseType, AnswerType };
+type Member = {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+};
+export type { QuestionType, CourseType, AnswerType, Member };

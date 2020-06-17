@@ -5,6 +5,7 @@ from django.conf import settings
 class BaseEntity(models.Model):
     class Meta:
         abstract = True
+
     createdAt = models.DateTimeField(auto_now_add=True)
     removedAt = models.DateTimeField(null=True)
 
@@ -31,26 +32,21 @@ class Designate(models.Model):
 
 class Group(BaseEntity):
     name = models.CharField(max_length=64)
-    groupCode = models.CharField(max_length=16)
+    groupCode = models.CharField(max_length=16, unique=True)
     openedAt = models.DateTimeField(null=True)
     closedAt = models.DateTimeField(null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.CASCADE,
                               related_name="owner")
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                   related_name="users")
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                     related_name="is_member_of",
+                                     blank=True)
 
 
 class Question(BaseEntity):
     content = models.TextField()
-    questionTemplates = models.ManyToManyField("QuestionTemplate")
     courses = models.ManyToManyField("Course")
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-
-class QuestionTemplate(BaseEntity):
-    questionsCount = models.IntegerField()
-    testTemplate = models.ForeignKey("TestTemplate", on_delete=models.DO_NOTHING)
 
 
 class TestResult(BaseEntity):
@@ -68,4 +64,3 @@ class TestTemplate(BaseEntity):
     name = models.CharField(max_length=64)
     owned_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     questions = models.ManyToManyField(Question)
-

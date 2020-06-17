@@ -75,24 +75,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='QuestionTemplate',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('createdAt', models.DateTimeField(auto_now_add=True)),
-                ('removedAt', models.DateTimeField(null=True)),
-                ('questionsCount', models.IntegerField()),
-                ('testTemplate', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='E_gzamin_app.TestTemplate')),
-            ],
-            options={
-                'abstract': False,
-            },
-        ),
-        migrations.AddField(
-            model_name='question',
-            name='questionTemplates',
-            field=models.ManyToManyField(to='E_gzamin_app.QuestionTemplate'),
-        ),
-        migrations.CreateModel(
             name='Group',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
