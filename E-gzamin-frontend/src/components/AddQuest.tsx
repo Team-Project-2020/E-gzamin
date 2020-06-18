@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ReactElement } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import QuestionsTable from "./QuestionsTable";
@@ -23,14 +23,17 @@ const useStyles = makeStyles((theme) => ({
   },
   courseSelect: {
     minWidth: "250px",
-    margin: "20px",
+    marginTop: "0px",
+    marginLeft: "0px",
+    marginRight: "0px",
+    marginBottom: "20px",
   },
   courseSelectSelect: {
     width: "100%",
   },
 }));
 
-function AddQuest() {
+function AddQuest(): ReactElement {
   const styles = useStyles();
   const [selectedQuestion, setSelectedQuestion] = useState<
     QuestionType | undefined
@@ -38,15 +41,10 @@ function AddQuest() {
 
   return (
     <div className={styles.addQuest}>
-      <div className={styles.header}>
-        <CategoryFilter
-          categories={categories}
-          onCategoryClick={(c) => () => {}}
-        />
-        <CourseSelect courses={courses} />
-      </div>
+      <div className={styles.header}></div>
       <div className={styles.questionDetails}>
         <QuestionsTable
+          header={<CourseSelect styles={styles} courses={courses} />}
           questions={questions}
           selectedQuestions={[selectedQuestion]}
           onSelect={(question: QuestionType): void =>

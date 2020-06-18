@@ -10,6 +10,7 @@ type QuestionsTableType = {
   questions: Array<QuestionType>;
   selectedQuestions: Array<QuestionType | undefined>;
   onSelect: (question: QuestionType) => void;
+  header: ReactElement;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -44,35 +45,44 @@ const QuestionsTable = ({
   questions,
   selectedQuestions,
   onSelect,
+  header,
 }: QuestionsTableType): ReactElement => {
+  const [questionsFilter, setQuestionsFilter] = useState<string>("");
   const styles = useStyles();
 
   return (
     <Paper elevation={2} className={styles.paper}>
+      {header}
       <TextField
         className={styles.search}
         id="filled-basic"
-        label="Filled"
+        label="Search"
         variant="filled"
+        value={questionsFilter}
+        onChange={({ target }): void => setQuestionsFilter(target.value)}
       />
       <div className={styles.questions}>
-        {questions.map((question) => {
-          return (
-            <Box
-              className={classnames(styles.question, {
-                isSelected: selectedQuestions?.find(
-                  (q) => q?.id === question.id
-                ),
-              })}
-              component="span"
-              m={1}
-              key={question.id}
-              onClick={(): void => onSelect(question)}
-            >
-              {question.question}
-            </Box>
-          );
-        })}
+        {questions
+          .filter(({ question }) =>
+            question.toLowerCase().includes(questionsFilter.toLowerCase())
+          )
+          .map((question) => {
+            return (
+              <Box
+                className={classnames(styles.question, {
+                  isSelected: selectedQuestions?.find(
+                    (q) => q?.id === question.id
+                  ),
+                })}
+                component="span"
+                m={1}
+                key={question.id}
+                onClick={(): void => onSelect(question)}
+              >
+                {question.question}
+              </Box>
+            );
+          })}
       </div>
     </Paper>
   );

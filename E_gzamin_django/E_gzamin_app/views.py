@@ -116,3 +116,86 @@ class MemberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             return User.objects.filter(is_member_of__in=[group])
         qs = User.objects.filter(is_member_of__in=Group.objects.filter(members__in=[self.request.user.id]))
         return qs
+
+class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = TestTemplate.objects.all()
+    serializer_class = TestTemplateSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.is_superuser:
+            return qs
+        return qs.filter(owned_by=self.request.user.id)
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset()
+        template = get_object_or_404(qs, pk=pk)
+        serializer = TestTemplateSerializer(template, context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        qs = self.get_queryset()
+        template = get_object_or_404(qs, pk=pk)
+        if 'questions' in request.data:
+            template.questions.clear()
+            for question_id in request.data[questions]:
+                template.questions.add(question_id)
+        template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
+        template.save()
+        serializer = TestTemplateSerializer(template, context={'request': request})
+        return Response(serializer.data)
+
+class TestResultViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = TestResult.objects.all()
+    serializer_class = TestResultSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.basename == 'testtemplate-testresults':
+            if self.request.user.is_superuser:
+                return qs
+            return qs.filter(testTemplate__in=TestTemplate.objects.filter(owned_by_id=self.request.user.id))
+        if self.request.user.is_superuser:
+            return qs
+        return qs.filter(user=self.request.user.id)
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset()
+        result = get_object_or_404(qs, pk=pk)
+        serializer = TestTemplateSerializer(result, context={'request': request})
+        return Response(serializer.data)
+
+
+class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = Designate.objects.all()
+    serializer_class = DesignateSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.basename == 'testtemplate-designate':
+            if self.request.user.is_superuser:
+                return qs
+            return qs.filter(group__in=Group.objects.filter(owner=self.request.user.id))
+        return qs.filter(group__in=Group.objects.filter(members__in=[self.request.user.id]))
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset()
+        designate = get_object_or_404(qs, pk=pk)
+        serializer = DesignateSerializer(designate, context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        qs = self.get_queryset()
+        designate = get_object_or_404(qs, pk=pk)
+        designate.time = request.data.get("time", result.time)
+        designate.startDate = request.data.get("startDate", result.startDate)
+        designate.endDate = request.data.get("endDate", result.endDate)
+        designate.passReq = request.data.get("passReq", result.passReq)
+        designate.group = request.data.get("group", result.group)
+        designate.testTemplate = request.data.get("testTemplate", result.testTemplate)
+        designate.save()
+        serializer = DesignateSerializer(designate, context={'request': request})
+        return Response(serializer.data)
