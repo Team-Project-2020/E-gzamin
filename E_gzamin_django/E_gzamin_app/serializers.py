@@ -42,7 +42,9 @@ class CourseSerializer(BaseEntitySerializer):
 class DesignateSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Designate
-        fields = ['time', 'startDate', 'endDate', 'passReq']
+        group_id = serializers.CharField(source="group.id", read_only=True)
+        testTemplate_id = serializers.CharField(source="testTemplate.id", read_only=True)
+        fields = ['time', 'startDate', 'endDate', 'passReq' , 'group_id', 'testTemplate_id']
 
 
 class GroupSerializer(BaseEntitySerializer):
@@ -74,7 +76,7 @@ class TestResultSerializer(BaseEntitySerializer):
     class Meta:
         model = TestResult
         fields = BaseEntitySerializer.Meta.fields + ['result', 'maxPoints', 'isPassed',
-                                                     'completedAt', 'startedAt', 'finishedAt']
+                                                     'completedAt', 'startedAt', 'finishedAt','user_id']
 
 
 class TestTemplateSerializer(BaseEntitySerializer):

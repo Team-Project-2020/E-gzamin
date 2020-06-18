@@ -153,10 +153,13 @@ class TestResultViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        if self.basename == 'testtemplate-testresults':
+            if self.request.user.is_superuser:
+                return qs
+            return qs.filter(testTemplate__in=TestTemplate.objects.filter(owned_by_id=self.request.user.id))
         if self.request.user.is_superuser:
             return qs
-        qs2 = qs.filter(testtemplate__in=TestTemplate.objects.filter(owned_by=[self.request.user.id]))
-        return qs2.union(qs.filter(user=self.request.user.id))
+        return qs.filter(user=self.request.user.id)
 
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()
@@ -164,18 +167,6 @@ class TestResultViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = TestTemplateSerializer(result, context={'request': request})
         return Response(serializer.data)
 
-    def update(self, request, pk=None):
-        qs = self.get_queryset()
-        result = get_object_or_404(qs, pk=pk)
-        result.maxPoints = request.data.get("maxPoints", 0.00)
-        result.isPassed = request.data.get("isPassed", False)
-        result.completedAt = request.data.get("completedAt", result.completedAt)
-        result.startedAt = request.data.get("startedAt", result.startedAt)
-        result.finishedAt = request.data.get("finishedAt", result.finishedAt)
-        result.testTemplate = request.data.get("testTemplate", result.testTemplate)
-        result.save()
-        serializer = TestResultSerializer(result, context={'request': request})
-        return Response(serializer.data)
 
 class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -184,10 +175,11 @@ class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        if self.request.user.is_superuser:
-            return qs
-        qs2 = qs.filter(group__in=Group.objects.filter(members__in=[self.request.user.id]))
-        return qs2.union(qs.filter(user=self.request.user.id))
+        if self.basename == 'testtemplate-designate':
+            if self.request.user.is_superuser:
+                return qs
+            return qs.filter(group__in=Group.objects.filter(owner=self.request.user.id))
+        return qs.filter(group__in=Group.objects.filter(members__in=[self.request.user.id]))
 
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()
