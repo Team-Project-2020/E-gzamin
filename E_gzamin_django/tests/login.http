@@ -1,0 +1,22 @@
+POST http://89.70.240.11:8000/rest/users
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"xd@fds.dgdfff",
+"password":"fdsfsd"
+}
+
+
+###
+
+GET http://89.70.240.11:8000/rest/users
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"xd@fds.dgdfff",
+"password":"fdsfsd"
+}
