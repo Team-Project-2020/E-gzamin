@@ -78,6 +78,16 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group.save()
         return Response({'status': 'user added'})
 
+    @action(detail=True, methods=['get', 'delete']) #TODO add checks for non-owners
+    def remove_user(self, request, pk=None):
+        group = self.get_object()
+        user = get_object_or_404(User.objects.all(), id=request.query_params.get('id', None))
+        if user not in group.members.all():
+            return Response({'status': 'user not in group'})
+        group.members.remove(user)
+        group.save()
+        return Response({'status': 'user deleted'})
+
 
 class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
