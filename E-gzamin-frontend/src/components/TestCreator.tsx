@@ -7,6 +7,7 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -15,7 +16,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: "80%",
     minWidth: "40%",
     maxWidth: "65%",
-    marginLeft: "auto",
   },
   testName: {
     width: "100%",
@@ -33,19 +33,25 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   QuestionContentLeft: {},
   QuestionContentRight: {},
+  generateTestButton: {
+    margin: "20px",
+  },
 }));
 
 type TestCreatorPropsType = {
   selectedQuestions: Array<QuestionType | undefined>;
   onDelete: (question: QuestionType) => void;
+  onGenerateTestClick: () => void;
 };
 
 const TestCreator = ({
   selectedQuestions,
   onDelete,
+  onGenerateTestClick,
 }: TestCreatorPropsType): ReactElement => {
   const styles = useStyles();
   const [testName, setTestName] = useState<string>("");
+  console.log(selectedQuestions);
   return (
     <Paper className={styles.paper}>
       <TextField
@@ -56,7 +62,7 @@ const TestCreator = ({
         label="Test name"
       />
       {selectedQuestions.map((question, index) => (
-        <>
+        <React.Fragment key={index}>
           <_QuestionContent
             key={question.id}
             styles={styles}
@@ -64,8 +70,17 @@ const TestCreator = ({
             answers={question.answers}
             onDelete={(): void => onDelete(question)}
           />
-        </>
+        </React.Fragment>
       ))}
+      <Button
+        onClick={onGenerateTestClick}
+        className={styles.generateTestButton}
+        variant="contained"
+        color="primary"
+        disabled={!selectedQuestions || !selectedQuestions.length}
+      >
+        GENERATE TEST
+      </Button>
     </Paper>
   );
 };

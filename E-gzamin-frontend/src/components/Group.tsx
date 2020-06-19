@@ -3,10 +3,9 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import { Theme, makeStyles } from "@material-ui/core/styles";
 import Header from "./Header";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
+
 import SingleGroupRow from "./SingleGroupRow";
 import { Member } from "../types";
 
@@ -201,7 +200,7 @@ const GroupTable = ({
         <div className={styles.grid}>
           {groups.map(({ id, name, code, members }, index) => {
             return (
-              <>
+              <React.Fragment key={index}>
                 <SingleGroupRow
                   name={name}
                   code={code}
@@ -210,7 +209,7 @@ const GroupTable = ({
                   index={index}
                   onDeletePrompt={onDeletePrompt}
                 />
-              </>
+              </React.Fragment>
             );
           })}
         </div>
