@@ -81,6 +81,8 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['get', 'delete']) #TODO add checks for non-owners
     def remove_user(self, request, pk=None):
         group = self.get_object()
+        if self.request.user != group.owner:
+            return ({'status': 'unauthorized access'})
         user = get_object_or_404(User.objects.all(), id=request.query_params.get('id', None))
         if user not in group.members.all():
             return Response({'status': 'user not in group'})
@@ -126,6 +128,21 @@ class MemberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             return User.objects.filter(is_member_of__in=[group])
         qs = User.objects.filter(is_member_of__in=Group.objects.filter(members__in=[self.request.user.id]))
         return qs
+
+class UserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return queryset
+    
+    def create(self, request):
+        user = User.objects.create_user(
+            username=self.request.data.get('username'),
+            password=self.request.data.get('password'),
+            email=self.request.data.get('username'))
+        return Response({'status': 'user registered'})
 
 class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
