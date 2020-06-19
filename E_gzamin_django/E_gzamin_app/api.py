@@ -7,7 +7,7 @@ class NestedDefaultRouter(NestedRouterMixin, routers.DefaultRouter):
 
 router = NestedDefaultRouter()
 router.register(r'answers', AnswerViewSet)
-router.register(r'users', MemberViewSet)
+router.register(r'users', UserViewSet)
 router.register(r'testresults', TestResultViewSet)
 router.register(r'designate', DesignateViewSet)
 
