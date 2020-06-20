@@ -1,0 +1,6 @@
+INSERT INTO public."E_gzamin_app_course"(
+	"createdAt", name,owner_id)
+	VALUES (NOW(), 'Course_1',6),
+	(NOW(), 'Course_2',7),
+	(NOW(), 'Course_3',8),
+	(NOW(), 'Course_4',9);

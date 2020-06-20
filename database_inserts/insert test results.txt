@@ -1,0 +1,11 @@
+INSERT INTO public."E_gzamin_app_testresult"(
+	"createdAt", result, "maxPoints", "isPassed", "completedAt", "startedAt", "finishedAt", "testTemplate_id", user_id)
+	VALUES (NOW(), 4, 5, true, NOW(), NOW(), NOW(), 6, 10),
+	(NOW(), 5, 5, true, NOW(), NOW(), NOW(), 6, 11),
+	(NOW(), 3, 5, true, NOW(), NOW(), NOW(), 6, 12),
+	(NOW(), 2, 5, false, NOW(), NOW(), NOW(), 6, 13),
+	(NOW(), 0, 5, false, NOW(), NOW(), NOW(), 6, 14),
+	(NOW(), 3, 5, true, NOW(), NOW(), NOW(), 2, 14),
+	(NOW(), 2, 5, false, NOW(), NOW(), NOW(), 2, 15),
+	(NOW(), 5, 5, true, NOW(), NOW(), NOW(), 2, 16),
+	(NOW(), 0, 5, false, NOW(), NOW(), NOW(), 2, 17);
