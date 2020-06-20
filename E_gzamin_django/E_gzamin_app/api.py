@@ -19,6 +19,7 @@ courses_router.register('questions', QuestionViewSet,basename='course-questions'
 
 groups_router = router.register(r'groups', GroupViewSet)
 groups_router.register('members', MemberViewSet, basename='group-members',parents_query_lookups=['groups'])
+groups_router.register('designates', DesignateViewSet, basename='group-designates', parents_query_lookups=['group'])
 
 testtemplates_router = router.register(r'testtemplates', TestTemplateViewSet)
 testtemplates_router.register('questions',QuestionViewSet,basename='testtemplate-questions',parents_query_lookups=['testtemplate'])

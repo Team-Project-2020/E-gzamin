@@ -25,8 +25,8 @@ class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = super().get_queryset()
         if self.request.user.is_superuser:
             return qs
-        qs2 = Answer.objects.filter(question__in=Question.objects.filter(owner=self.request.user.id))
-        return qs.intersection(qs2)
+        qs2 = qs.distinct().filter(question__in=Question.objects.filter(owner=self.request.user.id))
+        return qs2
 
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()
@@ -67,11 +67,11 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         owned  = self.request.query_params.get('owned', None)
         if self.request.user.is_superuser:
             return qs
-        qs = Group.objects.filter(Q(members__in=User.objects.filter(id=self.request.user.id)) |
+        qs = Group.objects.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)) |
                                   Q(owner=self.request.user))
         if owned == 'True' or owned == 'true':
             print("elo")
-            return qs.filter(owner=self.request.user.id)
+            return qs.distinct().filter(owner=self.request.user.id)
         return qs
 
     def retrieve(self, request, pk=None):
@@ -111,7 +111,7 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def remove_user(self, request, pk=None):
         group = self.get_object()
         if self.request.user != group.owner:
-            return ({'status': 'unauthorized access'})
+            return Response({'status': 'unauthorized access'})
         user = get_object_or_404(User.objects.all(), id=request.query_params.get('id', None))
         if user not in group.members.all():
             return Response({'status': 'user not in group'})
@@ -130,7 +130,7 @@ class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = super().get_queryset()
         if self.request.user.is_superuser:
             return qs
-        return qs.filter(owner=self.request.user.id)
+        return qs.distinct().filter(owner=self.request.user.id)
 
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()
@@ -187,6 +187,12 @@ class UserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             email=self.request.data.get('username'))
         return Response({'status': 'user registered'})
 
+    @action(detail=False, methods=['get'])
+    def me(self, request):
+        user = self.get_queryset().get(pk=self.request.user.id)
+        serializer = UserSerializer(user, context={'request': request})
+        return Response(serializer.data)
+
 class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = TestTemplate.objects.all()
@@ -203,6 +209,18 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         template = get_object_or_404(qs, pk=pk)
         serializer = TestTemplateSerializer(template, context={'request': request})
         return Response(serializer.data)
+
+    def create(self, request):
+        temp = TestTemplate(
+            name=request.data.get('name'),
+            owned_by=self.request.user
+        )
+        temp.save()
+        for question in request.data.get('questions'):
+            temp.questions.add(question)
+        serializer = TestTemplateSerializer(temp, context={'request': request})
+        return Response(serializer.data)
+
 
     def update(self, request, pk=None):
         qs = self.get_queryset()
