@@ -1,0 +1,77 @@
+### Add question
+POST {{host}}/rest/questions/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+{
+  "content": "Test Question"
+}
+
+### Get questions
+GET {{host}}/rest/questions/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+### Get specific question as owner
+GET {{host}}/rest/questions/27
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+### Get specific question as other
+GET {{host}}/rest/questions/27
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+### Chenge content as other user
+PUT {{host}}/rest/questions/27/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+{
+  "content": "New content"
+}
+### Chenge content as owner
+PUT {{host}}/rest/questions/27/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+{
+  "content": "New content"
+}
+
+### Get specific question as owner
+GET {{host}}/rest/questions/27
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+### Make another question
+POST {{host}}/rest/questions/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+{
+  "content": "Test Question2"
+}
+
+### Get all Questions as their owner
+GET {{host}}/rest/questions/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}

@@ -256,7 +256,6 @@ class TestResultViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = TestTemplateSerializer(result, context={'request': request})
         return Response(serializer.data)
 
-
 class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Designate.objects.all()

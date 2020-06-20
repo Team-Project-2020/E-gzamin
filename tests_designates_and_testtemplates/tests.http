@@ -1,0 +1,184 @@
+POST http://89.70.240.11:8000/rest/users/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"testuser@test.com",
+"password":"aaaaaa"
+}
+
+
+###
+
+POST http://89.70.240.11:8000/api/token/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"testuser@test.com",
+"password":"aaaaaa"
+}
+
+###
+
+PATCH http://89.70.240.11:8000/rest/groups/add_user/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+
+
+{
+"groupCode":"1111"
+}
+
+###
+
+GET http://89.70.240.11:8000/rest/groups
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+
+### admin
+
+POST http://89.70.240.11:8000/api/token/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"admin",
+"password":"password"
+}
+
+### admin all groups
+
+GET http://89.70.240.11:8000/rest/groups
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMTk4LCJqdGkiOiI0NGRhNzY4MjVlNzY0YWQ2OTAwOTg2Y2QzYzcwZDMxMCIsInVzZXJfaWQiOjF9.no_9ESP5oe5kiBbWBhCklfAF3K_oHx0-hh1fpn0aCsg
+
+###
+
+POST http://89.70.240.11:8000/rest/groups/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+
+{
+  "name" : "testing",
+  "groupCode" : "1410"
+}
+
+### user for test 2
+POST http://89.70.240.11:8000/rest/users/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"testuser2@test.com",
+"password":"aaaaaa"
+}
+
+### user for test 2 token
+POST http://89.70.240.11:8000/api/token/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"testuser2@test.com",
+"password":"aaaaaa"
+}
+
+### user test 2 add to test group
+
+PATCH http://89.70.240.11:8000/rest/groups/add_user/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyNjE0LCJqdGkiOiJkOThkMzA3MjUzNWE0OTMyOGQ2MGZjOWFhODRjYjNjMSIsInVzZXJfaWQiOjM4fQ.aF_-ZepoSsTI-oZhZAUL5oM1PD9-5cHnnzM_ATYrHxY
+
+
+{
+"groupCode":"1410"
+}
+
+### adding test
+POST http://89.70.240.11:8000/rest/testtemplates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
+
+{
+  "name": "testing",
+  "questions":["1", "2"]
+}
+
+###
+
+GET http://89.70.240.11:8000/rest/questions/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
+
+
+### browsing all tests
+
+GET http://89.70.240.11:8000/rest/testtemplates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMTk4LCJqdGkiOiI0NGRhNzY4MjVlNzY0YWQ2OTAwOTg2Y2QzYzcwZDMxMCIsInVzZXJfaWQiOjF9.no_9ESP5oe5kiBbWBhCklfAF3K_oHx0-hh1fpn0aCsg
+
+
+
+###
+
+POST http://89.70.240.11:8000/api/token/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"jd@egzamin.pl",
+"password":"password"
+}
+
+### making test from someone elses questions
+
+POST http://89.70.240.11:8000/rest/testtemplates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+
+{
+  "name": "testing",
+  "questions":["1", "2"]
+}
+
+### see your test
+
+GET http://89.70.240.11:8000/rest/testtemplates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+
+### try to see someone elses test
+
+GET http://89.70.240.11:8000/rest/testtemplates/18/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
+
