@@ -1,8 +1,0 @@
-INSERT INTO public."E_gzamin_app_question_questionTemplates"(
-	question_id, questiontemplate_id)
-	VALUES (1, 1),
-	(2, 1),
-	(3, 1),
-	(7, 1),
-	(9, 1),
-	(10, 1);
