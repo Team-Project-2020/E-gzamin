@@ -42,14 +42,14 @@ class CourseSerializer(BaseEntitySerializer):
 class DesignateSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Designate
-        group_id = serializers.CharField(source="group.id", read_only=True)
-        testTemplate_id = serializers.CharField(source="testTemplate.id", read_only=True)
+        group_id = serializers.CharField(source="group.id", read_only=True, required=False)
+        testTemplate_id = serializers.CharField(source="testTemplate.id", read_only=True, required=False)
         fields = ['time', 'startDate', 'endDate', 'passReq' , 'id', 'group_id', 'testTemplate_id']
 
 class GroupSerializer(BaseEntitySerializer):
     class Meta:
         model = Group
-        fields = BaseEntitySerializer.Meta.fields + ['name', 'groupCode', 'openedAt', 'closedAt', 'members']
+        fields = BaseEntitySerializer.Meta.fields + ['name', 'groupCode', 'openedAt', 'closedAt', 'members', 'owner']
 
     def create(self, validated_data):
         group = Group.objects.create(**validated_data)
