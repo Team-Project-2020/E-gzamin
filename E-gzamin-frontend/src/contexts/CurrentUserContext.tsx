@@ -12,11 +12,15 @@ const CurrentUserContextProvider = ({ children }) => {
   const { status, data, error, isFetching } = useQuery(
     'getCurrentUser',
     getCurrentUser,
+    {
+      manual: true,
+    },
   );
 
   if (isFetching) {
     return <Loader />;
   }
+
   return (
     <CurrentUserContext.Provider value={data}>
       {children}
