@@ -10,10 +10,11 @@ import Tests from '../components/Tests';
 import AuthRoute from './AuthRoute';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+import { CurrentUserContextProvider } from '../contexts/CurrentUserContext';
 
 function EgzaminRoute(): ReactElement {
   return (
-    <>
+    <CurrentUserContextProvider>
       <PrivateRoute exact path="/egzamin" component={Home} />
       <PrivateRoute exact path="/egzamin/addquest" component={AddQuest} />
       <PrivateRoute exact path="/egzamin/group" component={Group} />
@@ -21,7 +22,7 @@ function EgzaminRoute(): ReactElement {
       <PrivateRoute exact path="/egzamin/settings" component={Settings} />
       <PrivateRoute exact path="/egzamin/tests" component={Tests} />
       <Redirect to="/egzamin" />
-    </>
+    </CurrentUserContextProvider>
   );
 }
 

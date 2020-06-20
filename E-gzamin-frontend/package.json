@@ -24,6 +24,7 @@
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-query": "^1.5.9",
     "react-scripts": "3.4.0"
   },
   "main": "src/start.js",

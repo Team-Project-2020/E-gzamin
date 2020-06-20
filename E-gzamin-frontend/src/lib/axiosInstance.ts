@@ -2,11 +2,6 @@ import axios from 'axios';
 
 const backendURL = 'http://89.70.240.11:8000';
 
-const axiosInstance = axios.create({
-  baseURL: backendURL,
-  headers: axiosHeaders(),
-});
-
 export function authHeader() {
   const token = localStorage.getItem('token');
 
@@ -22,6 +17,11 @@ function axiosHeaders() {
     'content-type': 'application/json',
   };
 }
+
+const axiosInstance = axios.create({
+  baseURL: backendURL,
+  headers: axiosHeaders(),
+});
 
 axiosInstance.interceptors.request.use(
   function(config) {
