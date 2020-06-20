@@ -45,7 +45,7 @@ const Login = () => {
     e.preventDefault();
     const status = await loginAction(email, password);
     if (status === 200) {
-      history.push('/home');
+      history.push('/egzamin/');
       window.location.reload(true);
     }
   };

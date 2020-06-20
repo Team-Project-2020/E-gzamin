@@ -1,11 +1,11 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
 
-import isLoggedIn from "../lib/isLoggedIn";
+import isLoggedIn from '../lib/isLoggedIn';
 
 type PrivateRouteProps = {
   component: React.FC;
-  exact: boolean;
+  exact?: boolean;
   path: string;
 };
 const PrivateRoute: React.FC<PrivateRouteProps> = ({

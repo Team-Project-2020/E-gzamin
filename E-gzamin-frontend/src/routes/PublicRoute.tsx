@@ -17,7 +17,7 @@ const PublicRoute: React.FC<PublicRouteProps> = ({
     <Route
       {...restProps}
       render={(props: any): ReactElement =>
-        !isUserLoggedIn ? <Component {...props} /> : <Redirect to="/" />
+        !isUserLoggedIn ? <Component {...props} /> : <Redirect to="/egzamin" />
       }
     />
   );
