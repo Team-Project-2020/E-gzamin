@@ -50,7 +50,7 @@ const GroupMembersTable: React.FC<MembersTableProps> = ({ members }) => {
       <div className={styles.membersTable}>
         {[header, ...members].map(
           ({ id, firstName, lastName, email }, index) => (
-            <>
+            <React.Fragment key={index}>
               <MembersTableRowItem
                 content={firstName}
                 className={`${styles.membersTable} ${id === undefined &&
@@ -69,7 +69,7 @@ const GroupMembersTable: React.FC<MembersTableProps> = ({ members }) => {
                   styles.membersTableHeader}`}
                 style={{ gridRow: index + 1, gridColumn: 3 }}
               />
-            </>
+            </React.Fragment>
           )
         )}
         <div className={styles.space} />

@@ -1,12 +1,9 @@
-import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: "20px",
-    margin: "20px",
+  content: {
     minWidth: "40%",
     display: "flex",
     flexWrap: "wrap",
@@ -48,7 +45,7 @@ const CategoryFilter = ({ categories, onCategoryClick }: CategoriesType) => {
   const styles = useStyles();
 
   return (
-    <Paper elevation={2} className={styles.paper}>
+    <div className={styles.content}>
       {categories.map(({ id, name }) => (
         <Box
           className={styles.category}
@@ -60,7 +57,7 @@ const CategoryFilter = ({ categories, onCategoryClick }: CategoriesType) => {
           {name}
         </Box>
       ))}
-    </Paper>
+    </div>
   );
 };
 
