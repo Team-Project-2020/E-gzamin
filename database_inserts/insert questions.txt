@@ -1,0 +1,23 @@
+INSERT INTO public."E_gzamin_app_question"(
+	 "createdAt", content,owner_id)
+	VALUES ( NOW(), 'Which country is the smallest:',6),
+	( NOW(), 'How much does an average male German shepherd(dog) weigh?',6),
+	( NOW(), 'How tall is an average male Shiba inu?',6),
+	( NOW(), 'How much minimum strength do you need to wield Zweihander one-handed. ',8),
+	( NOW(), 'How tall is Eiffel Tower?',6),
+	( NOW(), 'When was the first computer mouse invented?',7),
+	( NOW(), 'What is the mean weight of male Emperor penguin at the start of the breeding season?',6),
+	( NOW(), 'When did famous impressionist Claude Monet die?',8),
+	( NOW(), 'What is the name of the capital city of Botswana?',6),
+	( NOW(), 'What is the length of Seine river?',6),
+	( NOW(), 'What is the newest available version of Unreal Engine?',7),
+	( NOW(), 'When was BASIC programming language released? ',7),
+	( NOW(), 'Who was the first kind of Poland.',9),
+	( NOW(), 'When did Władysław Jagiełło die?',9),
+	( NOW(), 'When did 2nd World War start?',9),
+	( NOW(), 'Is there dry bread for a horse',8),
+	( NOW(), 'When was this question created?',8),
+	( NOW(), 'When was C++ programming language released?',7),
+	( NOW(), 'Where was Ludvik van Beethoven born?',8),
+	( NOW(), 'Who was the first roman emperor? ',9),
+	( NOW(), 'Who painted'' The Starry Night''?',8);

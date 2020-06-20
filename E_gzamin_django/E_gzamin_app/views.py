@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -5,6 +7,7 @@ from django.contrib.auth.models import User
 from E_gzamin_app.models import *
 from E_gzamin_app.serializers import *
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework import status, viewsets
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from rest_framework.permissions import IsAuthenticated
@@ -23,8 +26,7 @@ class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if self.request.user.is_superuser:
             return qs
         qs2 = Answer.objects.filter(question__in=Question.objects.filter(owner=self.request.user.id))
-        lst = [x for x in qs for y in qs2 if x == y]
-        return lst
+        return qs.intersection(qs2)
 
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()
@@ -65,10 +67,34 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         owned  = self.request.query_params.get('owned', None)
         if self.request.user.is_superuser:
             return qs
+        qs = Group.objects.filter(Q(members__in=User.objects.filter(id=self.request.user.id)) |
+                                  Q(owner=self.request.user))
         if owned == 'True' or owned == 'true':
             print("elo")
             return qs.filter(owner=self.request.user.id)
-        return qs.filter(members__in=User.objects.filter(id=self.request.user.id))
+        return qs
+
+    def retrieve(self, request, pk=None):
+        group = self.get_queryset().get(pk=pk)
+        serializer = GroupSerializer(group, context={'request': request})
+        return Response(serializer.data)
+
+    def create(self, request):
+        group = Group(
+            name=request.data.get('name'),
+            groupCode=request.data.get('groupCode'),
+            owner=self.request.user
+        )
+        group.save()
+        serializer = GroupSerializer(group, context={'request': request})
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        group = Group.objects.get(pk=pk)
+        if not self.request.user.is_superuser and self.request.user != group.owner:
+            return Response({'status': 'unauthorized deletion, prosze wypierdalac'})
+        group.delete()
+        return Response({'status': 'group deleted'})
 
     @action(detail=False, methods=['patch'])
     def add_user(self, request, pk=None):
@@ -80,6 +106,18 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group.members.add(User.objects.get(id=self.request.user.id))
         group.save()
         return Response({'status': 'user added'})
+
+    @action(detail=True, methods=['get', 'delete']) #TODO add checks for non-owners
+    def remove_user(self, request, pk=None):
+        group = self.get_object()
+        if self.request.user != group.owner:
+            return ({'status': 'unauthorized access'})
+        user = get_object_or_404(User.objects.all(), id=request.query_params.get('id', None))
+        if user not in group.members.all():
+            return Response({'status': 'user not in group'})
+        group.members.remove(user)
+        group.save()
+        return Response({'status': 'user deleted'})
 
 
 class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
@@ -119,6 +157,35 @@ class MemberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             return User.objects.filter(is_member_of__in=[group])
         qs = User.objects.filter(is_member_of__in=Group.objects.filter(members__in=[self.request.user.id]))
         return qs
+
+class UserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return User.objects.all()
+        group = self.request.query_params.get('group', None)
+        if group is not None:
+            return User.objects.distinct().filter(is_member_of__in=[group])
+        qs = User.objects.distinct().filter(Q(is_member_of__in=Group.objects.filter(members__in=[self.request.user.id])) |
+                                            Q(pk=self.request.user.id))
+        return qs
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset().all()
+        pprint(qs)
+        user = qs.get(id=pk)
+        serializer = UserSerializer(
+            user, context={'request': request})
+        return Response(serializer.data)
+
+    def create(self, request):
+        user = User.objects.create_user(
+            username=self.request.data.get('username'),
+            password=self.request.data.get('password'),
+            email=self.request.data.get('username'))
+        return Response({'status': 'user registered'})
 
 class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)

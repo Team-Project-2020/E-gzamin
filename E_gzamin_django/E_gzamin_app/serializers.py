@@ -49,7 +49,7 @@ class DesignateSerializer(serializers.HyperlinkedModelSerializer):
 class GroupSerializer(BaseEntitySerializer):
     class Meta:
         model = Group
-        fields = BaseEntitySerializer.Meta.fields + ['name', 'groupCode', 'openedAt', 'closedAt', 'members']
+        fields = BaseEntitySerializer.Meta.fields + ['name', 'groupCode', 'openedAt', 'closedAt', 'members', 'owner']
 
     def create(self, validated_data):
         group = Group.objects.create(**validated_data)
