@@ -9,7 +9,7 @@ router = NestedDefaultRouter()
 router.register(r'answers', AnswerViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'testresults', TestResultViewSet)
-router.register(r"designates", DesignateViewSet)
+router.register(r'designates', DesignateViewSet)
 
 questions_router = router.register(r'questions', QuestionViewSet)
 questions_router.register('answers',AnswerViewSet,basename='question-answers',parents_query_lookups=['question'])

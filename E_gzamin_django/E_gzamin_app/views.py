@@ -262,13 +262,13 @@ class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = DesignateSerializer
 
     def get_queryset(self):
-        owned  = self.request.query_params.get('owned', None)
+        owned = self.request.query_params.get('owned', None)
         qs = super().get_queryset()
-        if owned == 'True' or owned == 'true' or (id is not None):
+        if owned == 'True' or owned == 'true':
             if self.request.user.is_superuser:
                 return qs
-            return qs.filter(group__in=Group.objects.filter(owner=self.request.user.id))
-        return qs.filter(group__in=Group.objects.filter(members__in=[self.request.user.id]))
+            return qs.distinct().filter(group__in=Group.objects.filter(owner=self.request.user.id))
+        return qs.distinct().filter(group__in=Group.objects.filter(members__in=[self.request.user.id]))
 
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()
