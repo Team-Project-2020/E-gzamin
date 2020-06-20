@@ -1,0 +1,7 @@
+INSERT INTO public."E_gzamin_app_group"(
+	name,"createdAt" ,"groupCode", "openedAt","closedAt", owner_id)
+	VALUES ( 'Group A',NOW(), 1111, NOW(), NOW(),6),
+	( 'Group B',NOW(), 5555, NOW(), NOW(),6),
+	( 'Group C',NOW(), 0000, NOW(), NOW(),7),
+	( 'Group D',NOW(), 1337, NOW(), NOW(),8),
+	( 'Group E',NOW(), 8888, NOW(), NOW(),9);
