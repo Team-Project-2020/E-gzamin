@@ -1,10 +1,20 @@
-import React, { ReactElement } from 'react';
-import Spinner from 'react-loader-spinner';
+import React, { ReactElement } from "react";
+import Spinner from "react-loader-spinner";
+import { useThemeMode } from "../contexts/ThemeModeContext";
 
-const Loader = (): ReactElement => (
-  <div>
-    <Spinner type="Circles" color="#00BFFF" height={150} width={150} />
-  </div>
-);
+const Loader = (): ReactElement => {
+  const { theme } = useThemeMode();
+
+  return (
+    <div>
+      <Spinner
+        type="TailSpin"
+        color={theme.palette.secondary.main}
+        height={150}
+        width={150}
+      />
+    </div>
+  );
+};
 
 export default Loader;
