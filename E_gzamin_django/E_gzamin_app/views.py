@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -5,6 +7,7 @@ from django.contrib.auth.models import User
 from E_gzamin_app.models import *
 from E_gzamin_app.serializers import *
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework import status, viewsets
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from rest_framework.permissions import IsAuthenticated
@@ -23,8 +26,7 @@ class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if self.request.user.is_superuser:
             return qs
         qs2 = Answer.objects.filter(question__in=Question.objects.filter(owner=self.request.user.id))
-        lst = [x for x in qs for y in qs2 if x == y]
-        return lst
+        return qs.intersection(qs2)
 
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()
@@ -62,10 +64,37 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        owned  = self.request.query_params.get('owned', None)
         if self.request.user.is_superuser:
             return qs
-        qs = Group.objects.filter(members__in=User.objects.filter(id=self.request.user.id))
+        qs = Group.objects.filter(Q(members__in=User.objects.filter(id=self.request.user.id)) |
+                                  Q(owner=self.request.user))
+        if owned == 'True' or owned == 'true':
+            print("elo")
+            return qs.filter(owner=self.request.user.id)
         return qs
+
+    def retrieve(self, request, pk=None):
+        group = self.get_queryset().get(pk=pk)
+        serializer = GroupSerializer(group, context={'request': request})
+        return Response(serializer.data)
+
+    def create(self, request):
+        group = Group(
+            name=request.data.get('name'),
+            groupCode=request.data.get('groupCode'),
+            owner=self.request.user
+        )
+        group.save()
+        serializer = GroupSerializer(group, context={'request': request})
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        group = Group.objects.get(pk=pk)
+        if not self.request.user.is_superuser and self.request.user != group.owner:
+            return Response({'status': 'unauthorized deletion, prosze wypierdalac'})
+        group.delete()
+        return Response({'status': 'group deleted'})
 
     @action(detail=False, methods=['patch'])
     def add_user(self, request, pk=None):
@@ -77,6 +106,18 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group.members.add(User.objects.get(id=self.request.user.id))
         group.save()
         return Response({'status': 'user added'})
+
+    @action(detail=True, methods=['get', 'delete']) #TODO add checks for non-owners
+    def remove_user(self, request, pk=None):
+        group = self.get_object()
+        if self.request.user != group.owner:
+            return ({'status': 'unauthorized access'})
+        user = get_object_or_404(User.objects.all(), id=request.query_params.get('id', None))
+        if user not in group.members.all():
+            return Response({'status': 'user not in group'})
+        group.members.remove(user)
+        group.save()
+        return Response({'status': 'user deleted'})
 
 
 class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
@@ -117,6 +158,35 @@ class MemberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = User.objects.filter(is_member_of__in=Group.objects.filter(members__in=[self.request.user.id]))
         return qs
 
+class UserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return User.objects.all()
+        group = self.request.query_params.get('group', None)
+        if group is not None:
+            return User.objects.distinct().filter(is_member_of__in=[group])
+        qs = User.objects.distinct().filter(Q(is_member_of__in=Group.objects.filter(members__in=[self.request.user.id])) |
+                                            Q(pk=self.request.user.id))
+        return qs
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset().all()
+        pprint(qs)
+        user = qs.get(id=pk)
+        serializer = UserSerializer(
+            user, context={'request': request})
+        return Response(serializer.data)
+
+    def create(self, request):
+        user = User.objects.create_user(
+            username=self.request.data.get('username'),
+            password=self.request.data.get('password'),
+            email=self.request.data.get('username'))
+        return Response({'status': 'user registered'})
+
 class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = TestTemplate.objects.all()
@@ -137,10 +207,11 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def update(self, request, pk=None):
         qs = self.get_queryset()
         template = get_object_or_404(qs, pk=pk)
-        if 'questions' in request.data:
+        if request.data.get("questions", None):
             template.questions.clear()
-            for question_id in request.data[questions]:
-                template.questions.add(question_id)
+            for question_id in list(request.data['questions'].split(',')):
+                if question_id in Questions.objects.filter(owner=self.request.user.id):
+                    template.questions.add(question_id)
         template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
         template.save()
         serializer = TestTemplateSerializer(template, context={'request': request})
@@ -167,15 +238,15 @@ class TestResultViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = TestTemplateSerializer(result, context={'request': request})
         return Response(serializer.data)
 
-
 class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Designate.objects.all()
     serializer_class = DesignateSerializer
 
     def get_queryset(self):
+        owned  = self.request.query_params.get('owned', None)
         qs = super().get_queryset()
-        if self.basename == 'testtemplate-designate':
+        if owned == 'True' or owned == 'true' or (id is not None):
             if self.request.user.is_superuser:
                 return qs
             return qs.filter(group__in=Group.objects.filter(owner=self.request.user.id))
@@ -187,15 +258,43 @@ class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = DesignateSerializer(designate, context={'request': request})
         return Response(serializer.data)
 
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        group_id = request.data.get("group_id", None)
+        group = Group.objects.get(id=group_id)
+        testTemplate_id = request.data.get("testTemplate_id", None)
+        testTemplate = TestTemplate.objects.get(id=testTemplate_id)
+        if group in Group.objects.filter(owner=self.request.user.id) and testTemplate in TestTemplate.objects.filter(owned_by=self.request.user.id):
+            serializer.validated_data['group'] = group
+            serializer.validated_data['testTemplate'] = testTemplate
+            serializer.validated_data['group_id'] = group_id
+            serializer.validated_data['testTemplate_id'] = testTemplate_id
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
+
     def update(self, request, pk=None):
         qs = self.get_queryset()
         designate = get_object_or_404(qs, pk=pk)
-        designate.time = request.data.get("time", result.time)
-        designate.startDate = request.data.get("startDate", result.startDate)
-        designate.endDate = request.data.get("endDate", result.endDate)
-        designate.passReq = request.data.get("passReq", result.passReq)
-        designate.group = request.data.get("group", result.group)
-        designate.testTemplate = request.data.get("testTemplate", result.testTemplate)
-        designate.save()
+        if designate.group in Group.objects.filter(owner=self.request.user.id):
+            group = request.data.get("group", designate.group)
+            test = request.data.get("testTemplate", designate.testTemplate)
+            if group in Group.objects.filter(owner=self.request.user.id) and test in TestTemplate.objects.filter(owned_by=self.request.user.id):
+                designate.time = request.data.get("time", designate.time)
+                designate.startDate = request.data.get("startDate", designate.startDate)
+                designate.endDate = request.data.get("endDate", designate.endDate)
+                designate.passReq = request.data.get("passReq", designate.passReq)
+                group_id = request.data.get("group_id", designate.group.id)
+                designate.group = Group.objects.get(id=group_id)
+                testTemplate_id = request.data.get("testTemplate_id", designate.testTemplate.id)
+                designate.testTemplate = TestTemplate.objects.get(id=testTemplate_id)
+                designate.save()
+                serializer = DesignateSerializer(designate, context={'request': request})
+                return Response(serializer.data, status=status.HTTP_200_OK)
         serializer = DesignateSerializer(designate, context={'request': request})
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
