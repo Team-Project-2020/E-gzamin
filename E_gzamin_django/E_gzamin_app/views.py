@@ -164,9 +164,10 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def update(self, request, pk=None):
         qs = self.get_queryset()
         template = get_object_or_404(qs, pk=pk)
-        if 'questions' in request.data:
+        if request.data.get("questions", None):
             template.questions.clear()
-            for question_id in request.data[questions]:
+            for question_id in list(request.data['questions'].split(',')):
+                print(question_id)
                 template.questions.add(question_id)
         template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
         template.save()
@@ -201,8 +202,9 @@ class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = DesignateSerializer
 
     def get_queryset(self):
+        owned  = self.request.query_params.get('owned', None)
         qs = super().get_queryset()
-        if self.basename == 'testtemplate-designate':
+        if owned == 'True' or owned == 'true' or (id is not None):
             if self.request.user.is_superuser:
                 return qs
             return qs.filter(group__in=Group.objects.filter(owner=self.request.user.id))
@@ -217,12 +219,15 @@ class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def update(self, request, pk=None):
         qs = self.get_queryset()
         designate = get_object_or_404(qs, pk=pk)
-        designate.time = request.data.get("time", result.time)
-        designate.startDate = request.data.get("startDate", result.startDate)
-        designate.endDate = request.data.get("endDate", result.endDate)
-        designate.passReq = request.data.get("passReq", result.passReq)
-        designate.group = request.data.get("group", result.group)
-        designate.testTemplate = request.data.get("testTemplate", result.testTemplate)
-        designate.save()
+        if designate.group in Group.objects.filter(owner=self.request.user.id):
+            group = request.data.get("group", designate.group)
+            if group in Group.objects.filter(owner=self.request.user.id):
+                designate.time = request.data.get("time", designate.time)
+                designate.startDate = request.data.get("startDate", designate.startDate)
+                designate.endDate = request.data.get("endDate", designate.endDate)
+                designate.passReq = request.data.get("passReq", designate.passReq)
+                designate.group = request.data.get("group", designate.group)
+                designate.testTemplate = request.data.get("testTemplate", designate.testTemplate)
+                designate.save()
         serializer = DesignateSerializer(designate, context={'request': request})
         return Response(serializer.data)

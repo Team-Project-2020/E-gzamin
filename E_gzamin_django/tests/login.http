@@ -1,4 +1,4 @@
-POST http://89.70.240.11:8000/rest/users
+POST http://89.70.240.11:8000/rest/users/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
@@ -11,7 +11,7 @@ Cache-Control: no-cache
 
 ###
 
-GET http://89.70.240.11:8000/rest/users
+POST http://89.70.240.11:8000/api/token/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
@@ -20,3 +20,25 @@ Cache-Control: no-cache
 "username":"xd@fds.dgdfff",
 "password":"fdsfsd"
 }
+
+###
+
+PATCH http://89.70.240.11:8000/rest/groups/add_user/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNjgwMDk2LCJqdGkiOiJiMmIwOTJmYjM0ZmQ0ZTkyYmRlZDkwZmQ3YmRiNTA4YyIsInVzZXJfaWQiOjI4fQ.UnPOv0uLABctXHPoz-iTSB0tNsOMq0QgFIG-g42Ucmk
+
+
+{
+"groupCode":"1111"
+}
+
+###
+
+GET http://89.70.240.11:8000/rest/groups
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNjgwMDk2LCJqdGkiOiJiMmIwOTJmYjM0ZmQ0ZTkyYmRlZDkwZmQ3YmRiNTA4YyIsInVzZXJfaWQiOjI4fQ.UnPOv0uLABctXHPoz-iTSB0tNsOMq0QgFIG-g42Ucmk
+
