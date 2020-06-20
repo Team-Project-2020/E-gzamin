@@ -1,14 +1,15 @@
-import React from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import AddQuest from "../components/AddQuest";
-import AuthRoute from "./AuthRoute";
-import PrivateRoute from "./PrivateRoute";
-import Group from "../components/Group";
-import Home from "../components/Home";
-import MakeTest from "../components/MakeTest";
-import Settings from "../components/Settings";
-import Tests from "../components/Tests";
+import AddQuest from '../components/AddQuest';
+import Group from '../components/Group';
+import Home from '../components/Home';
+import MakeTest from '../components/MakeTest';
+import Settings from '../components/Settings';
+import Tests from '../components/Tests';
+import AuthRoute from './AuthRoute';
+import PrivateRoute from './PrivateRoute';
+import PublicRoute from './PublicRoute';
 
 function MainRoute() {
   return (
@@ -20,7 +21,7 @@ function MainRoute() {
       <PrivateRoute exact path="/settings" component={Settings} />
       <PrivateRoute exact path="/tests" component={Tests} />
 
-      <Route path="/auth" component={AuthRoute} />
+      <PublicRoute path="/auth" component={AuthRoute} />
       <Redirect to="/" />
     </Switch>
   );

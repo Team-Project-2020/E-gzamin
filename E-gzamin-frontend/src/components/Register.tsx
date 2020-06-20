@@ -1,39 +1,54 @@
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import React from "react";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
+import registerAction from '../actions/registerAction';
+
+const useStyles = makeStyles(theme => ({
   paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%",
+    width: '100%',
     marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
   registerContainer: {
-    margin: "auto",
+    margin: 'auto',
   },
 }));
 
 const Register = () => {
   const classes = useStyles();
+  const [email, setEmail] = useState<string>(undefined);
+  const [password, setPassword] = useState<string>(undefined);
+  const history = useHistory();
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const status = await registerAction(email, password);
+    if (status === 200) {
+      history.push('/auth');
+      window.location.reload(true);
+    }
+  };
 
   return (
     <Container
@@ -49,31 +64,8 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -81,6 +73,8 @@ const Register = () => {
                 fullWidth
                 id="email"
                 label="Email Address"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 name="email"
                 autoComplete="email"
               />
@@ -92,6 +86,8 @@ const Register = () => {
                 fullWidth
                 name="password"
                 label="Password"
+                onChange={e => setPassword(e.target.value)}
+                value={password}
                 type="password"
                 id="password"
                 autoComplete="current-password"
