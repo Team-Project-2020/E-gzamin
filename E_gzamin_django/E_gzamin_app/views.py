@@ -23,8 +23,7 @@ class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if self.request.user.is_superuser:
             return qs
         qs2 = Answer.objects.filter(question__in=Question.objects.filter(owner=self.request.user.id))
-        lst = [x for x in qs for y in qs2 if x == y]
-        return lst
+        return qs.intersection(qs2)
 
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()
@@ -65,7 +64,30 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if self.request.user.is_superuser:
             return qs
         qs = Group.objects.filter(members__in=User.objects.filter(id=self.request.user.id))
-        return qs
+        qs2 = Group.objects.filter(owner=self.request.user)
+        return qs.union(qs2)
+
+    def retrieve(self, request, pk=None):
+        group = Group.objects.get(pk=pk)
+        serializer = GroupSerializer(group, context={'request': request})
+        return Response(serializer.data)
+
+    def create(self, request):
+        group = Group(
+            name=request.data.get('name'),
+            groupCode=request.data.get('groupCode'),
+            owner=self.request.user
+        )
+        group.save()
+        serializer = GroupSerializer(group, context={'request': request})
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        group = Group.objects.get(pk=pk)
+        if not self.request.user.is_superuser and self.request.user != group.owner:
+            return Response({'status': 'unauthorized deletion, prosze wypierdalac'})
+        group.delete()
+        return Response({'status': 'group deleted'})
 
     @action(detail=False, methods=['patch'])
     def add_user(self, request, pk=None):
@@ -135,8 +157,22 @@ class UserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return queryset
-    
+            return User.objects.all()
+        group = self.request.query_params.get('group', None)
+        if group is not None:
+            return User.objects.filter(is_member_of__in=[group])
+        qs = User.objects.filter(is_member_of__in=Group.objects.filter(
+            members__in=[self.request.user.id]))
+        qs2 = User.objects.filter(pk=self.request.user.id)
+        return qs.union(qs2)
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset()
+        user = qs.get(pk=User.objects.get(pk=pk).username)
+        serializer = UserSerializer(
+            user, context={'request': request})
+        return Response(serializer.data)
+
     def create(self, request):
         user = User.objects.create_user(
             username=self.request.data.get('username'),

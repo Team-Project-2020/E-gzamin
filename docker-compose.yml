@@ -10,3 +10,20 @@ services:
   environment:
    POSTGRES_USER: admin
    POSTGRES_PASSWORD: password
+ backend:
+  build:
+   context: ./E_gzamin_django
+   dockerfile: Dockerfile
+  command: python ./E_gzamin_django/manage.py runserver localhost:8000
+  volumes:
+   - .:/code
+  ports:
+   - "8000:8000"
+  networks:
+   - my_network
+#  depends_on:
+#   - db
+networks:
+ my_network:
+#  name: my_network
+  driver: bridge
