@@ -62,10 +62,13 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        owned  = self.request.query_params.get('owned', None)
         if self.request.user.is_superuser:
             return qs
-        qs = Group.objects.filter(members__in=User.objects.filter(id=self.request.user.id))
-        return qs
+        if owned == 'True' or owned == 'true':
+            print("elo")
+            return qs.filter(owner=self.request.user.id)
+        return qs.filter(members__in=User.objects.filter(id=self.request.user.id))
 
     @action(detail=False, methods=['patch'])
     def add_user(self, request, pk=None):
@@ -140,8 +143,8 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if request.data.get("questions", None):
             template.questions.clear()
             for question_id in list(request.data['questions'].split(',')):
-                print(question_id)
-                template.questions.add(question_id)
+                if question_id in Questions.objects.filter(owner=self.request.user.id):
+                    template.questions.add(question_id)
         template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
         template.save()
         serializer = TestTemplateSerializer(template, context={'request': request})
@@ -189,18 +192,43 @@ class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = DesignateSerializer(designate, context={'request': request})
         return Response(serializer.data)
 
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        group_id = request.data.get("group_id", None)
+        group = Group.objects.get(id=group_id)
+        testTemplate_id = request.data.get("testTemplate_id", None)
+        testTemplate = TestTemplate.objects.get(id=testTemplate_id)
+        if group in Group.objects.filter(owner=self.request.user.id) and testTemplate in TestTemplate.objects.filter(owned_by=self.request.user.id):
+            serializer.validated_data['group'] = group
+            serializer.validated_data['testTemplate'] = testTemplate
+            serializer.validated_data['group_id'] = group_id
+            serializer.validated_data['testTemplate_id'] = testTemplate_id
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
+
     def update(self, request, pk=None):
         qs = self.get_queryset()
         designate = get_object_or_404(qs, pk=pk)
         if designate.group in Group.objects.filter(owner=self.request.user.id):
             group = request.data.get("group", designate.group)
-            if group in Group.objects.filter(owner=self.request.user.id):
+            test = request.data.get("testTemplate", designate.testTemplate)
+            if group in Group.objects.filter(owner=self.request.user.id) and test in TestTemplate.objects.filter(owned_by=self.request.user.id):
                 designate.time = request.data.get("time", designate.time)
                 designate.startDate = request.data.get("startDate", designate.startDate)
                 designate.endDate = request.data.get("endDate", designate.endDate)
                 designate.passReq = request.data.get("passReq", designate.passReq)
-                designate.group = request.data.get("group", designate.group)
-                designate.testTemplate = request.data.get("testTemplate", designate.testTemplate)
+                group_id = request.data.get("group_id", designate.group.id)
+                designate.group = Group.objects.get(id=group_id)
+                testTemplate_id = request.data.get("testTemplate_id", designate.testTemplate.id)
+                designate.testTemplate = TestTemplate.objects.get(id=testTemplate_id)
                 designate.save()
+                serializer = DesignateSerializer(designate, context={'request': request})
+                return Response(serializer.data, status=status.HTTP_200_OK)
         serializer = DesignateSerializer(designate, context={'request': request})
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
