@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -5,6 +7,7 @@ from django.contrib.auth.models import User
 from E_gzamin_app.models import *
 from E_gzamin_app.serializers import *
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework import status, viewsets
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from rest_framework.permissions import IsAuthenticated
@@ -63,12 +66,12 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = super().get_queryset()
         if self.request.user.is_superuser:
             return qs
-        qs = Group.objects.filter(members__in=User.objects.filter(id=self.request.user.id))
-        qs2 = Group.objects.filter(owner=self.request.user)
-        return qs.union(qs2)
+        qs = Group.objects.filter(Q(members__in=User.objects.filter(id=self.request.user.id)) |
+                                  Q(owner=self.request.user))
+        return qs
 
     def retrieve(self, request, pk=None):
-        group = Group.objects.get(pk=pk)
+        group = self.get_queryset().get(pk=pk)
         serializer = GroupSerializer(group, context={'request': request})
         return Response(serializer.data)
 
@@ -160,15 +163,15 @@ class UserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             return User.objects.all()
         group = self.request.query_params.get('group', None)
         if group is not None:
-            return User.objects.filter(is_member_of__in=[group])
-        qs = User.objects.filter(is_member_of__in=Group.objects.filter(
-            members__in=[self.request.user.id]))
-        qs2 = User.objects.filter(pk=self.request.user.id)
-        return qs.union(qs2)
+            return User.objects.distinct().filter(is_member_of__in=[group])
+        qs = User.objects.distinct().filter(Q(is_member_of__in=Group.objects.filter(members__in=[self.request.user.id])) |
+                                            Q(pk=self.request.user.id))
+        return qs
 
     def retrieve(self, request, pk=None):
-        qs = self.get_queryset()
-        user = qs.get(pk=User.objects.get(pk=pk).username)
+        qs = self.get_queryset().all()
+        pprint(qs)
+        user = qs.get(id=pk)
         serializer = UserSerializer(
             user, context={'request': request})
         return Response(serializer.data)

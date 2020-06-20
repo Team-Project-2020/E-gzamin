@@ -56,7 +56,7 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiY
 
 ###
 
-GET http://89.70.240.11:8000/rest/groups/5
+GET http://89.70.240.11:8000/rest/groups/1
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
