@@ -1,0 +1,75 @@
+### Create answer
+POST {{host}}/rest/answers/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+{
+  "content": "Answer1",
+  "isCorrect": "True",
+  "question": "http://89.70.240.11:8000/rest/questions/27/"
+}
+
+### Create another answer for the same question
+POST {{host}}/rest/answers/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+{
+  "content": "Answer2",
+  "isCorrect": "False",
+  "question": "http://89.70.240.11:8000/rest/questions/27/"
+}
+
+### Get Answers for question
+GET {{host}}/rest/questions/27/answers/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+### Create answer for not-owned question (should not work, but apparently not a problem)
+POST {{host}}/rest/answers/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+{
+  "content": "Answer3",
+  "isCorrect": "False",
+  "question": "http://89.70.240.11:8000/rest/questions/27/"
+}
+
+### Delete an answer
+DELETE {{host}}/rest/answers/94/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+### change answer
+PUT {{host}}/rest/answers/93/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+{
+  "content": "New content"
+}
+
+### change more parameters for an answer
+PUT {{host}}/rest/answers/93/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+{
+  "content": "Even newer content",
+  "isCorrect" : "True"
+}
