@@ -6,15 +6,18 @@
 
 .Home-content {
   height: auto;
+  width: 100%;
 }
 
 .paper {
   display: flex;
   flex-wrap: nowrap;
   width: 100%;
-  margin: 1rem;
+  margin: 1rem 3rem;
+  
+  
   .MuiPaper-rounded {
-    width: 80%;
+    width: 90%;
     min-width: 620px;
   }
 }

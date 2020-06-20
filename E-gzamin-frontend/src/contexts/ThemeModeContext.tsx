@@ -37,6 +37,10 @@ const darkTheme = createMuiTheme({
       default: "#121212",
       paper: "#272c34",
     },
+    text: {
+      primary: "#eeeeee",
+      secondary: "#666666",
+    },
   },
 });
 
@@ -55,8 +59,12 @@ const theme = createMuiTheme({
     contrastThreshold: 3,
     tonalOffset: 0.2,
     background: {
-      default: "#ffffff",
+      default: "#dddddd",
       paper: "#f5f5f5",
+    },
+    text: {
+      primary: "#111111",
+      secondary: "#666666",
     },
   },
 });
