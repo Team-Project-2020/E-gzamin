@@ -1,0 +1,22 @@
+INSERT INTO public.auth_user(
+	password, is_superuser, username, first_name, last_name,email, is_staff, is_active,date_joined)
+	VALUES (1234,false,'dk@egzamin.pl','Dariusz','Kwiatkowski','dk@egzamin.pl',false,false,NOW()),
+			(1234,false,'1234@egzamin.pl','Jan','Nowak','1234@egzamin.pl',false,false,NOW()),
+			(1234,false,'eu@egzamin.pl','Eugeniusz','Nowak','eu@egzamin.pl',false,false,NOW()),
+			(1234,false,'zzz@egzamin.pl','Zdzisław','Zawiły','zzz@egzamin.pl',false,false,NOW()),
+			(1234,false,'jd@egzamin.pl','John','Doe','jd@egzamin.pl',false,false,NOW()),
+			(1234,false,'jj@egzamin.pl','Jacob','Jacob','jj@egzamin.pl',false,false,NOW()),
+			(1234,false,'A@egzamin.pl','Amy','Smith','A@egzamin.pl',false,false,NOW()),
+			(1234,false,'sn@egzamin.pl','Sara','Nowak','sn@egzamin.pl',false,false,NOW()),
+			(1234,false,'sj@egzamin.pl','Sam','Johnson','sj@egzamin.pl',false,false,NOW()),
+			(1234,false,'kb@egzamin.pl','Kate','Blue','kb@egzamin.pl',false,false,NOW()),
+			(1234,false,'jr@egzamin.pl','Jake','Red','jr@egzamin.pl',false,false,NOW()),
+			(1234,false,'007@egzamin.pl','James','Bond','007@egzamin.pl',false,false,NOW()),
+			(1234,false,'aw@egzamin.pl','Alice','Wonderland','aw@egzamin.pl',false,false,NOW()),
+			(1234,false,'100@egzamin.pl','Szymon','Szymon','100@egzamin.pl',false,false,NOW()),
+			(1234,false,'200@egzamin.pl','Natasha','Yellow','200@egzamin.pl',false,false,NOW()),
+			(1234,false,'300@egzamin.pl','Amy','Green','300@egzamin.pl',false,false,NOW()),
+			(1234,false,'400@egzamin.pl','Jan','Janowy','400@egzamin.pl',false,false,NOW()),
+			(1234,false,'500@egzamin.pl','Max','Mad','500@egzamin.pl',false,false,NOW()),
+			(1234,false,'bg@egzamin.pl','Bob','Good','bg@egzamin.pl',false,false,NOW()),
+			(1234,false,'gg@egzamin.pl','Greg','Good','gg@egzamin.pl',false,false,NOW());
