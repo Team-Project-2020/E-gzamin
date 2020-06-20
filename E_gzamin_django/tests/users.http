@@ -1,0 +1,35 @@
+### Register user
+POST {{host}}/rest/users/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"abc.abc",
+"password":"abcabc"
+}
+
+### Get User Token
+POST {{host}}/api/token/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"abc.abc",
+"password":"abcabc"
+}
+
+### Get User
+GET {{host}}/rest/users/me/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+### Get all Users
+GET {{host}}/rest/users/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}

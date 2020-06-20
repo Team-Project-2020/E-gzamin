@@ -1,0 +1,108 @@
+INSERT INTO public."E_gzamin_app_answer"(
+	"createdAt", content, "isCorrect", question_id)
+	VALUES 
+	(NOW(), 'Peru', false, 1),
+	(NOW(), 'Poland', false, 1),
+	(NOW(), 'Portugal', true, 1),
+	(NOW(), 'Pakistan', false, 1),
+	
+	(NOW(), '30–40 kg ', true, 2),
+	(NOW(), '20–30 kg ', false, 2),
+	(NOW(), '40–50 kg ', false, 2),
+	(NOW(), '50–60 kg ', false, 2),
+	
+	(NOW(), '38,5-41,5 cm ', true, 3),
+	(NOW(), '41,5-44,5 cm', false, 3),
+	(NOW(), '36,5-38,5 cm', false, 3),
+	(NOW(), '50,5–55,5 cm', false, 3),
+	
+	(NOW(), 24, true, 4),
+	(NOW(), 30, false, 4),
+	(NOW(), 16, false, 4),
+	(NOW(), 28, false, 4),
+	
+	(NOW(), '400m', false, 5),
+	(NOW(), '300m', true, 5),
+	(NOW(), '500m', false, 5),
+	(NOW(), '600m', false, 5),
+	
+	(NOW(), 1994, false, 6),
+	(NOW(), 1984, false, 6),
+	(NOW(), 1964, true, 6),
+	(NOW(), 1974, false, 6),
+	
+	(NOW(), 28, false, 7),
+	(NOW(), 48, false, 7),
+	(NOW(), 58, false, 7),
+	(NOW(), 38, true, 7),
+	
+	(NOW(), 1929, false, 8),
+	(NOW(), 1923, false, 8),
+	(NOW(), 1926, true, 8),
+	(NOW(), 1930, false, 8),
+	
+	(NOW(), 'Lobatse', false, 9),
+	(NOW(), 'Sowa', false, 9),
+	(NOW(), 'Orapa', false, 9),
+	(NOW(), 'Gaborone', true, 9),
+	
+	(NOW(), '888km', false, 10),
+	(NOW(), '555km', false, 10),
+	(NOW(), '999km', false, 10),
+	(NOW(), '777km', true, 10),
+	
+	(NOW(), '8', false, 11),
+	(NOW(), '4', true, 11),
+	(NOW(), '2', false, 11),
+	(NOW(), '1', false, 11),
+	
+	(NOW(), '1954', false, 12),
+	(NOW(), '1968', false, 12),
+	(NOW(), '1958', false, 12),
+	(NOW(), '1964', true, 12),
+	
+	(NOW(), 'Mieszko I', false, 13),
+	(NOW(), 'Bolesław Chrobry ', true, 13),
+	(NOW(), 'Mieszko II', false, 13),
+	(NOW(), 'Bolesław VII', false, 13),
+	
+	(NOW(), '1464', false, 14),
+	(NOW(), '1454', false, 14),
+	(NOW(), '1444', false, 14),
+	(NOW(), '1434', true, 14),
+	
+	(NOW(), '1938', false, 15),
+	(NOW(), '1940', false, 15),
+	(NOW(), '1941', false, 15),
+	(NOW(), '1939', true, 15),
+	
+	(NOW(), 'Yes', false, 16),
+	(NOW(), 'No', false, 16),
+	(NOW(), 'Maybe', false, 16),
+	(NOW(), 'I don not know', true, 16),
+	
+	(NOW(), '05.06.2020 ', true, 17),
+	(NOW(), '07.06.2020', false, 17),
+	(NOW(), '05.05.2020', false, 17),
+	(NOW(), '05.07.2020', false, 17),
+	
+	(NOW(), '1985', true, 18),
+	(NOW(), '1990', false, 18),
+	(NOW(), '1980', false, 18),
+	(NOW(), '1995', false, 18),
+	
+	(NOW(), 'In Vienna', false, 19),
+	(NOW(), 'In Saltsburg  ', false, 19),
+	(NOW(), 'In Bonn', true, 19),
+	(NOW(), 'In Berlin', false, 19),
+	
+	(NOW(), 'Augustus', true, 20),
+	(NOW(), 'Gaius Julius Caesar', false, 20),
+	(NOW(), 'Caligula', false, 20),
+	(NOW(), 'Tiberius', false, 20),
+	
+	(NOW(), 'Vincent van Gogh ', true, 21),
+	(NOW(), 'Leonardo da Vinci', false, 21),
+	(NOW(), 'Claude Monet ', false, 21),
+	(NOW(), 'Michelangelo', false, 21)
+	;

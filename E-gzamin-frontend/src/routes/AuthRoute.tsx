@@ -1,10 +1,14 @@
-import React from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import Register from "../components/Register";
-import Login from "../components/Login";
+import Login from '../components/Login';
+import Register from '../components/Register';
 
-const AuthRoute = ({ match: { path } }: { match: { path: String } }) => {
+const AuthRoute: React.FC<any> = ({
+  match: { path },
+}: {
+  match: { path: string };
+}) => {
   return (
     <>
       <BrowserRouter>

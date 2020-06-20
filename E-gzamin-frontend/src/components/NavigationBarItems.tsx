@@ -1,18 +1,18 @@
-import AddIcon from "@material-ui/icons/Add";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import LayersIcon from "@material-ui/icons/Layers";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import PeopleIcon from "@material-ui/icons/People";
-import PostAddIcon from "@material-ui/icons/PostAdd";
-import React, { useState } from "react";
-import SettingsIcon from "@material-ui/icons/Settings";
-import { Link as NavLink } from "react-router-dom";
-import logoutAction from "../actions/logoutAction";
+import AddIcon from '@material-ui/icons/Add';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import LayersIcon from '@material-ui/icons/Layers';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import PeopleIcon from '@material-ui/icons/People';
+import PostAddIcon from '@material-ui/icons/PostAdd';
+import React, { useState } from 'react';
+import SettingsIcon from '@material-ui/icons/Settings';
+import { Link as NavLink } from 'react-router-dom';
+import logoutAction from '../actions/logoutAction';
 
-import "./NavigationBarItems.scss";
+import './NavigationBarItems.scss';
 
 const NavigationBarItems = () => {
   const [selectedItem, setSelectedItem] = useState(document.location.pathname);
@@ -22,7 +22,7 @@ const NavigationBarItems = () => {
       <_MenuItem
         selectedItem={selectedItem}
         onClick={setSelectedItem}
-        to="/"
+        to="/egzamin/"
         label="Home"
       >
         <DashboardIcon />
@@ -30,7 +30,7 @@ const NavigationBarItems = () => {
       <_MenuItem
         selectedItem={selectedItem}
         onClick={setSelectedItem}
-        to="/maketest"
+        to="/egzamin/maketest"
         label="Make a test"
       >
         <PostAddIcon />
@@ -38,7 +38,7 @@ const NavigationBarItems = () => {
       <_MenuItem
         selectedItem={selectedItem}
         onClick={setSelectedItem}
-        to="/group"
+        to="/egzamin/group"
         label="Groups"
       >
         <PeopleIcon />
@@ -46,7 +46,7 @@ const NavigationBarItems = () => {
       <_MenuItem
         selectedItem={selectedItem}
         onClick={setSelectedItem}
-        to="/addquest"
+        to="/egzamin/addquest"
         label="Add Questions"
       >
         <AddIcon />
@@ -54,7 +54,7 @@ const NavigationBarItems = () => {
       <_MenuItem
         selectedItem={selectedItem}
         onClick={setSelectedItem}
-        to="/settings"
+        to="/egzamin/settings"
         label="Settings"
       >
         <SettingsIcon />
@@ -62,7 +62,7 @@ const NavigationBarItems = () => {
       <_MenuItem
         selectedItem={selectedItem}
         onClick={setSelectedItem}
-        to="/tests"
+        to="/egzamin/tests"
         label="Designed tests"
       >
         <LayersIcon />
@@ -70,9 +70,9 @@ const NavigationBarItems = () => {
       <div className="navbar-space" />
       <div className="bottom-items">
         <_MenuItem
-          selectedItem={""}
+          selectedItem={''}
           onClick={logoutAction}
-          to="/"
+          to="/egzamin/"
           label="Logout"
         >
           <ExitToAppIcon />

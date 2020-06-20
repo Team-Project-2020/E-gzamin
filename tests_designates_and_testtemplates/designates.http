@@ -1,0 +1,79 @@
+### seeing designated test as group member
+GET http://89.70.240.11:8000/rest/designates/37/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+
+### designating test as a group member
+
+POST http://89.70.240.11:8000/rest/designates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+
+{
+  "time": "01:00:00",
+    "passReq": "0.70",
+    "startDate": "2020-06-20T12:54:00.318303Z",
+    "endDate": "2022-07-06T00:00:00Z",
+    "group_id": "1",
+    "testTemplate_id": "19"
+}
+
+### seeing designated test as some random guy
+GET http://89.70.240.11:8000/rest/designates/37/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyNjE0LCJqdGkiOiJkOThkMzA3MjUzNWE0OTMyOGQ2MGZjOWFhODRjYjNjMSIsInVzZXJfaWQiOjM4fQ.aF_-ZepoSsTI-oZhZAUL5oM1PD9-5cHnnzM_ATYrHxY
+
+###checking your designated test
+GET http://89.70.240.11:8000/rest/designates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
+
+### adding your test to your group
+
+POST http://89.70.240.11:8000/rest/designates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
+
+{
+  "time": "01:00:00",
+    "passReq": "0.70",
+    "startDate": "2020-06-20T12:54:00.318303Z",
+    "endDate": "2022-07-06T00:00:00Z",
+    "group_id": "1",
+    "testTemplate_id": "2"
+}
+
+### checking all designates
+
+GET http://89.70.240.11:8000/rest/designates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMTk4LCJqdGkiOiI0NGRhNzY4MjVlNzY0YWQ2OTAwOTg2Y2QzYzcwZDMxMCIsInVzZXJfaWQiOjF9.no_9ESP5oe5kiBbWBhCklfAF3K_oHx0-hh1fpn0aCsg
+
+### designating other pearsons test
+
+POST http://89.70.240.11:8000/rest/designates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+
+{
+  "time": "02:00:00",
+    "passReq": "0.60",
+    "startDate": "2020-06-20T12:54:00.318303Z",
+    "endDate": "2022-07-06T00:00:00Z",
+    "group_id": 11,
+    "testTemplate_id": 2
+}
