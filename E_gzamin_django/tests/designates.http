@@ -1,5 +1,5 @@
 ### seeing designated test as group member
-GET http://89.70.240.11:8000/rest/designates/37/
+GET http://89.70.240.11:8000/rest/designates/37
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
@@ -30,7 +30,7 @@ Cache-Control: no-cache
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyNjE0LCJqdGkiOiJkOThkMzA3MjUzNWE0OTMyOGQ2MGZjOWFhODRjYjNjMSIsInVzZXJfaWQiOjM4fQ.aF_-ZepoSsTI-oZhZAUL5oM1PD9-5cHnnzM_ATYrHxY
 
 ###checking your designated test
-GET http://89.70.240.11:8000/rest/designates/
+GET http://89.70.240.11:8000/rest/designates?owned=true
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache

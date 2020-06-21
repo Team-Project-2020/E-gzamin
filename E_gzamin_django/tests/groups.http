@@ -1,0 +1,205 @@
+POST {{host}}/rest/users/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"xd@fds.dgdfff",
+"password":"fdsfsd"
+}
+
+
+### Admin login
+
+POST {{host}}/api/token/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"admin",
+"password":"password"
+}
+### User 3 login
+
+POST {{host}}/api/token/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"1234@egzamin.pl",
+"password":"password"
+}
+
+### User 2 login
+
+POST {{host}}/api/token/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"dk@egzamin.pl",
+"password":"password"
+}
+
+###
+
+POST {{host}}/api/token/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+
+{
+"username":"xd@fds.dgdfff",
+"password":"fdsfsd"
+}
+
+###
+
+PATCH {{host}}/rest/groups/add_user/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+
+{
+"groupCode":"4444"
+}
+
+### Get all users from groups that this user is member of
+
+GET {{host}}/rest/users/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+### Get self
+GET {{host}}/rest/users/28/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+### Get someone else (should not work)
+GET {{host}}/rest/users/9/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+#### Get a group as its member
+GET {{host}}/rest/groups/1/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+### Get all groups as a member of them
+GET {{host}}/rest/groups/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+### Group Creation
+
+POST {{host}}/rest/groups/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+{
+  "name" : "nie mam kurwa pojecia",
+  "groupCode" : "9999"
+}
+
+### delete group as its owner
+
+DELETE {{host}}/rest/groups/12/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+### delete group as its member (should not work)
+
+### Remove user from group as its owner
+
+POST {{host}}/rest/groups/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+{
+  "name" : "Test group",
+  "groupCode" : "88888"
+}
+###
+GET {{host}}/rest/users/me/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ5MjMxLCJqdGkiOiJiYmEzMTA0MjUwYTg0MDg1OGFhMmJmM2RiMzU2ZjRhMCIsInVzZXJfaWQiOjN9.uV6GO1Kc8vbkzA0qkKFnZ4_q5ieRd0YGmlCQJGAOREM
+
+###
+PATCH {{host}}/rest/groups/add_user/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+{
+"groupCode":"88888"
+}
+
+###
+GET {{host}}/rest/groups/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user3}}
+
+###
+GET {{host}}/rest/groups/15/remove_user?id=28
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user3}}
+
+### Add User 2 to the group
+PATCH {{host}}/rest/groups/add_user/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user2}}
+
+{
+"groupCode":"88888"
+}
+
+### Remove user from group as its member (should not work)
+GET {{host}}/rest/groups/15/remove_user?id=2
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user28}}
+
+### Get group
+GET {{host}}/rest/groups/15/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user3}}
+
+###
+GET {{host}}/rest/groups/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{admin}}
