@@ -66,8 +66,8 @@ const TestCreator = ({
           <_QuestionContent
             key={question.id}
             styles={styles}
-            question={question.question}
-            answers={question.answers}
+            question={question.content}
+            answers={question.answers || []}
             onDelete={(): void => onDelete(question)}
           />
         </React.Fragment>
@@ -113,7 +113,7 @@ const _QuestionContent = ({
         <Typography variant="subtitle1">{question}</Typography>
         {answers.map((answer, index) => (
           <Typography key={index} variant="subtitle2">
-            {getLetter(index)}: {answer.text}
+            {getLetter(index)}: {answer.content}
           </Typography>
         ))}
       </div>
