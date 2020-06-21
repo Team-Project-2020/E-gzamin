@@ -15,6 +15,7 @@ type AnswerType = {
   isCorrect: boolean;
   question?: number;
   createdAt:Date;
+  removedAt?:Date | undefined;
 };
 
 type Member = {

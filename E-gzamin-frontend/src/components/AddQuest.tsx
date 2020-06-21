@@ -61,7 +61,11 @@ function AddQuest(): ReactElement {
     if (selectedQuestion?.id) {
       newQuestion = await updateQuestion({
         id: selectedQuestion.id,
-        question: { id: selectedQuestion.id, content: question.content },
+        question: {
+          id: selectedQuestion.id,
+          content: question.content,
+          answers: question.answers,
+        },
       });
     } else
       newQuestion = await createQuestion({

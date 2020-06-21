@@ -1,14 +1,16 @@
 import { useQuery, useMutation } from 'react-query';
 
-import getAnswersAction from '../actions/getAnswers';
 import createAnswerAction from '../actions/createAnswer';
+import getAnswersAction from '../actions/getAnswers';
+import removeAnswerAction from '../actions/removeAnswer';
+import updateAnswerAction from '../actions/updateAnswer';
+
 import createQuestionAction from '../actions/createQuestion';
+import getQuestionsAction from '../actions/getQuestions';
 import removeQuestionAction from '../actions/removeQuestion';
 import updateQuestionAction from '../actions/updateQuestion';
 
 import { QuestionType, AnswerType } from '../types';
-
-import getQuestions from '../actions/getQuestions';
 
 const useQuestions = () => {
   const { status, data, error, isFetching, refetch } = useQuery<
@@ -18,8 +20,7 @@ const useQuestions = () => {
   >(
     'getQuestions',
     async () => {
-      const questions = await getQuestions();
-      console.log(questions);
+      const questions = await getQuestionsAction();
       return Promise.all(
         questions.map(async question => {
           const answers =
@@ -74,9 +75,15 @@ const useQuestions = () => {
     Error
   >(async ({ id, question }) => {
     const response = await updateQuestionAction({ id, question });
+    await Promise.all(
+      question.answers
+        .filter(answer => answer.removedAt)
+        .map(answer => removeAnswerAction({ id: answer.id })),
+    );
     refetch();
     return response;
   });
+
   const [removeQuestion] = useMutation<void, { id: number }, Error>(
     async ({ id }) => {
       await removeQuestionAction({ id });

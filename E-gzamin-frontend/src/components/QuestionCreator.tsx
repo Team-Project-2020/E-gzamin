@@ -97,7 +97,12 @@ const QuestionCreator = ({
   };
   const onRemoveAnswer = (createdAt: Date) => () => {
     setAnswers(
-      answers.filter((ans) => ans.createdAt.getTime() !== createdAt.getTime())
+      answers.map((ans) => {
+        if (ans.createdAt.getTime() === createdAt.getTime()) {
+          return { ...ans, removedAt: new Date() };
+        }
+        return ans;
+      })
     );
   };
   const onSubmit = () =>
@@ -133,11 +138,12 @@ const QuestionCreator = ({
         </IconButton>
       </Grid>
       <div className={styles.answers}>
-        {answers.map(({ content, isCorrect, id, createdAt }) => (
+        {answers.map(({ content, isCorrect, id, createdAt, removedAt }) => (
           <_AnswerRow
             content={content}
             isCorrect={isCorrect}
             key={createdAt.getTime()}
+            disabled={!!removedAt}
             createdAt={createdAt}
             updateAnswer={updateAnswer(id, createdAt)}
             onRemoveAnswer={onRemoveAnswer(createdAt)}
@@ -172,6 +178,7 @@ type _AnswerRowType = {
   isCorrect: boolean;
   updateAnswer: (answer: AnswerType) => void;
   createdAt: Date;
+  disabled: boolean | undefined;
   styles: Record<
     "paper" | "questionInput" | "answers" | "answerRow" | "answerRowAnswer",
     string
@@ -186,6 +193,7 @@ const _AnswerRow = ({
   styles,
   createdAt,
   onRemoveAnswer,
+  disabled,
 }: _AnswerRowType): ReactElement => {
   return (
     <div className={styles.answerRow}>
@@ -193,6 +201,7 @@ const _AnswerRow = ({
         id="standard-basic"
         className={styles.answerRowAnswer}
         autoFocus
+        disabled={disabled}
         onChange={(e): void => {
           updateAnswer({ content: e.target.value, isCorrect, createdAt });
         }}
@@ -205,6 +214,7 @@ const _AnswerRow = ({
         control={
           <Checkbox
             checked={isCorrect}
+            disabled={disabled}
             onChange={(): void =>
               updateAnswer({ content, isCorrect: !isCorrect, createdAt })
             }
@@ -213,7 +223,12 @@ const _AnswerRow = ({
           />
         }
       />
-      <IconButton aria-label="delete" color="default" onClick={onRemoveAnswer}>
+      <IconButton
+        aria-label="delete"
+        color="default"
+        onClick={onRemoveAnswer}
+        disabled={disabled}
+      >
         <DeleteIcon />
       </IconButton>
     </div>
