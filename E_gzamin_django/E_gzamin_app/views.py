@@ -97,7 +97,7 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        owned  = self.request.query_params.get('owned', None)
+        owned = self.request.query_params.get('owned', None)
         if self.request.user.is_superuser:
             return qs
         if owned == 'True' or owned == 'true' or (str(self.request.path_info) != '/rest/groups/'):
@@ -149,6 +149,15 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group.members.remove(user)
         group.save()
         return Response({'status': 'user deleted'})
+
+    @action(detail=True, methods=['delete'])
+    def leave_group(self, request, pk=None):
+        group = self.get_object()
+        if self.request.user not in group.members.all():
+            return Response({'status': 'user not in group'})
+        group.members.remove(self.request.user)
+        group.save()
+        return Response({'status': 'group left'})
 
 
 class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
