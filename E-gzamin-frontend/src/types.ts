@@ -25,4 +25,15 @@ type Member = {
   email?: string;
 };
 
-export type { QuestionType, CourseType, AnswerType, Member };
+type GroupType = {
+  id: number;
+  name: string;
+  groupCode: string;
+  members: Array<Member>;
+};
+
+type GroupMembers = {
+  members: Array<Member>;
+};
+
+export type { QuestionType, CourseType, AnswerType, Member, GroupType, GroupMembers };

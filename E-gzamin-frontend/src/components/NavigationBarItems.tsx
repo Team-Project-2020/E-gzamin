@@ -63,7 +63,7 @@ const NavigationBarItems = () => {
         selectedItem={selectedItem}
         onClick={setSelectedItem}
         to="/egzamin/tests"
-        label="Designed tests"
+        label="Designated tests"
       >
         <LayersIcon />
       </_MenuItem>
