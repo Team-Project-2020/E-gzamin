@@ -80,6 +80,27 @@ const useQuestions = () => {
         .filter(answer => answer.removedAt)
         .map(answer => removeAnswerAction({ id: answer.id })),
     );
+    await Promise.all(
+      question.answers
+        .filter(answers => !answers.removedAt && answers.id)
+        .map(
+          async answer =>
+            await updateAnswerAction({
+              answer,
+              answerId: answer.id,
+            }),
+        ),
+    );
+    await createAnswer(
+      question.answers
+        .filter(answers => !answers.removedAt && !answers.id)
+        .map(answer => ({
+          content: answer.content,
+          isCorrect: answer.isCorrect,
+          question: response.id,
+          createdAt: answer.createdAt,
+        })),
+    );
     refetch();
     return response;
   });

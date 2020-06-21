@@ -76,13 +76,18 @@ const QuestionCreator = ({
 
   const updateAnswer = (id: number, createdAt: Date) => (
     answer: AnswerType
-  ): void =>
+  ): void => {
+    const updatedAnswer = answers.find((ans) => ans.createdAt === createdAt);
     setAnswers(
       sortBy(
-        [...answers.filter((ans) => ans.createdAt !== createdAt), answer],
+        [
+          ...answers.filter((ans) => ans.createdAt !== createdAt),
+          { ...updatedAnswer, ...answer },
+        ],
         (a) => a.createdAt.getTime()
       )
     );
+  };
   const addAnswer = (): void => {
     const newAnswers = [
       ...answers,

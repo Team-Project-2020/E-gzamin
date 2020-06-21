@@ -77,7 +77,7 @@ function AddQuest(): ReactElement {
   };
 
   useEffect(() => {
-    const question = questions.find((q) => q?.id === selectedQuestion?.id);
+    const question = questions.find((q) => q?.id === selectedQuestion?.id); //weird behaviour in case of answer delete
     question && setSelectedQuestion(question);
   }, [questions]);
 
