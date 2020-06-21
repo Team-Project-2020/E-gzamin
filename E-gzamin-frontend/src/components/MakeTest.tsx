@@ -64,7 +64,6 @@ function MakeTest(): ReactElement {
   return (
     <div className={styles.makeTest}>
       <div className={styles.header}>
-        <div></div>
       </div>
       <div className={styles.test}>
         <QuestionsTable

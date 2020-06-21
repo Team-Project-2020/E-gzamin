@@ -115,7 +115,7 @@ const QuestionCreator = ({
   return (
     <Paper elevation={2} className={styles.paper}>
       <CategoryFilter
-        categories={categories}
+        // categories={categories}
         onCategoryClick={(c) => () => {}}
       />
       <Grid
