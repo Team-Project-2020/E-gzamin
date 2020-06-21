@@ -4,6 +4,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import lightGreen from "@material-ui/core/colors/lightGreen";
 import teal from "@material-ui/core/colors/teal";
+import { Theme } from "@material-ui/core/styles";
 
 interface Props {
   children?: React.ReactNode;
@@ -11,11 +12,8 @@ interface Props {
 interface DarkModeContextProps {
   darkMode: boolean;
   setDarkMode(darkMode: boolean): void;
+  theme: Theme;
 }
-export const ThemeModeContext = React.createContext<DarkModeContextProps>({
-  darkMode: false,
-  setDarkMode: () => {},
-});
 
 export const useThemeMode = () => useContext(ThemeModeContext);
 
@@ -69,13 +67,21 @@ const theme = createMuiTheme({
   },
 });
 
+export const ThemeModeContext = React.createContext<DarkModeContextProps>({
+  darkMode: false,
+  setDarkMode: () => {},
+  theme,
+});
+
 export const ThemeModeProvider: React.FC<Props> = ({ children }) => {
   const [darkMode, setDarkMode] = useLocalStorage("darkMode", false);
+
   return (
     <ThemeModeContext.Provider
       value={{
         darkMode,
         setDarkMode,
+        theme: darkMode ? darkTheme : theme,
       }}
     >
       <ThemeProvider theme={darkMode ? darkTheme : theme}>
