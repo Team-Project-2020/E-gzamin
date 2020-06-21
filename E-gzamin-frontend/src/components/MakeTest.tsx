@@ -12,6 +12,7 @@ import MakeTestPopup from "./MakeTestPopup";
 import useQuestions from "../hooks/useQuestions";
 import { CourseType } from "../types";
 import useCategories from "../hooks/useCategories";
+import useTestTemplate from "../hooks/useTestTemplate";
 
 const useStyles = makeStyles((theme) => ({
   makeTest: {
@@ -43,20 +44,24 @@ const useStyles = makeStyles((theme) => ({
 function MakeTest(): ReactElement {
   const styles = useStyles();
   const { categories: courses } = useCategories();
+  const [testName, setTestName] = useState<string>("");
+
+  const { testTemplates, createTestTemplate } = useTestTemplate();
 
   const [selectedQuestions, setSelectedQuestions] = useState<
     Array<QuestionType>
   >([]);
-  const [isMakeTestPopupOpened, setMakeTestPopupOpened] = useState<boolean>(
-    false
-  );
+
   const { questions } = useQuestions();
   const [selectedCourse, setCourse] = useState<undefined | CourseType>(
     undefined
   );
 
-  const togglePopup = (): void =>
-    setMakeTestPopupOpened(!isMakeTestPopupOpened);
+  const onTestCreate = () => {
+    const questions = selectedQuestions.map(({ id }) => id);
+    createTestTemplate({ name: testName, questions });
+  };
+
   const updateSelectedQuestions = (question: QuestionType): void => {
     if (selectedQuestions.includes(question)) {
       setSelectedQuestions(
@@ -85,16 +90,13 @@ function MakeTest(): ReactElement {
           onSelect={updateSelectedQuestions}
         />
         <TestCreator
-          onGenerateTestClick={togglePopup}
-          selectedQuestions={selectedQuestions}
           onDelete={updateSelectedQuestions}
+          onGenerateTestClick={onTestCreate}
+          selectedQuestions={selectedQuestions}
+          setTestName={setTestName}
+          testName={testName}
         />
       </div>
-      <MakeTestPopup
-        test={{ questions: selectedQuestions }}
-        open={isMakeTestPopupOpened}
-        onClose={togglePopup}
-      />
     </div>
   );
 }
