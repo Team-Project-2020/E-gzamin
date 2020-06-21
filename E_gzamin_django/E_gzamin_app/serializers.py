@@ -27,7 +27,7 @@ class AnswerSerializer(BaseEntitySerializer):
 class CourseSerializer(BaseEntitySerializer):
     class Meta:
         model = Course
-        fields = BaseEntitySerializer.Meta.fields + ['name']
+        fields = BaseEntitySerializer.Meta.fields + ['name', 'owner']
 
     def create(self, validated_data):
         course = Course.objects.create(**validated_data)
@@ -75,7 +75,7 @@ class TestResultSerializer(BaseEntitySerializer):
     class Meta:
         model = TestResult
         fields = BaseEntitySerializer.Meta.fields + ['result', 'maxPoints', 'isPassed',
-                                                     'completedAt', 'startedAt', 'finishedAt','user_id']
+                                                     'startedAt', 'finishedAt','user_id']
 
 
 class TestTemplateSerializer(BaseEntitySerializer):
