@@ -272,7 +272,7 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if request.data.get("questions", None):
             template.questions.clear()
             for question_id in list(request.data['questions'].split(',')):
-                if question_id in Questions.objects.filter(owner=self.request.user.id):
+                if question_id in Question.objects.filter(owner=self.request.user.id):
                     template.questions.add(question_id)
         template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
         template.save()
