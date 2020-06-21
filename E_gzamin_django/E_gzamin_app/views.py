@@ -100,10 +100,23 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         owned  = self.request.query_params.get('owned', None)
         if self.request.user.is_superuser:
             return qs
-        if owned == 'True' or owned == 'true' or (str(self.request.path_info) != '/rest/groups/'):
+        if owned == 'True' or owned == 'true':
             return qs.distinct().filter(owner=self.request.user.id)
-        qs = Group.objects.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)))
-        return qs
+        if owned == 'False' or owned == 'false':
+            return qs.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)))
+        return qs.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)) | Q(owner=self.request.user.id))
+
+    def update(self, request, pk=None):
+        qs = self.get_queryset()
+        group = get_object_or_404(qs, pk=pk)
+        if self.request.user.is_superuser or group.owner == self.request.user:
+            super(GroupViewSet, self).update()
+        else:
+            serializer = GroupSerializer(group, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
+        group.save()
+        serializer = GroupSerializer(group, context={'request': request})
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         group = self.get_queryset().get(pk=pk)

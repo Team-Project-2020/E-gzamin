@@ -22,30 +22,32 @@ type CourseType = {
 type CourseSelectType = {
   courses: Array<CourseType>;
   styles?: Record<"courseSelect" | "courseSelectSelect", string>;
+  value: undefined | CourseType;
+  onChange: (course: CourseType) => void;
 };
+
 const CourseSelect: React.FC<CourseSelectType> = ({
   courses,
   styles,
+  value,
+  onChange,
 }: CourseSelectType) => {
   const defaultStyles = useStyles();
   const componentStyles = styles || defaultStyles;
-
-  const [selected, setSelected] = useState<undefined | CourseType>(undefined);
+  
   return (
     <div className={componentStyles.courseSelect}>
       <InputLabel>Course</InputLabel>
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
-        value={selected}
+        value={value?.id || -1}
         className={componentStyles.courseSelectSelect}
         onChange={({ target }): void =>
-          setSelected(courses.find(({ id }) => id === target.value))
+          onChange(courses.find(({ id }) => id === target.value))
         }
       >
-        <MenuItem key={-1} value={undefined}>
-          Select category
-        </MenuItem>
+        <MenuItem value={-1}>Select course</MenuItem>
         {courses.map(({ id, name }) => (
           <MenuItem key={id} value={id}>
             {name}
