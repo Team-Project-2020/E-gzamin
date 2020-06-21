@@ -47,7 +47,7 @@ const CourseSelect: React.FC<CourseSelectType> = ({
           onChange(courses.find(({ id }) => id === target.value))
         }
       >
-        <MenuItem value={-1}>Select category</MenuItem>
+        <MenuItem value={-1}>Select course</MenuItem>
         {courses.map(({ id, name }) => (
           <MenuItem key={id} value={id}>
             {name}
