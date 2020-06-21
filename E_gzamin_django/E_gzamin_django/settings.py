@@ -27,7 +27,8 @@ SECRET_KEY = 'z$^a%r^qm$$$!6et9l$g!v1)_%@3zrx94$r5g2v-ofi0mt9_s5'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '89.70.240.11'
+    '89.70.240.11',
+    '127.0.0.1'
 ]
 
 
@@ -42,9 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'E_gzamin_app',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -162,3 +165,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CORS_ORIGIN_ALLOW_ALL = True
