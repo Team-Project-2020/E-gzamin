@@ -102,7 +102,6 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             return qs
         qs = Group.objects.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)))
         if owned == 'True' or owned == 'true':
-            print("elo")
             return qs.distinct().filter(owner=self.request.user.id)
         return qs
 
@@ -295,7 +294,8 @@ class TestResultViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return qs.distinct().filter(user=self.request.user.id)
 
     def create(self, request):
-        temp = TestTemplate.objects.get(pk=self.request.data.get('testId'))
+        des = Designate.objects.get(pk=self.request.data.get('designateId'))
+        temp = TestTemplate.objects.get(pk=des.testTemplate.id)
         res = TestResult(
             testTemplate=temp,
             user=self.request.user,
@@ -346,7 +346,7 @@ class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         owned = self.request.query_params.get('owned', None)
         qs = super().get_queryset()
-        if owned == 'True' or owned == 'true':
+        if owned == 'True' or owned == 'true' or (str(self.request.path_info) != '/rest/designates/') :
             if self.request.user.is_superuser:
                 return qs
             return qs.distinct().filter(group__in=Group.objects.filter(owner=self.request.user.id))

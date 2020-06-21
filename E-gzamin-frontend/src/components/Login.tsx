@@ -1,47 +1,53 @@
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import React from "react";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import loginAction from "../actions/loginAction";
-import { useHistory } from "react-router-dom";
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
+import loginAction from '../actions/loginAction';
+
+const useStyles = makeStyles(theme => ({
   paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%",
+    width: '100%',
     marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
   registerContainer: {
-    margin: "auto",
+    margin: 'auto',
   },
 }));
 
 const Login = () => {
   const classes = useStyles();
   const history = useHistory();
+  const [email, setEmail] = useState<string>(undefined);
+  const [password, setPassword] = useState<string>(undefined);
 
-  const handleSubmit = () => {
-    loginAction("sdf@fsd", "dsagfsdg");
-    history.push("/home");
-    window.location.reload(true);
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const status = await loginAction(email, password);
+    if (status === 200) {
+      history.push('/egzamin/');
+      window.location.reload(true);
+    }
   };
 
   return (
@@ -69,6 +75,8 @@ const Login = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -79,6 +87,8 @@ const Login = () => {
                 name="password"
                 label="Password"
                 type="password"
+                onChange={e => setPassword(e.target.value)}
+                value={password}
                 id="password"
                 autoComplete="current-password"
               />
@@ -91,7 +101,7 @@ const Login = () => {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            Login
           </Button>
           <Grid container justify="flex-end">
             <Grid item>

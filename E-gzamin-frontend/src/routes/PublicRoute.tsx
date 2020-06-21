@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 import isLoggedIn from '../lib/isLoggedIn';
 
-type PrivateRouteProps = {
+type PublicRouteProps = {
   component: React.FC;
   exact?: boolean;
   path: string;
 };
-const PrivateRoute: React.FC<PrivateRouteProps> = ({
+const PublicRoute: React.FC<PublicRouteProps> = ({
   component: Component,
   ...restProps
 }) => {
@@ -16,15 +16,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   return (
     <Route
       {...restProps}
-      render={(props: any) =>
-        isUserLoggedIn ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/auth/login" />
-        )
+      render={(props: any): ReactElement =>
+        !isUserLoggedIn ? <Component {...props} /> : <Redirect to="/egzamin" />
       }
     />
   );
 };
 
-export default PrivateRoute;
+export default PublicRoute;
