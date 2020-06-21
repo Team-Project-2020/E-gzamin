@@ -51,7 +51,6 @@ const TestCreator = ({
 }: TestCreatorPropsType): ReactElement => {
   const styles = useStyles();
   const [testName, setTestName] = useState<string>("");
-  console.log(selectedQuestions);
   return (
     <Paper className={styles.paper}>
       <TextField

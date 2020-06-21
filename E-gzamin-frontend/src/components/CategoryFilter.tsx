@@ -7,6 +7,8 @@ import Grid from "@material-ui/core/Grid";
 import Dialog from "@material-ui/core/Dialog";
 import TextField from "@material-ui/core/TextField";
 import useCategories from "../hooks/useCategories";
+import CourseSelect from "./CourseSelect";
+import { CourseType } from "../types";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -56,13 +58,11 @@ type CategoryType = {
   name: string;
 };
 type CategoriesType = {
-  // categories: Array<CategoryType>;
   onCategoryClick: (categoryId: number) => (event: unknown) => unknown;
 };
 
 const CategoryFilter = ({ onCategoryClick }: CategoriesType) => {
-  const { categories, createCategory } = useCategories();
-  console.log(categories);
+  const { categories, createCategory, removeCategory } = useCategories();
   const styles = useStyles();
   const [isAddCoursePopupOpened, setAddCoursePopupOpened] = useState<boolean>(
     false
@@ -118,6 +118,11 @@ const CategoryFilter = ({ onCategoryClick }: CategoriesType) => {
         onClose={toggleAddCoursePopup}
         onSubmit={createCategory}
       />
+      <RemoveCoursePopup
+        open={isRemoveCoursePopupOpened}
+        onClose={toggleRemoveCoursePopup}
+        onSubmit={removeCategory}
+      />
     </div>
   );
 };
@@ -125,7 +130,7 @@ const CategoryFilter = ({ onCategoryClick }: CategoriesType) => {
 type AddCoursePopupProps = {
   open: boolean;
   onClose: () => void;
-  onSubmit: (name: string) => any;
+  onSubmit: (name: string) => Promise<any>;
 };
 
 const usePopupStyles = makeStyles((theme: Theme) => ({
@@ -160,6 +165,44 @@ const AddCoursePopup = ({ open, onClose, onSubmit }: AddCoursePopupProps) => {
         />
         <Button onClick={onClick} variant="contained" color="primary">
           ADD COURSE
+        </Button>
+      </Grid>
+    </Dialog>
+  );
+};
+
+const RemoveCoursePopup = ({
+  open,
+  onClose,
+  onSubmit,
+}: AddCoursePopupProps) => {
+  const styles = usePopupStyles();
+  const [selectedCourse, setCourse] = useState<undefined | CourseType>(
+    undefined
+  );
+  const { categories: courses } = useCategories();
+
+  const onClick = () => {
+    selectedCourse &&
+      selectedCourse.id &&
+      onSubmit(selectedCourse.id.toString());
+    onClose();
+  };
+  return (
+    <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
+      <Grid
+        container
+        className={styles.addCoursePopup}
+        direction="column"
+        justify="space-between"
+      >
+        <CourseSelect
+          value={selectedCourse}
+          onChange={setCourse}
+          courses={courses}
+        />
+        <Button onClick={onClick} variant="contained" color="primary">
+          REMOVE COURSE
         </Button>
       </Grid>
     </Dialog>

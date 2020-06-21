@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 
-import { courses, categories } from "../Constants";
 import QuestionsTable from "./QuestionsTable";
 import CourseSelect from "./CourseSelect";
 import CategoryFilter from "./CategoryFilter";
@@ -11,6 +10,8 @@ import TestCreator from "./TestCreator";
 import { QuestionType } from "../types";
 import MakeTestPopup from "./MakeTestPopup";
 import useQuestions from "../hooks/useQuestions";
+import { CourseType } from "../types";
+import useCategories from "../hooks/useCategories";
 
 const useStyles = makeStyles((theme) => ({
   makeTest: {
@@ -41,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
 
 function MakeTest(): ReactElement {
   const styles = useStyles();
+  const { categories: courses } = useCategories();
+
   const [selectedQuestions, setSelectedQuestions] = useState<
     Array<QuestionType>
   >([]);
@@ -48,6 +51,9 @@ function MakeTest(): ReactElement {
     false
   );
   const { questions } = useQuestions();
+  const [selectedCourse, setCourse] = useState<undefined | CourseType>(
+    undefined
+  );
 
   const togglePopup = (): void =>
     setMakeTestPopupOpened(!isMakeTestPopupOpened);
@@ -63,11 +69,17 @@ function MakeTest(): ReactElement {
 
   return (
     <div className={styles.makeTest}>
-      <div className={styles.header}>
-      </div>
+      <div className={styles.header}></div>
       <div className={styles.test}>
         <QuestionsTable
-          header={<CourseSelect styles={styles} courses={courses} />}
+          header={
+            <CourseSelect
+              value={selectedCourse}
+              onChange={setCourse}
+              styles={styles}
+              courses={courses}
+            />
+          }
           questions={questions}
           selectedQuestions={selectedQuestions}
           onSelect={updateSelectedQuestions}
