@@ -1,3 +1,4 @@
+from datetime import datetime
 from pprint import pprint
 
 from django.shortcuts import render
@@ -34,6 +35,17 @@ class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = AnswerSerializer(answer, context={'request': request})
         return Response(serializer.data)
 
+    def create(self, request):
+        answer = Answer(
+            content=self.request.data.get('content'),
+            isCorrect=self.request.data.get('isCorrect'),
+            question=Question.objects.get(pk=self.request.data.get('question'))
+        )
+        answer.save()
+        serializer = AnswerSerializer(answer, context={'request': request})
+        return Response(serializer.data)
+
+
     def update(self, request, pk=None):
         qs = self.get_queryset()
         answer = get_object_or_404(qs, pk=pk)
@@ -54,8 +66,29 @@ class CoursesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = super().get_queryset()
         if self.request.user.is_superuser:
             return qs
-        return qs.filter(owner=self.request.user.id)
+        return qs#.distinct().filter(owner=self.request.user.id)
 
+    def retrieve(self, request, pk=None):
+        course = self.get_queryset().get(pk=pk)
+        serializer = CourseSerializer(course, context={'request': request})
+        return Response(serializer.data)
+
+    def create(self, request):
+        course = Course(
+            name=self.request.data.get('name'),
+            owner=self.request.user
+        )
+        course.save()
+        serializer = CourseSerializer(course, context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        qs = self.get_queryset()
+        course = get_object_or_404(qs, pk=pk)
+        course.content = request.data.get("name", course.name)
+        course.save()
+        serializer = CourseSerializer(course, context={'request': request})
+        return Response(serializer.data)
 
 class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -67,8 +100,7 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         owned  = self.request.query_params.get('owned', None)
         if self.request.user.is_superuser:
             return qs
-        qs = Group.objects.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)) |
-                                  Q(owner=self.request.user))
+        qs = Group.objects.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)))
         if owned == 'True' or owned == 'true':
             print("elo")
             return qs.distinct().filter(owner=self.request.user.id)
@@ -135,6 +167,18 @@ class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()
         question = get_object_or_404(qs, pk=pk)
+        serializer = QuestionSerializer(question, context={'request': request})
+        return Response(serializer.data)
+
+    def create(self, request):
+        question = Question(
+            content=self.request.data.get('content'),
+            owner=self.request.user
+        )
+        question.save()
+        if self.request.data.get('courses') is not None:
+            for course in self.request.data.get('courses'):
+                question.courses.add(course)
         serializer = QuestionSerializer(question, context={'request': request})
         return Response(serializer.data)
 
@@ -245,15 +289,53 @@ class TestResultViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if self.basename == 'testtemplate-testresults':
             if self.request.user.is_superuser:
                 return qs
-            return qs.filter(testTemplate__in=TestTemplate.objects.filter(owned_by_id=self.request.user.id))
+            return qs.distinct().filter(testTemplate__in=TestTemplate.objects.filter(owned_by_id=self.request.user.id))
         if self.request.user.is_superuser:
             return qs
-        return qs.filter(user=self.request.user.id)
+        return qs.distinct().filter(user=self.request.user.id)
+
+    def create(self, request):
+        temp = TestTemplate.objects.get(pk=self.request.data.get('testId'))
+        res = TestResult(
+            testTemplate=temp,
+            user=self.request.user,
+            maxPoints=temp.questions.count(),
+            result=0,
+            isPassed=False,
+            startedAt=datetime.now()
+        )
+        res.save()
+        serializer = TestResultSerializer(res, context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        res = self.get_queryset().get(pk=pk)
+        points = 0
+        if res.finishedAt is not None:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        questions = self.request.data.get('questions')
+        for qid in questions:
+            is_correct = True
+            question = Question.objects.get(pk=qid['questionId'])
+            for answer in Answer.objects.filter(question=question):
+                if answer.isCorrect and answer.id not in qid['answers']:
+                    is_correct = False
+                if not answer.isCorrect and answer.id in qid['answers']:
+                    is_correct = False
+            if is_correct:
+                points += 1
+        res.result = points
+        res.isPassed = True if \
+            points/res.maxPoints > Designate.objects.get(pk=self.request.data.get('designateId')).passReq else False
+        res.finishedAt = datetime.now()
+        res.save()
+        serializer = TestResultSerializer(res, context={'request': request})
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()
         result = get_object_or_404(qs, pk=pk)
-        serializer = TestTemplateSerializer(result, context={'request': request})
+        serializer = TestResultSerializer(result, context={'request': request})
         return Response(serializer.data)
 
 class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
