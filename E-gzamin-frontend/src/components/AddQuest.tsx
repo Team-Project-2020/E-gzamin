@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from "react";
+import React, { useState, ReactElement, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import QuestionsTable from "./QuestionsTable";
@@ -75,6 +75,11 @@ function AddQuest(): ReactElement {
 
     setSelectedQuestion(newQuestion);
   };
+
+  useEffect(() => {
+    const question = questions.find((q) => q?.id === selectedQuestion?.id);
+    question && setSelectedQuestion(question);
+  }, [questions]);
 
   return (
     <div className={styles.addQuest}>
