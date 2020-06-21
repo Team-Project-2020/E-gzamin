@@ -3,13 +3,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 
-import { courses, questions, categories } from "../Constants";
+import { courses, categories } from "../Constants";
 import QuestionsTable from "./QuestionsTable";
 import CourseSelect from "./CourseSelect";
 import CategoryFilter from "./CategoryFilter";
 import TestCreator from "./TestCreator";
 import { QuestionType } from "../types";
 import MakeTestPopup from "./MakeTestPopup";
+import useQuestions from "../hooks/useQuestions";
 
 const useStyles = makeStyles((theme) => ({
   makeTest: {
@@ -46,6 +47,8 @@ function MakeTest(): ReactElement {
   const [isMakeTestPopupOpened, setMakeTestPopupOpened] = useState<boolean>(
     false
   );
+  const { questions } = useQuestions();
+
   const togglePopup = (): void =>
     setMakeTestPopupOpened(!isMakeTestPopupOpened);
   const updateSelectedQuestions = (question: QuestionType): void => {

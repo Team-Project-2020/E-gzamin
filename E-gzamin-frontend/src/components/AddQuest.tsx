@@ -2,11 +2,12 @@ import React, { useState, ReactElement } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import QuestionsTable from "./QuestionsTable";
-import CategoryFilter from "./CategoryFilter";
 import QuestionCreator from "./QuestionCreator";
 import CourseSelect from "./CourseSelect";
 import { QuestionType, CourseType } from "../types";
 import { courses, questions, categories } from "../Constants";
+import useQuestions from "../hooks/useQuestions";
+
 const useStyles = makeStyles((theme) => ({
   addQuest: {
     width: "inherit",
@@ -38,6 +39,12 @@ function AddQuest(): ReactElement {
   const [selectedQuestion, setSelectedQuestion] = useState<
     QuestionType | undefined
   >(undefined);
+  const { questions, createQuestion } = useQuestions();
+
+  const onQuestionSelect = (question: QuestionType) => {
+    if (question.id === selectedQuestion?.id) setSelectedQuestion(undefined);
+    else setSelectedQuestion(question);
+  };
 
   return (
     <div className={styles.addQuest}>
@@ -47,11 +54,12 @@ function AddQuest(): ReactElement {
           header={<CourseSelect styles={styles} courses={courses} />}
           questions={questions}
           selectedQuestions={[selectedQuestion]}
-          onSelect={(question: QuestionType): void =>
-            setSelectedQuestion(question)
-          }
+          onSelect={onQuestionSelect}
         />
-        <QuestionCreator editedQuestion={selectedQuestion} />
+        <QuestionCreator
+          editedQuestion={selectedQuestion}
+          createQuestion={createQuestion}
+        />
       </div>
     </div>
   );

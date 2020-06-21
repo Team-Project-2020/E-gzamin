@@ -3,7 +3,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useState, ReactElement } from "react";
+import React, { useState, ReactElement, useEffect } from "react";
 import { sortBy } from "lodash";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
@@ -50,17 +50,24 @@ const useStyles = makeStyles(() => ({
 
 type QuestionCreatorType = {
   editedQuestion: QuestionType | undefined;
+  createQuestion: any;
 };
 const QuestionCreator = ({
   editedQuestion,
+  createQuestion,
 }: QuestionCreatorType): ReactElement => {
   const styles = useStyles();
-  const [question, setQuestion] = useState<string>(
-    editedQuestion?.question || ""
+  const [question, setQuestion] = useState<string | null>(
+    editedQuestion?.content || ""
   );
   const [answers, setAnswers] = useState<Array<AnswerStateType>>(
     editedQuestion?.answers || []
   );
+  useEffect(() => {
+    const newQuestion = editedQuestion?.content || "";
+    setQuestion(newQuestion);
+  }, [editedQuestion]);
+
   const updateAnswer = (id: number) => (answer: AnswerType): void =>
     setAnswers(
       sortBy(
@@ -82,7 +89,7 @@ const QuestionCreator = ({
   const onRemoveAnswer = (id: number) => () => {
     setAnswers(answers.filter((ans) => ans.id !== id));
   };
-  const onSubmit = () => {};
+  const onSubmit = () => createQuestion({ content: question });
   return (
     <Paper elevation={2} className={styles.paper}>
       <CategoryFilter
@@ -94,6 +101,7 @@ const QuestionCreator = ({
         className={styles.questionInput}
         id="standard-basic"
         value={question}
+        autoFocus={true}
         onChange={({ target }): void => setQuestion(target.value)}
         label="Question"
       />
