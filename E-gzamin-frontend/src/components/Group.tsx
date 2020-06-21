@@ -5,9 +5,11 @@ import Button from "@material-ui/core/Button";
 
 import { Theme, makeStyles } from "@material-ui/core/styles";
 import Header from "./Header";
-
+import getGroups from '../actions/getGroups';
+import { useQuery } from 'react-query';
 import SingleGroupRow from "./SingleGroupRow";
 import { Member } from "../types";
+import Loader from './Loader';
 
 const useStyles = makeStyles((theme: Theme) => ({
   groupContent: {
@@ -39,8 +41,21 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+
+
 function Group() {
   const styles = useStyles();
+    const { status, data, error, isFetching } = useQuery(
+      'getGroups',
+      getGroups,
+    );
+
+    if (isFetching) {
+      return <Loader />;
+    }
+  
+  
+  
   return (
     <div className={styles.groupContent}>
       <_CreatedGroups styles={styles} />
