@@ -12,6 +12,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { QuestionType } from "../types";
 import CategoryFilter from "./CategoryFilter";
 import { courses, questions, categories } from "../Constants";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(() => ({
     maxWidth: "65%",
   },
   questionInput: {
-    width: "100%",
+    width: "85%",
     margin: "10px 0px",
   },
   answers: {
@@ -51,10 +52,12 @@ const useStyles = makeStyles(() => ({
 type QuestionCreatorType = {
   editedQuestion: QuestionType | undefined;
   createQuestion: any;
+  onQuestionRemove: () => void;
 };
 const QuestionCreator = ({
   editedQuestion,
   createQuestion,
+  onQuestionRemove,
 }: QuestionCreatorType): ReactElement => {
   const styles = useStyles();
   const [question, setQuestion] = useState<string | null>(
@@ -89,22 +92,37 @@ const QuestionCreator = ({
   const onRemoveAnswer = (id: number) => () => {
     setAnswers(answers.filter((ans) => ans.id !== id));
   };
-  const onSubmit = () => createQuestion({ content: question });
+  const onSubmit = () => createQuestion({ question: { content: question } });
   return (
     <Paper elevation={2} className={styles.paper}>
       <CategoryFilter
         categories={categories}
         onCategoryClick={(c) => () => {}}
       />
-
-      <TextField
-        className={styles.questionInput}
-        id="standard-basic"
-        value={question}
-        autoFocus={true}
-        onChange={({ target }): void => setQuestion(target.value)}
-        label="Question"
-      />
+      <Grid
+        container
+        item
+        spacing={0}
+        direction="row"
+        alignItems="flex-end"
+        justify="space-between"
+      >
+        <TextField
+          className={styles.questionInput}
+          id="standard-basic"
+          value={question}
+          autoFocus={true}
+          onChange={({ target }): void => setQuestion(target.value)}
+          label="Question"
+        />
+        <IconButton
+          aria-label="delete"
+          color="default"
+          onClick={onQuestionRemove}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Grid>
       <div className={styles.answers}>
         {answers.map(({ text, isCorrect, id }) => (
           <_AnswerRow
