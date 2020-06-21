@@ -196,6 +196,7 @@ const GroupTable = ({
                   members={members}
                   onDelete={id ? () => onRemove(id) : undefined}
                   index={index}
+                  groupId={id}
                   onDeletePrompt={onDeletePrompt}
                 />
               </React.Fragment>

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: "20px",
   },
 }));
-const GroupMembersTable: React.FC<GroupMembers> = () => {
+const GroupMembersTable: React.FC<any> = ({ groupId }: { groupId: number }) => {
   const styles = useStyles();
   const header = {
     id: undefined,
@@ -34,7 +34,8 @@ const GroupMembersTable: React.FC<GroupMembers> = () => {
     lastName: "Last name",
     email: "Email",
   };
-  const groupMembers = useGroupMembers();
+  const groupMembers = useGroupMembers({ id: groupId });
+  console.log(groupMembers)
   if (!groupMembers.groupMembers.length)
     return (
       <div className={styles.rowItem}>
