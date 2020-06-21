@@ -1,7 +1,7 @@
 type QuestionType = {
   id: number;
-  question: string;
-  answers: Array<AnswerType>;
+  content: string;
+  answers?: Array<AnswerType>;
 };
 
 type CourseType = {
@@ -10,14 +10,19 @@ type CourseType = {
 };
 
 type AnswerType = {
-  id: number;
-  text: string;
+  id?: number;
+  content: string;
   isCorrect: boolean;
+  question?: number;
+  createdAt:Date;
+  removedAt?:Date | undefined;
 };
+
 type Member = {
   id?: number;
   firstName?: string;
   lastName?: string;
   email?: string;
 };
+
 export type { QuestionType, CourseType, AnswerType, Member };

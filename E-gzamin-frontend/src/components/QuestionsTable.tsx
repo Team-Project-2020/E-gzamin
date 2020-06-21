@@ -63,8 +63,8 @@ const QuestionsTable = ({
       />
       <div className={styles.questions}>
         {questions
-          .filter(({ question }) =>
-            question.toLowerCase().includes(questionsFilter.toLowerCase())
+          .filter(({ content }) =>
+            content.toLowerCase().includes(questionsFilter.toLowerCase())
           )
           .map((question) => {
             return (
@@ -79,7 +79,7 @@ const QuestionsTable = ({
                 key={question.id}
                 onClick={(): void => onSelect(question)}
               >
-                {question.question}
+                {question.content}
               </Box>
             );
           })}

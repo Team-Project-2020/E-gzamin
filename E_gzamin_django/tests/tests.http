@@ -166,13 +166,13 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiY
   "questions":["1", "2"]
 }
 
-### see your test
+### see your tests
 
 GET http://89.70.240.11:8000/rest/testtemplates/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyODMxMTkzLCJqdGkiOiIyYjdmMmFjM2NmZGQ0ZjkyYmQ3ZTU1ZDQ1NGQ0YjM3ZCIsInVzZXJfaWQiOjM3fQ.iM0Qi5ARQwz2QWulJWRCgSTpcFVFI_7bxyz1QqVShNY
 
 ### try to see someone elses test
 
