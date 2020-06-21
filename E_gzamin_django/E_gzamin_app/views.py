@@ -100,9 +100,9 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         owned  = self.request.query_params.get('owned', None)
         if self.request.user.is_superuser:
             return qs
-        qs = Group.objects.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)))
-        if owned == 'True' or owned == 'true':
+        if owned == 'True' or owned == 'true' or (str(self.request.path_info) != '/rest/groups/'):
             return qs.distinct().filter(owner=self.request.user.id)
+        qs = Group.objects.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)))
         return qs
 
     def retrieve(self, request, pk=None):
@@ -195,6 +195,8 @@ class MemberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def get_queryset(self):
+        if self.basename == 'group-members':
+            return super().get_queryset()
         group = self.request.query_params.get('group', None)
         if group is not None:
             return User.objects.filter(is_member_of__in=[group])
