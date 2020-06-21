@@ -207,7 +207,7 @@ const _AnswerRow = ({
           />
         }
       />
-      <IconButton aria-label="delete" color="primary" onClick={onRemoveAnswer}>
+      <IconButton aria-label="delete" color="default" onClick={onRemoveAnswer}>
         <DeleteIcon />
       </IconButton>
     </div>
