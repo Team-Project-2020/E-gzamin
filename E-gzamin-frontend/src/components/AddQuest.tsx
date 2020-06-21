@@ -1,36 +1,36 @@
-import React, { useState, ReactElement } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, ReactElement } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 
-import QuestionsTable from './QuestionsTable';
-import QuestionCreator from './QuestionCreator';
-import CourseSelect from './CourseSelect';
-import { QuestionType, CourseType } from '../types';
-import { courses, questions, categories } from '../Constants';
-import useQuestions from '../hooks/useQuestions';
+import QuestionsTable from "./QuestionsTable";
+import QuestionCreator from "./QuestionCreator";
+import CourseSelect from "./CourseSelect";
+import { QuestionType, CourseType } from "../types";
+import { courses, questions, categories } from "../Constants";
+import useQuestions from "../hooks/useQuestions";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   addQuest: {
-    width: 'inherit',
+    width: "inherit",
     backgroundColor: theme.palette.background.default,
   },
   questionDetails: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
   },
   header: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   courseSelect: {
-    minWidth: '250px',
-    marginTop: '0px',
-    marginLeft: '0px',
-    marginRight: '0px',
-    marginBottom: '20px',
+    minWidth: "250px",
+    marginTop: "0px",
+    marginLeft: "0px",
+    marginRight: "0px",
+    marginBottom: "20px",
   },
   courseSelectSelect: {
-    width: '100%',
+    width: "100%",
   },
 }));
 
@@ -66,7 +66,9 @@ function AddQuest(): ReactElement {
     } else
       newQuestion = await createQuestion({
         content: question.content,
+        answers: question.answers,
       });
+
     setSelectedQuestion(newQuestion);
   };
 

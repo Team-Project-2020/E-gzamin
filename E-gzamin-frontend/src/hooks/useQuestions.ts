@@ -1,27 +1,69 @@
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation } from 'react-query';
 
-import createQuestionAction from "../actions/createQuestion";
-import removeQuestionAction from "../actions/removeQuestion";
-import updateQuestionAction from "../actions/updateQuestion";
+import getAnswersAction from '../actions/getAnswers';
+import createAnswerAction from '../actions/createAnswer';
+import createQuestionAction from '../actions/createQuestion';
+import removeQuestionAction from '../actions/removeQuestion';
+import updateQuestionAction from '../actions/updateQuestion';
 
-import { QuestionType } from "../types";
+import { QuestionType, AnswerType } from '../types';
 
-import getQuestions from "../actions/getQuestions";
+import getQuestions from '../actions/getQuestions';
 
 const useQuestions = () => {
-  const { status, data, error, isFetching, refetch } = useQuery(
-    "getQuestions",
-    getQuestions,
+  const { status, data, error, isFetching, refetch } = useQuery<
+    Array<QuestionType>,
+    any,
+    Error
+  >(
+    'getQuestions',
+    async () => {
+      const questions = await getQuestions();
+      console.log(questions);
+      return Promise.all(
+        questions.map(async question => {
+          const answers =
+            (await getAnswersAction({ questionId: question.id })) || [];
+          const answersWithCreatedAt = answers.map(answer => ({
+            ...answer,
+            createdAt: new Date(answer.createdAt),
+          }));
+          return {
+            ...question,
+            answers: answersWithCreatedAt,
+          };
+        }),
+      );
+    },
     {
       manual: true,
-    }
+    },
   );
+
+  const [createAnswer] = useMutation<
+    Array<AnswerType>,
+    Array<{
+      content: string;
+      isCorrect: boolean;
+      question: number;
+      createdAt: Date;
+    }>,
+    Error
+  >(async answers => {
+    return await Promise.all(
+      answers.map(async answer => await createAnswerAction(answer)),
+    );
+  });
+
   const [createQuestion] = useMutation<
     QuestionType,
-    { content: string },
+    { content: string; answers: Array<AnswerType> },
     Error
-  >(async (data) => {
-    const response = await createQuestionAction(data);
+  >(async ({ content, answers }) => {
+    const response = await createQuestionAction({ content });
+    await createAnswer(
+      answers.map(answer => ({ question: response.id, ...answer })),
+    );
     refetch();
     return response;
   });
@@ -39,7 +81,7 @@ const useQuestions = () => {
     async ({ id }) => {
       await removeQuestionAction({ id });
       refetch();
-    }
+    },
   );
   if (data === undefined && !isFetching) refetch();
   return {

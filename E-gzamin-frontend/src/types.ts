@@ -10,14 +10,18 @@ type CourseType = {
 };
 
 type AnswerType = {
-  id: number;
-  text: string;
+  id?: number;
+  content: string;
   isCorrect: boolean;
+  question?: number;
+  createdAt:Date;
 };
+
 type Member = {
   id?: number;
   firstName?: string;
   lastName?: string;
   email?: string;
 };
+
 export type { QuestionType, CourseType, AnswerType, Member };
