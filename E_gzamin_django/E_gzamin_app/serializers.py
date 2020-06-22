@@ -23,6 +23,10 @@ class AnswerSerializer(BaseEntitySerializer):
         instance.save()
         return instance
 
+class AnswerUserSerializer(BaseEntitySerializer):
+    class Meta:
+        model = Answer
+        fields = BaseEntitySerializer.Meta.fields + ['content', 'question']
 
 class CourseSerializer(BaseEntitySerializer):
     class Meta:
