@@ -39,19 +39,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type TestCreatorPropsType = {
-  selectedQuestions: Array<QuestionType | undefined>;
   onDelete: (question: QuestionType) => void;
   onGenerateTestClick: () => void;
+  selectedQuestions: Array<QuestionType | undefined>;
+  setTestName: (name: string) => void;
+  testName: string;
 };
 
 const TestCreator = ({
   selectedQuestions,
   onDelete,
   onGenerateTestClick,
+  setTestName,
+  testName,
 }: TestCreatorPropsType): ReactElement => {
   const styles = useStyles();
-  const [testName, setTestName] = useState<string>("");
-  console.log(selectedQuestions);
   return (
     <Paper className={styles.paper}>
       <TextField

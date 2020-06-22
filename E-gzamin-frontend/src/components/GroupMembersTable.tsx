@@ -2,11 +2,9 @@ import React, { useState, ReactElement } from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Header from "./Header";
 
-import { Member } from "../types";
+import { Member, GroupMembers } from "../types";
+import useGroupMembers from "../hooks/useGroupMembers";
 
-type MembersTableProps = {
-  members: Array<Member>;
-};
 const useStyles = makeStyles((theme: Theme) => ({
   membersTable: {
     display: "grid",
@@ -28,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: "20px",
   },
 }));
-const GroupMembersTable: React.FC<MembersTableProps> = ({ members }) => {
+const GroupMembersTable: React.FC<any> = ({ groupId }: { groupId: number }) => {
   const styles = useStyles();
   const header = {
     id: undefined,
@@ -36,7 +34,9 @@ const GroupMembersTable: React.FC<MembersTableProps> = ({ members }) => {
     lastName: "Last name",
     email: "Email",
   };
-  if (!members.length)
+  const groupMembers = useGroupMembers({ id: groupId });
+  console.log(groupMembers)
+  if (!groupMembers.groupMembers.length)
     return (
       <div className={styles.rowItem}>
         This group is empty or you don't have the privileges to see the members
@@ -47,25 +47,25 @@ const GroupMembersTable: React.FC<MembersTableProps> = ({ members }) => {
     <>
       <Header className={styles.header} content="Members" variant="h6" />
 
-      <div className={styles.membersTable}>
-        {[header, ...members].map(
-          ({ id, firstName, lastName, email }, index) => (
+      {/* <div className={styles.membersTable}>
+        {[header, ...groupMembers.groupMembers].map(
+          ({ members }, index) => (
             <React.Fragment key={index}>
               <MembersTableRowItem
-                content={firstName}
-                className={`${styles.membersTable} ${id === undefined &&
+                content={members.firstName}
+                className={`${styles.membersTable} ${members.id === undefined &&
                   styles.membersTableHeader}`}
                 style={{ gridRow: index + 1, gridColumn: 1 }}
               />
               <MembersTableRowItem
-                content={lastName}
-                className={`${styles.membersTable} ${id === undefined &&
+                content={members.lastName}
+                className={`${styles.membersTable} ${members.id === undefined &&
                   styles.membersTableHeader}`}
                 style={{ gridRow: index + 1, gridColumn: 2 }}
               />
               <MembersTableRowItem
-                content={email}
-                className={`${styles.membersTable} ${id === undefined &&
+                content={members.email}
+                className={`${styles.membersTable} ${members.id === undefined &&
                   styles.membersTableHeader}`}
                 style={{ gridRow: index + 1, gridColumn: 3 }}
               />
@@ -73,7 +73,7 @@ const GroupMembersTable: React.FC<MembersTableProps> = ({ members }) => {
           )
         )}
         <div className={styles.space} />
-      </div>
+      </div> */}
     </>
   );
 };

@@ -5,8 +5,8 @@ import QuestionsTable from "./QuestionsTable";
 import QuestionCreator from "./QuestionCreator";
 import CourseSelect from "./CourseSelect";
 import { QuestionType, CourseType } from "../types";
-import { courses, questions, categories } from "../Constants";
 import useQuestions from "../hooks/useQuestions";
+import useCategories from "../hooks/useCategories";
 
 const useStyles = makeStyles((theme) => ({
   addQuest: {
@@ -45,6 +45,11 @@ function AddQuest(): ReactElement {
     removeQuestion,
     updateQuestion,
   } = useQuestions();
+  const { categories: courses } = useCategories();
+
+  const [selectedCourse, setCourse] = useState<undefined | CourseType>(
+    undefined
+  );
 
   const onQuestionRemove = () => {
     selectedQuestion?.id && removeQuestion({ id: selectedQuestion.id });
@@ -86,7 +91,14 @@ function AddQuest(): ReactElement {
       <div className={styles.header}></div>
       <div className={styles.questionDetails}>
         <QuestionsTable
-          header={<CourseSelect styles={styles} courses={courses} />}
+          header={
+            <CourseSelect
+              value={selectedCourse}
+              onChange={setCourse}
+              styles={styles}
+              courses={courses}
+            />
+          }
           questions={questions}
           selectedQuestions={[selectedQuestion]}
           onSelect={onQuestionSelect}
