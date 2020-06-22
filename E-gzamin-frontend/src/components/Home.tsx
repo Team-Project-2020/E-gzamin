@@ -29,7 +29,7 @@ function Home() {
   const styles = useStyles();
   const { testTemplates } = useTestTemplate();
   const { ownedDesignates, designates } = useDesignates();
-
+  
   return (
     <div className="Home-content">
       <Header content="TEST TEMPLATES" variant="h3" />
@@ -41,21 +41,12 @@ function Home() {
         <DesignateField key={index} designate={designate} />
       ))}
       <Header content="TODO" variant="h3" />
-      {/*designated not owned */}
-      <TestField
-        subject="Pszyrka"
-        owner="Janusz"
-        pub_date="21.37.1410"
-        result="123/1500"
-        result_positive={false}
-        attempts={3}
-        available_attempts={3}
-        deadline="29.02.2021"
-        time={20}
-      />
+      {designates.map((designate, index) => (
+        <TestField key={index} designate={designate} />
+      ))}
       <Header content="COMPLETED" variant="h3" />
       {/*test results not owned */}
-      <TestField
+      {/* <TestField
         subject="Demonologia"
         owner="Seweryn"
         pub_date="11.12.1499"
@@ -65,7 +56,7 @@ function Home() {
         available_attempts={3}
         deadline="30.02.2021"
         time={15}
-      />
+      /> */}
     </div>
   );
 }

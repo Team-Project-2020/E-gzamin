@@ -138,6 +138,7 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group = Group.objects.get(pk=pk)
         if not self.request.user.is_superuser and self.request.user != group.owner:
             return Response({'status': 'unauthorized deletion, prosze wypierdalac'})
+        Designate.objects.filter(group=group).delete()
         group.delete()
         return Response({'status': 'group deleted'})
 

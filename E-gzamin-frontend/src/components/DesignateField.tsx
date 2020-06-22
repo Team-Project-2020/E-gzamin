@@ -11,6 +11,7 @@ import { DesignateType } from "../types";
 import TestFieldCell from "./TestFieldCell";
 import useGroups from "../hooks/useGroups";
 import useTestTemplate from "../hooks/useTestTemplate";
+import formatDate from '../lib/formatDate';
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
@@ -39,7 +40,6 @@ type DesignateFieldProps = {
   designate: DesignateType;
 };
 
-const formatDate = (date) => moment(date).format("DD-mm-yyyy");
 
 const DesignateField = ({ designate }: DesignateFieldProps) => {
   const styles = useStyles();
