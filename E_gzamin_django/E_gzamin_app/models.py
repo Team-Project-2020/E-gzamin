@@ -22,7 +22,7 @@ class Course(BaseEntity):
 
 
 class Designate(models.Model):
-    time = models.TimeField()
+    time = models.IntegerField(default=60)
     startDate = models.DateTimeField()
     endDate = models.DateTimeField()
     passReq = models.DecimalField(max_digits=3, decimal_places=2)
