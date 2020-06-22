@@ -12,49 +12,55 @@ type TestProps = {
 const Test = (props) => {
   const { params } = props.match;
   const id = parseInt(params.id);
-  const { status, progress, testResult, toggleResult, isChecked } = useTest(id);
+  // const { status, progress, testResult, toggleResult, isChecked } = useTest(id);
+  const {
+    createTestResult,
+    createStatus,
+    createdTestResult,
+    data,
+  } = useTestResult(id);
+  const designateId = id;
+  console.log(data)
 
-  if (!status.isReady() || true) return <Loader />;
+  if (true) return <Loader />;
 
-  console.log(testResult);
-
-  const questions = [
-    {
-      id: 3,
-      content: "a",
-      answers: [
-        { id: 734, content: "1" },
-        { id: 54, content: "2" },
-        { id: 423, content: "3" },
-      ],
-    },
-    {
-      id: 4,
-      content: "b",
-      answers: [
-        { id: 1, content: "1" },
-        { id: 2, content: "2" },
-        { id: 3, content: "3" },
-      ],
-    },
-    {
-      id: 5,
-      content: "c",
-      answers: [
-        { id: 23, content: "1" },
-        { id: 11, content: "2" },
-        { id: 423, content: "3" },
-      ],
-    },
-  ];
-  const actualQuestion = questions[progress];
-  return (
-    <TestQuestion
-      isChecked={isChecked(actualQuestion.id)}
-      toggleResult={toggleResult(actualQuestion.id)}
-      question={actualQuestion}
-    />
-  );
+  // const questions = [
+  //   {
+  //     id: 3,
+  //     content: "a",
+  //     answers: [
+  //       { id: 734, content: "1" },
+  //       { id: 54, content: "2" },
+  //       { id: 423, content: "3" },
+  //     ],
+  //   },
+  //   {
+  //     id: 4,
+  //     content: "b",
+  //     answers: [
+  //       { id: 1, content: "1" },
+  //       { id: 2, content: "2" },
+  //       { id: 3, content: "3" },
+  //     ],
+  //   },
+  //   {
+  //     id: 5,
+  //     content: "c",
+  //     answers: [
+  //       { id: 23, content: "1" },
+  //       { id: 11, content: "2" },
+  //       { id: 423, content: "3" },
+  //     ],
+  //   },
+  // ];
+  // const actualQuestion = questions[progress];
+  // return (
+  //   <TestQuestion
+  //     isChecked={isChecked(actualQuestion.id)}
+  //     toggleResult={toggleResult(actualQuestion.id)}
+  //     question={actualQuestion}
+  //   />
+  // );
 };
 
 export default Test;

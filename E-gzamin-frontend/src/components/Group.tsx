@@ -39,7 +39,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   grid: {
     display: "grid",
     gridTemplateRows: "50px",
-    backgroundColor: "#a1ff332e"
+    borderBottomWidth: "2px",
+    borderBottomStyle: "solid",
+    borderBottomColor: theme.palette.primary.main,
   },
 }));
 

@@ -46,11 +46,11 @@ const useTest = id => {
     createTestResult,
     createStatus,
     createdTestResult: testResult,
-  } = useTestResult();
+  } = useTestResult(id);
   if (createStatus.isIdle()) createTestResult({ designateId: id });
 
   const status = {
-    isReady: () => !createStatus.isIdle() && !createStatus.isLoading(),
+    // isReady: () => !createStatus.isIdle() && !createStatus.isLoading(),
   };
 
   return { status, progress, setProgress, testResult, toggleResult, isChecked };

@@ -38,8 +38,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     gridColumn: "3",
   },
 }));
-const GroupMembersTable: React.FC<any> = ({ groupId }: { groupId: number }) => {
-  const styles = useStyles();
+const GroupMembersTable: React.FC<any> = ({ groupId , styleInput }: { groupId: number , styleInput?: 
+  Record<"membersTable" | "rowItem" | "header" | "membersTableHeader" | "space" | "itemDelete", string>}) => {
+  const defaultStyles = useStyles();
+  const styles = styleInput || defaultStyles;
   const header = {
     id: undefined,
     first_name: "First name",
@@ -57,7 +59,7 @@ const GroupMembersTable: React.FC<any> = ({ groupId }: { groupId: number }) => {
     );
   return (
     <>
-      <Header className={styles.header} content="Members" variant="h6" />
+      {/* <Header className={styles.header} content="Members" variant="h6" /> */}
 
       <div className={styles.membersTable}>
         {[header, ...groupMembers].map(
