@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderBottomColor: theme.palette.primary.main,
     gridArea: "space",
     gridColumn: "1 / 4",
-    backgroundColor: "#dcedc8"
   },
 }));
 const SingleGroupRow: React.FC<SingleGroupRowProps> = (props) => {
