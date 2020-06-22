@@ -6,17 +6,13 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import TestIcon from "./TestIcon";
 import TestFieldCell from "./TestFieldCell";
+import { DesignateType } from "../types";
+import formatDate from "../lib/formatDate";
+import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 
 type TestFieldType = {
-  subject: string;
-  owner: string;
-  pub_date: string;
-  result: string;
-  result_positive: boolean;
-  attempts: number;
-  available_attempts: number;
-  deadline: string;
-  time: number;
+  designate: DesignateType;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     width: "80%",
     paddingLeft: "20px",
     paddingRight: "20px",
-    marginLeft:'5%',
+    marginLeft: "5%",
   },
   mainHeaders: {
     color: theme.palette.text.primary,
@@ -35,64 +31,37 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
+  button: {
+    margin: "auto",
+  },
 }));
 
 function TestField(props: TestFieldType) {
   const styles = useStyles();
-  const {
-    subject,
-    owner,
-    pub_date,
-    result,
-    result_positive,
-    attempts,
-    available_attempts,
-    deadline,
-    time,
-  } = props;
-  const testIconStatus =
-    available_attempts == attempts
-      ? "todo"
-      : result_positive
-      ? "passed"
-      : "failed";
-
+  const { designate } = props;
+  console.log(designate);
+  const { time, startDate, endDate, passReq } = designate;
+  const history = useHistory();
   const field = (
     <Paper className={styles.mainContent} elevation={2}>
       <Grid container item xs={12} spacing={0}>
-        <Grid container item xs={1} spacing={0}>
-          <TestIcon status={testIconStatus} />
-        </Grid>
-        <Grid container item xs={2} spacing={0}>
-          <TestFieldCell label="Subject" value={subject} />
-        </Grid>
-        <Grid container item xs={2} spacing={0}>
-          <TestFieldCell label="Author" value={owner} />
-        </Grid>
-        <Grid container item xs={1} spacing={0}>
-          <TestFieldCell label="Publicated" value={pub_date} />
-        </Grid>
-        <Grid container item xs={1} spacing={0}>
-          <TestFieldCell label="Deadline" value={deadline} />
-        </Grid>
-        <Grid container item xs={1} spacing={0}>
-          <TestFieldCell label="Score" value={result} />
-        </Grid>
-        <Grid container item xs={1} spacing={0}>
-          <TestFieldCell
-            label="Result"
-            value={result_positive ? "Passed" : "Failed"}
-          />
-        </Grid>
-        <Grid container item xs={1} spacing={0}>
-          <TestFieldCell
-            label="Attempts"
-            value={attempts + "/" + available_attempts}
-          />
-        </Grid>
-        <Grid container item xs={1} spacing={0}>
-          <TestFieldCell label="Time" value={time + " min"} />
-        </Grid>
+        <TestIcon status={"todo"} />
+
+        <TestFieldCell label="Time for test" value={`${time} minutes`} />
+        <TestFieldCell label="Publicated" value={formatDate(startDate)} />
+        <TestFieldCell label="Deadline" value={formatDate(endDate)} />
+        <TestFieldCell
+          label="required"
+          value={`${parseFloat(passReq) * 100}%`}
+        />
+        <Button
+          className={styles.button}
+          onClick={() => history.push(`egzamin/test/${designate.id}`)}
+          variant="contained"
+          color="primary"
+        >
+          USE Template
+        </Button>
       </Grid>
     </Paper>
   );
