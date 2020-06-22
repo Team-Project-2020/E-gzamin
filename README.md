@@ -1,5 +1,5 @@
 # E-gzamin
-E-learning app for creating exams/tests
+E-learning app for creating exams and tests
 
 ## Backend
 Backend is managed by python framework Django, to run install all packages mentioned in requirements.txt and type
