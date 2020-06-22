@@ -7,21 +7,22 @@ import useGroupMembers from "../hooks/useGroupMembers";
 import { number } from "prop-types";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import removeGroupMember from "../actions/removeGroupMember"
-import getCurrentUser from "../actions/getCurrentUser"
+import useGroups from "../hooks/useGroups"
 
 const useStyles = makeStyles((theme: Theme) => ({
   membersTable: {
     display: "grid",
     width: "80%",
     marginLeft: "auto",
+    margin: "auto",
   },
   rowItem: {
     textAlign: "center",
     paddingBottom: "10px",
   },
   header: {
-    paddingLeft: "15%",
+    paddingLeft: "5%",
+    fontWeight: "bold",
   },
   membersTableHeader: {
     padding: "5px",
@@ -45,15 +46,16 @@ const GroupMembersTable: React.FC<any> = ({ groupId }: { groupId: number }) => {
     last_name: "Last name",
     username: "Email",
   };
-
-  const { groupMembers } = useGroupMembers({ id: groupId });
+  const { groupMembers, removeGroupMember } = useGroupMembers({ id: groupId });
+  const ownedGroupIds = useGroups().ownedGroups.filter(({ id }) => id == 4).map(({ id }) => id);
+  const isOwner = ownedGroupIds.includes(groupId);
+  console.log(ownedGroupIds)
   if (!groupMembers.length)
     return (
       <div className={styles.rowItem}>
         This group is empty or you don't have the privileges to see the members
       </div>
     );
-
   return (
     <>
       <Header className={styles.header} content="Members" variant="h6" />
@@ -82,16 +84,17 @@ const GroupMembersTable: React.FC<any> = ({ groupId }: { groupId: number }) => {
                 className={`${styles.membersTable} ${id === undefined &&
                   styles.membersTableHeader}`}
                 style={{ gridRow: index + 1, gridColumn: 3 }}
-              />
-              <IconButton
-                  className={styles.itemDelete}
-                  aria-label="delete"
-                  color="default"
-                  onClick={() => removeGroupMember({id: groupId, userId: id})}
-                  style={{ gridRow: index + 1, gridColumn: 4 }}
-                >
-                  <DeleteIcon />
-              </IconButton>
+              />{ isOwner && id !== undefined &&
+                  <IconButton
+                    className={styles.itemDelete}
+                    aria-label="delete"
+                    color="default"
+                    onClick={() => removeGroupMember({ id: groupId, userId: id })}
+                    style={{ gridRow: index + 1, gridColumn: 4 }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+              }
             </React.Fragment>
           )}
         )}

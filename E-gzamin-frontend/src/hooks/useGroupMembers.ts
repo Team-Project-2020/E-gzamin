@@ -3,7 +3,7 @@ import { Member } from '../types';
 import getGroupMembers from '../actions/getGroupMembers';
 import removeGroupMemberAction from '../actions/removeGroupMember'
 
-const useGroupMembers = ({ id }):  { groupMembers: Array<Member> } => {
+const useGroupMembers = ({ id }) => {
   const { data, isFetching, refetch } = useQuery<
     Array<Member>,
     any,
@@ -11,9 +11,14 @@ const useGroupMembers = ({ id }):  { groupMembers: Array<Member> } => {
   >(`getGroupMembers${id}`, () => getGroupMembers({ id }), {
     manual: true,
   });
-
+  const [removeGroupMember] = useMutation<void, { id: number, userId: number }, Error>(
+    async ({ id, userId }) => {
+      await removeGroupMemberAction({ id, userId });
+      refetch();
+    },
+  );
   if (data === undefined && !isFetching) refetch();
-  return { groupMembers: data || [], };
+  return { groupMembers: data || [], removeGroupMember };
 };
 
 export default useGroupMembers;

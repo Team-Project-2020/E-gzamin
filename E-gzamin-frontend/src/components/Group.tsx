@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   grid: {
     display: "grid",
     gridTemplateRows: "50px",
+    backgroundColor: "#a1ff332e"
   },
 }));
 
