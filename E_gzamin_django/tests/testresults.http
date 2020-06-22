@@ -1,41 +1,35 @@
 ### getting your results
-GET http://89.70.240.11:8000/rest/testresults/
+GET {{host}}/rest/testresults/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkzNjA5NDI3LCJqdGkiOiI1MTM4YTI4NGZhMDk0ODA0OTQwZDQyZWY2Mzc2ODZmZCIsInVzZXJfaWQiOjM4fQ.4EdXSGCz3KMxZjxuenDxwp60CYy0EUm1lyXQlXlbCMw
+Authorization: Bearer {{user38}}
 
-### checking your courses
-GET http://89.70.240.11:8000/rest/courses/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
 
 ### checking your questions
-GET http://89.70.240.11:8000/rest/questions/
+GET {{host}}/rest/questions/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
+Authorization: Bearer {{user6}}
 
 ### creating test result
-POST http://89.70.240.11:8000/rest/testresults/
+POST {{host}}/rest/testresults/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkzNjA5NDI3LCJqdGkiOiI1MTM4YTI4NGZhMDk0ODA0OTQwZDQyZWY2Mzc2ODZmZCIsInVzZXJfaWQiOjM4fQ.4EdXSGCz3KMxZjxuenDxwp60CYy0EUm1lyXQlXlbCMw
+Authorization: Bearer {{user38}}
 
 {
     "designateId":41
 }
 
 ### updating testresult
-PUT http://89.70.240.11:8000/rest/testresults/18/
+PUT {{host}}/rest/testresults/18/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkzNjA5NDI3LCJqdGkiOiI1MTM4YTI4NGZhMDk0ODA0OTQwZDQyZWY2Mzc2ODZmZCIsInVzZXJfaWQiOjM4fQ.4EdXSGCz3KMxZjxuenDxwp60CYy0EUm1lyXQlXlbCMw
+Authorization: Bearer {{user38}}
 
 {
   "designateId":41,
@@ -52,47 +46,33 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiY
 }
 
 ### getting your results from 1 test as an owner
-GET http://89.70.240.11:8000/rest/testresults/1
+GET {{host}}/rest/testresults/1
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzU4NTEwLCJqdGkiOiJiZjc1MzRjY2EzZDM0M2U4OWQ2NTZmNjEyNDcyY2Q2MCIsInVzZXJfaWQiOjM3fQ.PTgLOD9sKaKR2-zYF61A_M_Ce84N2_SYljMAagkEeGk
+Authorization: Bearer {{user38}}
 
 ### getting your results from 1 test as a group member
-GET http://89.70.240.11:8000/rest/testresults/1
+GET {{host}}/rest/testresults/1
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzU4NTEwLCJqdGkiOiJiZjc1MzRjY2EzZDM0M2U4OWQ2NTZmNjEyNDcyY2Q2MCIsInVzZXJfaWQiOjM3fQ.PTgLOD9sKaKR2-zYF61A_M_Ce84N2_SYljMAagkEeGk
+Authorization: Bearer {{user38}}
 
-### creating course
-POST http://89.70.240.11:8000/rest/courses/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
-
-{
-    "name":"pls send help"
-}
-
-### delete course
-DELETE http://89.70.240.11:8000/rest/courses/12/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
 
 ### seeing someone elses results
-GET http://89.70.240.11:8000/rest/testresults/17/
+GET {{host}}/rest/testresults/17/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyODMxMTkzLCJqdGkiOiIyYjdmMmFjM2NmZGQ0ZjkyYmQ3ZTU1ZDQ1NGQ0YjM3ZCIsInVzZXJfaWQiOjM3fQ.iM0Qi5ARQwz2QWulJWRCgSTpcFVFI_7bxyz1QqVShNY
+Authorization: Bearer {{user6}}
 
 ### seeing test results of people in your group
-GET http://89.70.240.11:8000/rest/testtemplates/19/testresults/
+GET {{host}}/rest/testtemplates/19/testresults/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyODMxMTkzLCJqdGkiOiIyYjdmMmFjM2NmZGQ0ZjkyYmQ3ZTU1ZDQ1NGQ0YjM3ZCIsInVzZXJfaWQiOjM3fQ.iM0Qi5ARQwz2QWulJWRCgSTpcFVFI_7bxyz1QqVShNY
+Authorization: Bearer {{user37}}
+
+
+
