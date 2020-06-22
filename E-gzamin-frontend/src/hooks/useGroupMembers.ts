@@ -1,18 +1,19 @@
 import { useQuery, useMutation } from 'react-query';
-import { GroupMembers } from '../types';
+import { Member } from '../types';
 import getGroupMembers from '../actions/getGroupMembers';
+import removeGroupMemberAction from '../actions/removeGroupMember'
 
-const useGroupMembers = ({ id }) => {
+const useGroupMembers = ({ id }):  { groupMembers: Array<Member> } => {
   const { data, isFetching, refetch } = useQuery<
-    Array<GroupMembers>,
+    Array<Member>,
     any,
     Error
-  >(['getGroupMembers'], () => getGroupMembers({ id }), {
+  >(`getGroupMembers${id}`, () => getGroupMembers({ id }), {
     manual: true,
   });
 
   if (data === undefined && !isFetching) refetch();
-  return { groupMembers: data || [] };
+  return { groupMembers: data || [], };
 };
 
 export default useGroupMembers;
