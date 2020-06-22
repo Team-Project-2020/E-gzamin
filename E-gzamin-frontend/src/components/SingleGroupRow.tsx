@@ -96,7 +96,8 @@ const SingleGroupRow: React.FC<SingleGroupRowProps> = (props) => {
       )}
       {onDelete && (
         <Collapse
-          style={{ gridColumn: "1 / 4", gridRow: index * 3 + 2 }}
+          style={{
+            gridColumn: "1 / 4", gridRow: index * 3 + 2, backgroundColor: "#f1f8e9" }}
           in={isOpen}
         >
           <GroupMembersTable groupId={groupId} />
