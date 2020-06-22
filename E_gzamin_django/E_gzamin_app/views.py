@@ -90,6 +90,7 @@ class CoursesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = CourseSerializer(course, context={'request': request})
         return Response(serializer.data)
 
+
 class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Group.objects.all()
@@ -151,7 +152,7 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group.save()
         return Response({'status': 'user added'})
 
-    @action(detail=True, methods=['get', 'delete']) #TODO add checks for non-owners
+    @action(detail=True, methods=['get', 'delete'])
     def remove_user(self, request, pk=None):
         group = self.get_object()
         if self.request.user != group.owner:

@@ -39,7 +39,7 @@ class CourseSerializer(BaseEntitySerializer):
         return instance
 
 
-class DesignateSerializer(serializers.HyperlinkedModelSerializer):
+class DesignateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Designate
         group_id = serializers.CharField(source="group.id", read_only=True, required=False)
