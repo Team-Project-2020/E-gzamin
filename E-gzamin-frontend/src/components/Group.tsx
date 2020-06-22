@@ -8,8 +8,9 @@ import Header from "./Header";
 import getGroups from '../actions/getGroups';
 import { useQuery } from 'react-query';
 import SingleGroupRow from "./SingleGroupRow";
-import { Member } from "../types";
+import { Member, GroupType } from "../types";
 import Loader from './Loader';
+import useGroups from '../hooks/useGroups'
 
 const useStyles = makeStyles((theme: Theme) => ({
   groupContent: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   grid: {
     display: "grid",
     gridTemplateRows: "50px",
+    backgroundColor: "#a1ff332e"
   },
 }));
 
@@ -75,75 +77,42 @@ type _CreatedGroupsPropsType = {
 };
 const _CreatedGroups: React.FC<_CreatedGroupsPropsType> = (props) => {
   const { styles } = props;
-  const groups = [
-    { id: undefined, name: "name", code: "code", members: [] },
-    { id: 5, name: "math 2k20", code: "50421", members: [] },
-    { id: 6, name: "math 2k19", code: "50421", members: [] },
-    { id: 7, name: "xdfvdsfgsdf", code: "50421", members: [] },
-    { id: 8, name: "xdfvdsfgfdsfsdfsdf", code: "50421", members: [] },
-    {
-      id: 8,
-      name: "xdfvd",
-      code: "50421",
-      members: [],
-    },
-
-    {
-      id: 1,
-      name: "gfd",
-      code: "50422",
-      members: [
-        {
-          id: 1,
-          email: "xd@fds.pl",
-          firstName: "dfasfasd",
-          lastName: "dasfsedrfwe",
-        },
-        {
-          id: 2,
-          email: "fdsghdf@fdfsd.pl",
-          firstName: "dfasfasd",
-          lastName: "dasfsedrfwe",
-        },
-        {
-          id: 3,
-          email: "ffdsgsdfghdf@fdfsd.pl",
-          firstName: "dfasfasd",
-          lastName: "dasfsedrfwe",
-        },
-      ],
-    },
-    { id: 15, name: "xdfvdsfgfdsfsdfsdf", code: "50421", members: [] },
-  ];
+  const groups = useGroups();
 
   const onRemoveGroup = (groupId) => {
     console.log("remove group", groupId);
+    groups.removeGroup({id: groupId});
   };
   const onLeaveGroup = (groupId) => {
     console.log("leave group", groupId);
+    groups.leaveGroup({id: groupId});
   };
-  const onCreateGroup = (groupName) => {
-    console.log("create group", groupName);
+  const onCreateGroup = (code, name) => {
+    console.log("create group", name);
+    groups.createGroup({name, code});
   };
   const onJoinGroup = (groupCode) => {
     console.log("join to the group", groupCode);
+    groups.joinGroup({groupCode})
   };
   return (
     <>
       <GroupTable
-        groups={groups}
+        groups={groups.ownedGroups}
         styles={styles}
         headerContent="Created Groups"
         inputPrompt="Group name"
+        codePrompt="Group code"
         onRemove={onRemoveGroup}
         onButtonClick={onCreateGroup}
         buttonText="Create group"
         onDeletePrompt="remove group"
       />
       <GroupTable
-        groups={groups}
+        groups={groups.groups}
         styles={styles}
-        inputPrompt="Group code"
+        inputPrompt="Group name"
+        codePrompt="Group code"
         headerContent="Groups you joined"
         buttonText="Join Group"
         onDeletePrompt="leave"
@@ -153,15 +122,9 @@ const _CreatedGroups: React.FC<_CreatedGroupsPropsType> = (props) => {
     </>
   );
 };
-type Group = {
-  id: number;
-  name: string;
-  code: string;
-  members: Array<Member>;
-};
 
 type GroupTableProps = {
-  groups: Array<Group>;
+  groups: Array<GroupType>;
   styles: Record<
     | "groupContent"
     | "grid"
@@ -173,9 +136,10 @@ type GroupTableProps = {
   >;
   buttonText: string;
   inputPrompt: string;
+  codePrompt: string;
   headerContent: string;
   onRemove: (groupId: number) => void;
-  onButtonClick: (input: string) => void;
+  onButtonClick: (input: string, code: string) => void;
   onDeletePrompt?: string;
 };
 const GroupTable = ({
@@ -185,10 +149,14 @@ const GroupTable = ({
   onRemove,
   buttonText,
   inputPrompt,
+  codePrompt,
   onButtonClick,
   onDeletePrompt,
 }: GroupTableProps) => {
   const [textFieldValue, setTextFieldValue] = useState<string | undefined>(
+    undefined
+  );
+  const [codeFieldValue, setCodeFieldValue] = useState<string | undefined>(
     undefined
   );
   return (
@@ -196,16 +164,23 @@ const GroupTable = ({
       <Header content={headerContent} />
       <Paper className={styles.paper}>
         <div className={styles.createGroup}>
-          <TextField
+{headerContent !== "Groups you joined" &&          <TextField
             className={styles.createGroupInput}
             id="standard-basic"
             value={textFieldValue}
             onChange={({ target }): void => setTextFieldValue(target.value)}
             label={inputPrompt}
+          />}
+          <TextField
+            className={styles.createGroupInput}
+            id="standard-basic"
+            value={codeFieldValue}
+            onChange={({ target }): void => setCodeFieldValue(target.value)}
+            label={codePrompt}
           />
           <Button
             className={styles.createGroupButton}
-            onClick={() => onButtonClick(textFieldValue)}
+            onClick={() => onButtonClick(codeFieldValue, textFieldValue)}
             variant="contained"
             color="primary"
           >
@@ -213,15 +188,16 @@ const GroupTable = ({
           </Button>
         </div>
         <div className={styles.grid}>
-          {groups.map(({ id, name, code, members }, index) => {
+          {groups.map(({ id, name, groupCode, members }, index) => {
             return (
               <React.Fragment key={index}>
                 <SingleGroupRow
                   name={name}
-                  code={code}
+                  code={groupCode}
                   members={members}
                   onDelete={id ? () => onRemove(id) : undefined}
                   index={index}
+                  groupId={id}
                   onDeletePrompt={onDeletePrompt}
                 />
               </React.Fragment>

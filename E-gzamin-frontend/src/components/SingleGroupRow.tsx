@@ -14,6 +14,7 @@ type SingleGroupRowProps = {
   members: Array<Member>;
   onDelete?: (groupId) => void | undefined;
   index: number;
+  groupId:number;
   onDeletePrompt?: string;
 };
 const useStyles = makeStyles((theme: Theme) => ({
@@ -50,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 const SingleGroupRow: React.FC<SingleGroupRowProps> = (props) => {
-  const { name, code, members, onDelete, index, onDeletePrompt } = props;
+  const { name, code, members, onDelete, index, onDeletePrompt, groupId } = props;
   const styles = useStyles();
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = (): void => setOpen(!isOpen);
@@ -95,10 +96,11 @@ const SingleGroupRow: React.FC<SingleGroupRowProps> = (props) => {
       )}
       {onDelete && (
         <Collapse
-          style={{ gridColumn: "1 / 4", gridRow: index * 3 + 2 }}
+          style={{
+            gridColumn: "1 / 4", gridRow: index * 3 + 2, backgroundColor: "#f1f8e9" }}
           in={isOpen}
         >
-          <GroupMembersTable members={members} />
+          <GroupMembersTable groupId={groupId} />
         </Collapse>
       )}
     </>

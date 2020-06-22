@@ -1,12 +1,9 @@
 import axios from '../lib/axiosInstance';
 
 
-async function getGroups(): Promise<number> {
-    const response = await axios.get('/rest/groups');
-    if (response.status === 200) {
-        return response.data;
-    }
-    return response.status;
-  }
+const getGroups = async () => {
+    const { data } = await axios.get('/rest/groups?owned=False');
+    return data;
+};
   
-  export default getGroups;
+export default getGroups;

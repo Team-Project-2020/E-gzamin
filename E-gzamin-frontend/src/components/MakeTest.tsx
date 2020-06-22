@@ -3,13 +3,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 
-import { courses, questions, categories } from "../Constants";
 import QuestionsTable from "./QuestionsTable";
 import CourseSelect from "./CourseSelect";
 import CategoryFilter from "./CategoryFilter";
 import TestCreator from "./TestCreator";
 import { QuestionType } from "../types";
 import MakeTestPopup from "./MakeTestPopup";
+import useQuestions from "../hooks/useQuestions";
+import { CourseType } from "../types";
+import useCategories from "../hooks/useCategories";
+import useTestTemplate from "../hooks/useTestTemplate";
 
 const useStyles = makeStyles((theme) => ({
   makeTest: {
@@ -40,14 +43,25 @@ const useStyles = makeStyles((theme) => ({
 
 function MakeTest(): ReactElement {
   const styles = useStyles();
+  const { categories: courses } = useCategories();
+  const [testName, setTestName] = useState<string>("");
+
+  const { testTemplates, createTestTemplate } = useTestTemplate();
+
   const [selectedQuestions, setSelectedQuestions] = useState<
     Array<QuestionType>
   >([]);
-  const [isMakeTestPopupOpened, setMakeTestPopupOpened] = useState<boolean>(
-    false
+
+  const { questions } = useQuestions();
+  const [selectedCourse, setCourse] = useState<undefined | CourseType>(
+    undefined
   );
-  const togglePopup = (): void =>
-    setMakeTestPopupOpened(!isMakeTestPopupOpened);
+
+  const onTestCreate = () => {
+    const questions = selectedQuestions.map(({ id }) => id);
+    createTestTemplate({ name: testName, questions });
+  };
+
   const updateSelectedQuestions = (question: QuestionType): void => {
     if (selectedQuestions.includes(question)) {
       setSelectedQuestions(
@@ -60,27 +74,29 @@ function MakeTest(): ReactElement {
 
   return (
     <div className={styles.makeTest}>
-      <div className={styles.header}>
-        <div></div>
-      </div>
+      <div className={styles.header}></div>
       <div className={styles.test}>
         <QuestionsTable
-          header={<CourseSelect styles={styles} courses={courses} />}
+          header={
+            <CourseSelect
+              value={selectedCourse}
+              onChange={setCourse}
+              styles={styles}
+              courses={courses}
+            />
+          }
           questions={questions}
           selectedQuestions={selectedQuestions}
           onSelect={updateSelectedQuestions}
         />
         <TestCreator
-          onGenerateTestClick={togglePopup}
-          selectedQuestions={selectedQuestions}
           onDelete={updateSelectedQuestions}
+          onGenerateTestClick={onTestCreate}
+          selectedQuestions={selectedQuestions}
+          setTestName={setTestName}
+          testName={testName}
         />
       </div>
-      <MakeTestPopup
-        test={{ questions: selectedQuestions }}
-        open={isMakeTestPopupOpened}
-        onClose={togglePopup}
-      />
     </div>
   );
 }

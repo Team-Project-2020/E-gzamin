@@ -55,6 +55,45 @@ class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = AnswerSerializer(answer, context={'request': request})
         return Response(serializer.data)
 
+class AnswerUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    queryset = Answer.objects.all()
+    serializer_class = AnswerUserSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset()
+        answer = get_object_or_404(qs, pk=pk)
+        serializer = AnswerSerializer(answer, context={'request': request})
+        return Response(serializer.data)
+
+    def create(self, request):
+        if Question.objects.get(self.request.data.get('question')).owner == self.request.user:
+            answer = Answer(
+                content=self.request.data.get('content'),
+                isCorrect=self.request.data.get('isCorrect'),
+                question=Question.objects.get(pk=self.request.data.get('question'))
+            )
+            answer.save()
+        serializer = AnswerSerializer(answer, context={'request': request})
+        return Response(serializer.data)
+
+
+    def update(self, request, pk=None):
+        qs = self.get_queryset()
+        answer = get_object_or_404(qs, pk=pk)
+        if answer.question.owner == self.request.user:
+            answer.content = request.data.get("content", answer.content)
+            answer.isCorrect = request.data.get("isCorrect", answer.isCorrect)
+            answer.save()
+        serializer = AnswerUserSerializer(answer, context={'request': request})
+        return Response(serializer.data)
+
+
 
 class CoursesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -90,6 +129,7 @@ class CoursesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = CourseSerializer(course, context={'request': request})
         return Response(serializer.data)
 
+
 class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Group.objects.all()
@@ -97,13 +137,26 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        owned  = self.request.query_params.get('owned', None)
+        owned = self.request.query_params.get('owned', None)
         if self.request.user.is_superuser:
             return qs
-        qs = Group.objects.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)))
         if owned == 'True' or owned == 'true':
             return qs.distinct().filter(owner=self.request.user.id)
-        return qs
+        if owned == 'False' or owned == 'false':
+            return qs.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)))
+        return qs.distinct().filter(Q(members__in=User.objects.filter(id=self.request.user.id)) | Q(owner=self.request.user.id))
+
+    def update(self, request, pk=None):
+        qs = self.get_queryset()
+        group = get_object_or_404(qs, pk=pk)
+        if self.request.user.is_superuser or group.owner == self.request.user:
+            super(GroupViewSet, self).update()
+        else:
+            serializer = GroupSerializer(group, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
+        group.save()
+        serializer = GroupSerializer(group, context={'request': request})
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         group = self.get_queryset().get(pk=pk)
@@ -124,6 +177,7 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group = Group.objects.get(pk=pk)
         if not self.request.user.is_superuser and self.request.user != group.owner:
             return Response({'status': 'unauthorized deletion, prosze wypierdalac'})
+        Designate.objects.filter(group=group).delete()
         group.delete()
         return Response({'status': 'group deleted'})
 
@@ -138,7 +192,7 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group.save()
         return Response({'status': 'user added'})
 
-    @action(detail=True, methods=['get', 'delete']) #TODO add checks for non-owners
+    @action(detail=True, methods=['get', 'delete'])
     def remove_user(self, request, pk=None):
         group = self.get_object()
         if self.request.user != group.owner:
@@ -150,6 +204,15 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group.save()
         return Response({'status': 'user deleted'})
 
+    @action(detail=True, methods=['delete'])
+    def leave_group(self, request, pk=None):
+        group = self.get_object()
+        if self.request.user not in group.members.all():
+            return Response({'status': 'user not in group'})
+        group.members.remove(self.request.user)
+        group.save()
+        return Response({'status': 'group left'})
+
 
 class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -160,6 +223,8 @@ class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
         if self.request.user.is_superuser:
+            return qs
+        if self.basename == 'testresults-testtemplate-question':
             return qs
         return qs.distinct().filter(owner=self.request.user.id)
 
@@ -195,6 +260,8 @@ class MemberViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def get_queryset(self):
+        if self.basename == 'group-members':
+            return super().get_queryset()
         group = self.request.query_params.get('group', None)
         if group is not None:
             return User.objects.filter(is_member_of__in=[group])
@@ -245,6 +312,10 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = super().get_queryset()
         if self.request.user.is_superuser:
             return qs
+        if self.basename == 'testresults-testtemplate':
+            testtemp = qs.get()
+            if(len(TestResult.objects.distinct().filter(Q(testTemplate=testtemp.id)).filter(Q(finishedAt=None)).filter(user=self.request.user)) > 0):
+                return qs
         return qs.filter(owned_by=self.request.user.id)
 
     def retrieve(self, request, pk=None):
@@ -260,7 +331,8 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
         temp.save()
         for question in request.data.get('questions'):
-            temp.questions.add(question)
+            if Question.objects.filter(owner=self.request.user.id).filter(id=question):
+                temp.questions.add(question)
         serializer = TestTemplateSerializer(temp, context={'request': request})
         return Response(serializer.data)
 
@@ -268,13 +340,14 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def update(self, request, pk=None):
         qs = self.get_queryset()
         template = get_object_or_404(qs, pk=pk)
-        if request.data.get("questions", None):
-            template.questions.clear()
-            for question_id in list(request.data['questions'].split(',')):
-                if question_id in Questions.objects.filter(owner=self.request.user.id):
-                    template.questions.add(question_id)
-        template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
-        template.save()
+        if self.request.user == template.owned_by:
+            if request.data.get("questions", None):
+                template.questions.clear()
+                for question_id in (request.data['questions']):
+                    if Question.objects.filter(owner=self.request.user.id).filter(id=question_id):
+                        template.questions.add(question_id)
+            template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
+            template.save()
         serializer = TestTemplateSerializer(template, context={'request': request})
         return Response(serializer.data)
 
@@ -325,8 +398,11 @@ class TestResultViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             if is_correct:
                 points += 1
         res.result = points
-        res.isPassed = True if \
-            points/res.maxPoints > Designate.objects.get(pk=self.request.data.get('designateId')).passReq else False
+        if res.maxPoints > 0:
+            res.isPassed = True if \
+                points/res.maxPoints > Designate.objects.get(pk=self.request.data.get('designateId')).passReq else False
+        else:
+            res.isPassed = True
         res.finishedAt = datetime.now()
         res.save()
         serializer = TestResultSerializer(res, context={'request': request})
