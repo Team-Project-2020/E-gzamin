@@ -63,7 +63,6 @@ const GroupMembersTable: React.FC<any> = ({ groupId }: { groupId: number }) => {
         {[header, ...groupMembers].map(
           (member, index) => {
             const {id, first_name, last_name, username} = member
-            console.log(member)
             return (
             <React.Fragment key={index}>
               <MembersTableRowItem

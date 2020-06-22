@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 function Home() {
   const styles = useStyles();
   const { testTemplates } = useTestTemplate();
-  console.log(testTemplates);
   return (
     <div className="Home-content">
       <Header content="TEST TEMPLATES" variant="h3" />
