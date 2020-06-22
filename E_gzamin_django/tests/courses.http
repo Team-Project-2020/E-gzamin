@@ -1,0 +1,35 @@
+### creating course
+POST http://89.70.240.11:8000/rest/courses/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user37}}
+
+{
+    "name":"pls send help"
+}
+
+### delete course
+DELETE {{host}}/rest/courses/12/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user37}}
+
+### updating course
+PUT {{host}}/rest/courses/30/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user37}}
+
+{
+    "name":"course 8"
+}
+
+### checking your courses
+GET {{host}}/rest/courses/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user37}}
