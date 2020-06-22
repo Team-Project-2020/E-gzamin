@@ -49,7 +49,6 @@ const GroupMembersTable: React.FC<any> = ({ groupId }: { groupId: number }) => {
   const { groupMembers, removeGroupMember } = useGroupMembers({ id: groupId });
   const ownedGroupIds = useGroups().ownedGroups.filter(({ id }) => id == 4).map(({ id }) => id);
   const isOwner = ownedGroupIds.includes(groupId);
-  console.log(ownedGroupIds)
   if (!groupMembers.length)
     return (
       <div className={styles.rowItem}>
