@@ -90,6 +90,7 @@ class CoursesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = CourseSerializer(course, context={'request': request})
         return Response(serializer.data)
 
+
 class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Group.objects.all()
@@ -97,7 +98,7 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        owned  = self.request.query_params.get('owned', None)
+        owned = self.request.query_params.get('owned', None)
         if self.request.user.is_superuser:
             return qs
         if owned == 'True' or owned == 'true':
@@ -151,7 +152,7 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group.save()
         return Response({'status': 'user added'})
 
-    @action(detail=True, methods=['get', 'delete']) #TODO add checks for non-owners
+    @action(detail=True, methods=['get', 'delete'])
     def remove_user(self, request, pk=None):
         group = self.get_object()
         if self.request.user != group.owner:
@@ -162,6 +163,15 @@ class GroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         group.members.remove(user)
         group.save()
         return Response({'status': 'user deleted'})
+
+    @action(detail=True, methods=['delete'])
+    def leave_group(self, request, pk=None):
+        group = self.get_object()
+        if self.request.user not in group.members.all():
+            return Response({'status': 'user not in group'})
+        group.members.remove(self.request.user)
+        group.save()
+        return Response({'status': 'group left'})
 
 
 class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
@@ -286,7 +296,7 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if request.data.get("questions", None):
             template.questions.clear()
             for question_id in list(request.data['questions'].split(',')):
-                if question_id in Questions.objects.filter(owner=self.request.user.id):
+                if question_id in Question.objects.filter(owner=self.request.user.id):
                     template.questions.add(question_id)
         template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
         template.save()

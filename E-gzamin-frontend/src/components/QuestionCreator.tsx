@@ -3,15 +3,16 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useState, ReactElement } from "react";
+import React, { useState, ReactElement, useEffect } from "react";
 import { sortBy } from "lodash";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { QuestionType } from "../types";
+import { QuestionType, AnswerType } from "../types";
 import CategoryFilter from "./CategoryFilter";
 import { courses, questions, categories } from "../Constants";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(() => ({
     maxWidth: "65%",
   },
   questionInput: {
-    width: "100%",
+    width: "85%",
     margin: "10px 0px",
   },
   answers: {
@@ -50,61 +51,107 @@ const useStyles = makeStyles(() => ({
 
 type QuestionCreatorType = {
   editedQuestion: QuestionType | undefined;
+  createQuestion: any;
+  onQuestionRemove: () => void;
 };
 const QuestionCreator = ({
   editedQuestion,
+  createQuestion,
+  onQuestionRemove,
 }: QuestionCreatorType): ReactElement => {
   const styles = useStyles();
-  const [question, setQuestion] = useState<string>(
-    editedQuestion?.question || ""
+  const [question, setQuestion] = useState<string | null>(
+    editedQuestion?.content || ""
   );
-  const [answers, setAnswers] = useState<Array<AnswerStateType>>(
+  const [answers, setAnswers] = useState<Array<AnswerType>>(
     editedQuestion?.answers || []
   );
-  const updateAnswer = (id: number) => (answer: AnswerType): void =>
+  useEffect(() => {
+    const newQuestion = editedQuestion?.content || "";
+    const newAnswers = editedQuestion?.answers || [];
+
+    setQuestion(newQuestion);
+    setAnswers(newAnswers);
+  }, [editedQuestion]);
+
+  const updateAnswer = (id: number, createdAt: Date) => (
+    answer: AnswerType
+  ): void => {
+    const updatedAnswer = answers.find((ans) => ans.createdAt === createdAt);
     setAnswers(
       sortBy(
-        [...answers.filter((ans) => ans.id !== id), { ...answer, id }],
-        (a) => a.id
+        [
+          ...answers.filter((ans) => ans.createdAt !== createdAt),
+          { ...updatedAnswer, ...answer },
+        ],
+        (a) => a.createdAt.getTime()
       )
     );
+  };
   const addAnswer = (): void => {
     const newAnswers = [
       ...answers,
       {
-        text: "",
+        content: "",
         isCorrect: false,
-        id: answers[answers?.length - 1]?.id + 1 || 0,
+        createdAt: new Date(),
+        question: editedQuestion?.id,
       },
     ];
     setAnswers(newAnswers);
   };
-  const onRemoveAnswer = (id: number) => () => {
-    setAnswers(answers.filter((ans) => ans.id !== id));
+  const onRemoveAnswer = (createdAt: Date) => () => {
+    setAnswers(
+      answers.map((ans) => {
+        if (ans.createdAt.getTime() === createdAt.getTime()) {
+          return { ...ans, removedAt: new Date() };
+        }
+        return ans;
+      })
+    );
   };
-  const onSubmit = () => {};
+  const onSubmit = () =>
+    createQuestion({ question: { content: question, answers } });
   return (
     <Paper elevation={2} className={styles.paper}>
       <CategoryFilter
-        categories={categories}
+        // categories={categories}
         onCategoryClick={(c) => () => {}}
       />
-
-      <TextField
-        className={styles.questionInput}
-        id="standard-basic"
-        value={question}
-        onChange={({ target }): void => setQuestion(target.value)}
-        label="Question"
-      />
+      <Grid
+        container
+        item
+        spacing={0}
+        direction="row"
+        alignItems="flex-end"
+        justify="space-between"
+      >
+        <TextField
+          className={styles.questionInput}
+          id="standard-basic"
+          value={question}
+          autoFocus={true}
+          onChange={({ target }): void => setQuestion(target.value)}
+          label="Question"
+        />
+        <IconButton
+          aria-label="delete"
+          color="default"
+          onClick={onQuestionRemove}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Grid>
       <div className={styles.answers}>
-        {answers.map(({ text, isCorrect, id }) => (
+        {answers.map(({ content, isCorrect, id, createdAt, removedAt }) => (
           <_AnswerRow
-            text={text}
+            content={content}
             isCorrect={isCorrect}
-            key={id}
-            updateAnswer={updateAnswer(id)}
-            onRemoveAnswer={onRemoveAnswer(id)}
+            key={createdAt.getTime()}
+            disabled={!!removedAt}
+            createdAt={createdAt}
+            updateAnswer={updateAnswer(id, createdAt)}
+            onRemoveAnswer={onRemoveAnswer(createdAt)}
             styles={styles}
           />
         ))}
@@ -130,19 +177,13 @@ const QuestionCreator = ({
     </Paper>
   );
 };
-type AnswerStateType = {
-  id: number;
-  text: string;
-  isCorrect: boolean;
-};
-type AnswerType = {
-  text: string;
-  isCorrect: boolean;
-};
+
 type _AnswerRowType = {
-  text: string;
+  content: string;
   isCorrect: boolean;
   updateAnswer: (answer: AnswerType) => void;
+  createdAt: Date;
+  disabled: boolean | undefined;
   styles: Record<
     "paper" | "questionInput" | "answers" | "answerRow" | "answerRowAnswer",
     string
@@ -151,11 +192,13 @@ type _AnswerRowType = {
 };
 
 const _AnswerRow = ({
-  text,
+  content,
   isCorrect,
   updateAnswer,
   styles,
+  createdAt,
   onRemoveAnswer,
+  disabled,
 }: _AnswerRowType): ReactElement => {
   return (
     <div className={styles.answerRow}>
@@ -163,11 +206,12 @@ const _AnswerRow = ({
         id="standard-basic"
         className={styles.answerRowAnswer}
         autoFocus
+        disabled={disabled}
         onChange={(e): void => {
-          updateAnswer({ text: e.target.value, isCorrect });
+          updateAnswer({ content: e.target.value, isCorrect, createdAt });
         }}
         label="Answer"
-        value={text}
+        value={content}
       />
       <FormControlLabel
         label="is correct"
@@ -175,13 +219,21 @@ const _AnswerRow = ({
         control={
           <Checkbox
             checked={isCorrect}
-            onChange={(): void => updateAnswer({ text, isCorrect: !isCorrect })}
+            disabled={disabled}
+            onChange={(): void =>
+              updateAnswer({ content, isCorrect: !isCorrect, createdAt })
+            }
             color="primary"
             inputProps={{ "aria-label": "primary checkbox" }}
           />
         }
       />
-      <IconButton aria-label="delete" color="primary" onClick={onRemoveAnswer}>
+      <IconButton
+        aria-label="delete"
+        color="default"
+        onClick={onRemoveAnswer}
+        disabled={disabled}
+      >
         <DeleteIcon />
       </IconButton>
     </div>

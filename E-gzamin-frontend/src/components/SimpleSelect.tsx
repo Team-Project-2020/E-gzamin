@@ -6,49 +6,39 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 
 const useStyles = makeStyles(() => ({
-  courseSelect: {
+  selectContent: {
     minWidth: "250px",
     margin: "20px",
   },
-  courseSelectSelect: {
+  itemSelect: {
     width: "100%",
   },
 }));
 
-type CourseType = {
-  id: number;
-  name: string;
+type SimpleSelectProps = {
+  value: { id: number; name: string } | null;
+  onChange: (id: number) => void;
+  InputLabelText: string;
+  values: Array<{ id; name }>;
+  styles?: Record<"selectContent" | "itemSelect", string>;
 };
-type CourseSelectType = {
-  courses: Array<CourseType>;
-  styles?: Record<"courseSelect" | "courseSelectSelect", string>;
-  value: undefined | CourseType;
-  onChange: (course: CourseType) => void;
-};
-
-const CourseSelect: React.FC<CourseSelectType> = ({
-  courses,
-  styles,
-  value,
-  onChange,
-}: CourseSelectType) => {
+const SimpleSelect = ({ value, onChange, InputLabelText, values, styles }) => {
   const defaultStyles = useStyles();
   const componentStyles = styles || defaultStyles;
-  
+
   return (
-    <div className={componentStyles.courseSelect}>
-      <InputLabel>Course</InputLabel>
+    <div className={componentStyles.selectContent}>
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         value={value?.id || -1}
-        className={componentStyles.courseSelectSelect}
+        className={componentStyles.itemSelect}
         onChange={({ target }): void =>
-          onChange(courses.find(({ id }) => id === target.value))
+          onChange(values.find(({ id }) => id === target.value))
         }
       >
-        <MenuItem value={-1}>Select course</MenuItem>
-        {courses.map(({ id, name }) => (
+        <MenuItem value={-1}>{InputLabelText}</MenuItem>
+        {values.map(({ id, name }) => (
           <MenuItem key={id} value={id}>
             {name}
           </MenuItem>
@@ -58,4 +48,4 @@ const CourseSelect: React.FC<CourseSelectType> = ({
   );
 };
 
-export default CourseSelect;
+export default SimpleSelect;

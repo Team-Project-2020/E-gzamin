@@ -39,19 +39,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type TestCreatorPropsType = {
-  selectedQuestions: Array<QuestionType | undefined>;
   onDelete: (question: QuestionType) => void;
   onGenerateTestClick: () => void;
+  selectedQuestions: Array<QuestionType | undefined>;
+  setTestName: (name: string) => void;
+  testName: string;
 };
 
 const TestCreator = ({
   selectedQuestions,
   onDelete,
   onGenerateTestClick,
+  setTestName,
+  testName,
 }: TestCreatorPropsType): ReactElement => {
   const styles = useStyles();
-  const [testName, setTestName] = useState<string>("");
-  console.log(selectedQuestions);
   return (
     <Paper className={styles.paper}>
       <TextField
@@ -66,8 +68,8 @@ const TestCreator = ({
           <_QuestionContent
             key={question.id}
             styles={styles}
-            question={question.question}
-            answers={question.answers}
+            question={question.content}
+            answers={question.answers || []}
             onDelete={(): void => onDelete(question)}
           />
         </React.Fragment>
@@ -113,7 +115,7 @@ const _QuestionContent = ({
         <Typography variant="subtitle1">{question}</Typography>
         {answers.map((answer, index) => (
           <Typography key={index} variant="subtitle2">
-            {getLetter(index)}: {answer.text}
+            {getLetter(index)}: {answer.content}
           </Typography>
         ))}
       </div>

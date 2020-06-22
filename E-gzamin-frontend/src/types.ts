@@ -1,7 +1,16 @@
+type DesignateType = {
+  time:number,
+  passReq:string,
+  startDate:Date,
+  endDate:Date,
+  group_id:number,
+  testTemplate_id:number,
+}
+
 type QuestionType = {
   id: number;
-  question: string;
-  answers: Array<AnswerType>;
+  content: string;
+  answers?: Array<AnswerType>;
 };
 
 type CourseType = {
@@ -10,14 +19,30 @@ type CourseType = {
 };
 
 type AnswerType = {
-  id: number;
-  text: string;
-  isCorrect: boolean;
-};
-type Member = {
   id?: number;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
+  content: string;
+  isCorrect: boolean;
+  question?: number;
+  createdAt:Date;
+  removedAt?:Date | undefined;
 };
-export type { QuestionType, CourseType, AnswerType, Member };
+
+type Member = {
+  id: number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+};
+
+type GroupType = {
+  id: number;
+  name: string;
+  groupCode: string;
+  members: Array<Member>;
+};
+
+type GroupMembers = {
+  members: Array<Member>;
+};
+
+export type {DesignateType, QuestionType, CourseType, AnswerType, Member, GroupType, GroupMembers };
