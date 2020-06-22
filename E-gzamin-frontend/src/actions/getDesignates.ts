@@ -1,7 +1,7 @@
 import axios from '../lib/axiosInstance';
 
 const getDesignates = async () => {
-  const { data } = await axios.get(`/rest/designates`);
+  const { data } = await axios.get(`/rest/designates/`);
   return data;
 };
 

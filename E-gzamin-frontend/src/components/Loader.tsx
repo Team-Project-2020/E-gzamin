@@ -2,16 +2,16 @@ import React, { ReactElement } from "react";
 import Spinner from "react-loader-spinner";
 import { useThemeMode } from "../contexts/ThemeModeContext";
 
-const Loader = (): ReactElement => {
+const Loader = ({ size }: { size?: number }): ReactElement => {
   const { theme } = useThemeMode();
 
   return (
-    <div>
+    <div style={{ margin: "auto" }}>
       <Spinner
         type="TailSpin"
         color={theme.palette.secondary.main}
-        height={150}
-        width={150}
+        height={size || 150}
+        width={size || 150}
       />
     </div>
   );

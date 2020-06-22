@@ -1,4 +1,5 @@
 type DesignateType = {
+  id?:number,
   time:number,
   passReq:string,
   startDate:Date,
