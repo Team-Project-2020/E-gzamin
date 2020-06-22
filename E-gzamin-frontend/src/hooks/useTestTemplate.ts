@@ -4,6 +4,7 @@ import createTestTemplateAction from '../actions/createTestTemplate';
 import getTestTemplateAction from '../actions/getTestTemplates';
 
 type testTemplate = {
+  id?:number;
   name: string;
   questions: Array<number>;
 };
@@ -21,9 +22,12 @@ const useTestTemplate = () => {
     createTestTemplateAction,
   );
 
+  const getTestTemplate = id =>
+    (data || []).find(template => template?.id === id);
+
   if (data === undefined && !isFetching) refetch();
 
-  return { testTemplates: data || [], createTestTemplate };
+  return { testTemplates: data || [], createTestTemplate, getTestTemplate };
 };
 
 export default useTestTemplate;
