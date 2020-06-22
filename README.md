@@ -1,19 +1,19 @@
 # E-gzamin
 E-learning app for creating exams/tests
 
-# Backend
+## Backend
 Backend is managed by python framework Django, to run type
 
 `python manage.py runserver`
 
-# Frontend
+## Frontend
 Frontend is done in javascript framework React, to run type
 
 `npm install`
 
 `npm start`
 
-# Endpoints
+## Endpoints
 * `admin/` - to enter administrator panel
 * `rest/questions` - provides informations about questions
 * `rest/questions/<int>` - provides informations about a specific question 
@@ -33,4 +33,4 @@ Frontend is done in javascript framework React, to run type
 * `rest/users/me` - used to manage a user
 * `rest/designates` - provides information about test to be completed
 * `rest/designates/<int>` - provides information about a given test to be completed
-* `rest/designates/?owned=true` - tbd
+
