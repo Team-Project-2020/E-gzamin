@@ -19,10 +19,10 @@ type AnswerType = {
 };
 
 type Member = {
-  id?: number;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
+  id: number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
 };
 
 type GroupType = {
