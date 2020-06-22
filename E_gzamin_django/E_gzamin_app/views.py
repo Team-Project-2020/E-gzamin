@@ -55,6 +55,45 @@ class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = AnswerSerializer(answer, context={'request': request})
         return Response(serializer.data)
 
+class AnswerUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    queryset = Answer.objects.all()
+    serializer_class = AnswerUserSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs
+
+    def retrieve(self, request, pk=None):
+        qs = self.get_queryset()
+        answer = get_object_or_404(qs, pk=pk)
+        serializer = AnswerSerializer(answer, context={'request': request})
+        return Response(serializer.data)
+
+    def create(self, request):
+        if Question.objects.get(self.request.data.get('question')).owner == self.request.user:
+            answer = Answer(
+                content=self.request.data.get('content'),
+                isCorrect=self.request.data.get('isCorrect'),
+                question=Question.objects.get(pk=self.request.data.get('question'))
+            )
+            answer.save()
+        serializer = AnswerSerializer(answer, context={'request': request})
+        return Response(serializer.data)
+
+
+    def update(self, request, pk=None):
+        qs = self.get_queryset()
+        answer = get_object_or_404(qs, pk=pk)
+        if answer.question.owner == self.request.user:
+            answer.content = request.data.get("content", answer.content)
+            answer.isCorrect = request.data.get("isCorrect", answer.isCorrect)
+            answer.save()
+        serializer = AnswerUserSerializer(answer, context={'request': request})
+        return Response(serializer.data)
+
+
 
 class CoursesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -185,6 +224,8 @@ class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = super().get_queryset()
         if self.request.user.is_superuser:
             return qs
+        if self.basename == 'testresults-testtemplate-question':
+            return qs
         return qs.distinct().filter(owner=self.request.user.id)
 
     def retrieve(self, request, pk=None):
@@ -271,6 +312,10 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = super().get_queryset()
         if self.request.user.is_superuser:
             return qs
+        if self.basename == 'testresults-testtemplate':
+            testtemp = qs.get()
+            if(len(TestResult.objects.distinct().filter(Q(testTemplate=testtemp.id)).filter(Q(finishedAt=None)).filter(user=self.request.user)) > 0):
+                return qs
         return qs.filter(owned_by=self.request.user.id)
 
     def retrieve(self, request, pk=None):
@@ -294,13 +339,14 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def update(self, request, pk=None):
         qs = self.get_queryset()
         template = get_object_or_404(qs, pk=pk)
-        if request.data.get("questions", None):
-            template.questions.clear()
-            for question_id in list(request.data['questions'].split(',')):
-                if question_id in Question.objects.filter(owner=self.request.user.id):
-                    template.questions.add(question_id)
-        template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
-        template.save()
+        if self.request.user == template.owned_by:
+            if request.data.get("questions", None):
+                template.questions.clear()
+                for question_id in (request.data['questions']):
+                    if Question.objects.filter(owner=self.request.user.id).filter(id=question_id):
+                        template.questions.add(question_id)
+            template.name = request.data.get("name", template.name) #it basicly does a tenary on existance of this "field" - if request.data has a filed "filed" then variable is equal to first parameter else secound
+            template.save()
         serializer = TestTemplateSerializer(template, context={'request': request})
         return Response(serializer.data)
 
