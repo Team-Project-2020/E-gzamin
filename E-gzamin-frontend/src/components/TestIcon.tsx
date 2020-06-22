@@ -47,19 +47,19 @@ function StatusIcon(props: StatusPicType) {
 }
 
 type TestIconType = {
-  status: "todo" | "failed" | "passed";
+  status?: "todo" | "failed" | "passed";
 };
 
-function _TestIcon(props: TestIconType) {
+function TestIconComponent(props: TestIconType) {
   const status = props.status;
   const styles = useStyles();
 
   return (
     <div className="test-icon">
       <TestIcon className={styles.testIcon} />
-      <StatusIcon status={status} />
+      {status && <StatusIcon status={status} />}
     </div>
   );
 }
 
-export default TestIcon;
+export default TestIconComponent;
