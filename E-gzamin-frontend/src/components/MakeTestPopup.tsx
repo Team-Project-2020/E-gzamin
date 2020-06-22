@@ -79,7 +79,6 @@ const MakeTestPopup = ({
     });
     onClose();
   };
-  console.log(ownedGroups);
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Dialog

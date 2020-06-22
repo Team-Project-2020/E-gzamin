@@ -1,26 +1,49 @@
 import { useQuery, useMutation } from 'react-query';
 import getDesignates from '../actions/getDesignates';
+import getOwnedDesignates from '../actions/getOwnedDesignates';
+
 import createDesignateAction from '../actions/createDesignate';
 import { DesignateType } from '../types';
 
 const useDesignates = () => {
-  const { status, data, error, isFetching, refetch } = useQuery<
-    Array<DesignateType>,
-    any,
-    Error
-  >('getDesignates', getDesignates, {
-    manual: true,
-  });
+  const {
+    data: ownedDesignates,
+    isFetching: isFetchingOwned,
+    refetch: refetchOwned,
+  } = useQuery<Array<DesignateType>, any, Error>(
+    'getOwnedDesignates',
+    getOwnedDesignates,
+    {
+      manual: true,
+    },
+  );
+  const {
+    data: designates,
+    isFetching: isFetching,
+    refetch: refetch,
+  } = useQuery<Array<DesignateType>, any, Error>(
+    'getDesignates',
+    getDesignates,
+    {
+      manual: true,
+    },
+  );
   const [createDesignate] = useMutation<any, DesignateType, Error>(
     async designate => {
       const response = await createDesignateAction(designate);
-      refetch();
+      refetchOwned();
       return response;
     },
   );
-  if (data === undefined && !isFetching) refetch();
 
-  return { designates: data || [], createDesignate };
+  if (designates === undefined && !isFetching) refetch();
+  if (ownedDesignates === undefined && !isFetchingOwned) refetchOwned();
+
+  return {
+    ownedDesignates: ownedDesignates || [],
+    designates: designates || [],
+    createDesignate,
+  };
 };
 
 export default useDesignates;
