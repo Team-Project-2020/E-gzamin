@@ -8,6 +8,9 @@ import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { QuestionType } from "../types";
+import useDesignates from "../hooks/useDesignates";
+import useGroups from "../hooks/useGroups";
+import SimpleSelect from "./SimpleSelect";
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
@@ -29,24 +32,54 @@ const useStyles = makeStyles((theme) => ({
   inputAdornment: {
     color: theme.palette.text.secondary,
   },
+  selectContent: {
+    width: "100%",
+    margin:"15px 5px",
+  },
+  itemSelect: {
+    width: "100%",
+  },
 }));
 
 type MakeTestPopupPropsType = {
   open: boolean;
   onClose: () => void;
-  test: { questions: Array<QuestionType> };
+  testTemplate: { id: number; name: string; questions: Array<number> };
+};
+const convertToTwoDigits = (time: number, maxValue: number) => {
+  if (time.toString().length === 1) return `0${time}`;
+  return time % maxValue;
 };
 const MakeTestPopup = ({
   open,
   onClose,
-  test,
+  testTemplate,
 }: MakeTestPopupPropsType): ReactElement => {
   const styles = useStyles();
+  const {  createDesignate } = useDesignates();
+  const { ownedGroups } = useGroups();
+  const [groupTest, setGroupTest] = useState(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [finishDate, setFinishDate] = useState<Date | null>(null);
   const [threshold, setThreshold] = useState<number | null>(null);
   const [time, setTime] = useState<number | null>(null);
-  const [questionsPerUser, setQuestionsPerUser] = useState<number | null>(null);
+
+  const isButtonDisabled =
+    !time || !threshold || !startDate || !finishDate || !groupTest;
+
+  const handleSubmit = async () => {
+
+    createDesignate({
+      time,
+      passReq: (threshold / 100).toString(),
+      startDate,
+      endDate: finishDate,
+      group_id: groupTest.id,
+      testTemplate_id: testTemplate.id,
+    });
+    onClose();
+  };
+  console.log(ownedGroups);
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Dialog
@@ -98,27 +131,17 @@ const MakeTestPopup = ({
               endAdornment: <InputAdornment position="end">%</InputAdornment>,
             }}
           />
-          <TextField
-            className={styles.input}
-            id="standard-basic"
-            value={questionsPerUser}
-            onChange={({ target }) => setQuestionsPerUser(Number(target.value))}
-            label="questions per user"
-            type="number"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment
-                  className={styles.inputAdornment}
-                  position="end"
-                >
-                  out of {test.questions.length}
-                </InputAdornment>
-              ),
-            }}
+          <SimpleSelect
+            value={groupTest}
+            styles={styles}
+            onChange={setGroupTest}
+            InputLabelText={"Select group"}
+            values={ownedGroups}
           />
         </div>
         <Button
-          onClick={() => {}}
+          onClick={handleSubmit}
+          disabled={isButtonDisabled}
           className={styles.generateTestButton}
           variant="contained"
           color="primary"

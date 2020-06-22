@@ -1,5 +1,5 @@
 type DesignateType = {
-  time:string,
+  time:number,
   passReq:string,
   startDate:Date,
   endDate:Date,
