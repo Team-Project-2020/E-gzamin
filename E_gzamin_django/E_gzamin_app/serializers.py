@@ -3,7 +3,7 @@ from E_gzamin_app.models import *
 from django.contrib.auth.models import User
 
 
-class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
+class BaseEntitySerializer(serializers.ModelSerializer):
     class Meta:
         model = BaseEntity
         fields = ['url', 'id', 'createdAt', 'removedAt']
@@ -27,7 +27,7 @@ class AnswerSerializer(BaseEntitySerializer):
 class CourseSerializer(BaseEntitySerializer):
     class Meta:
         model = Course
-        fields = BaseEntitySerializer.Meta.fields + ['name']
+        fields = BaseEntitySerializer.Meta.fields + ['name', 'owner']
 
     def create(self, validated_data):
         course = Course.objects.create(**validated_data)
@@ -39,12 +39,13 @@ class CourseSerializer(BaseEntitySerializer):
         return instance
 
 
-class DesignateSerializer(serializers.HyperlinkedModelSerializer):
+class DesignateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Designate
         group_id = serializers.CharField(source="group.id", read_only=True, required=False)
         testTemplate_id = serializers.CharField(source="testTemplate.id", read_only=True, required=False)
         fields = ['time', 'startDate', 'endDate', 'passReq' , 'id', 'group_id', 'testTemplate_id']
+
 
 class GroupSerializer(BaseEntitySerializer):
     class Meta:
@@ -75,13 +76,13 @@ class TestResultSerializer(BaseEntitySerializer):
     class Meta:
         model = TestResult
         fields = BaseEntitySerializer.Meta.fields + ['result', 'maxPoints', 'isPassed',
-                                                     'completedAt', 'startedAt', 'finishedAt','user_id']
+                                                     'startedAt', 'finishedAt','user_id']
 
 
 class TestTemplateSerializer(BaseEntitySerializer):
     class Meta:
         model = TestTemplate
-        fields = BaseEntitySerializer.Meta.fields + ['name','questions']
+        fields = BaseEntitySerializer.Meta.fields + ['name', 'questions']
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

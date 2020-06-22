@@ -22,7 +22,7 @@ class Course(BaseEntity):
 
 
 class Designate(models.Model):
-    time = models.TimeField()
+    time = models.IntegerField(default=60)
     startDate = models.DateTimeField()
     endDate = models.DateTimeField()
     passReq = models.DecimalField(max_digits=3, decimal_places=2)
@@ -53,9 +53,8 @@ class TestResult(BaseEntity):
     result = models.DecimalField(max_digits=5, decimal_places=2)
     maxPoints = models.DecimalField(max_digits=5, decimal_places=2)
     isPassed = models.BooleanField()
-    completedAt = models.DateTimeField()
     startedAt = models.DateTimeField()
-    finishedAt = models.DateTimeField()
+    finishedAt = models.DateTimeField(null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     testTemplate = models.ForeignKey("TestTemplate", on_delete=models.DO_NOTHING)
 
