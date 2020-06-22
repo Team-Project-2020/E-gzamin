@@ -331,7 +331,8 @@ class TestTemplateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         )
         temp.save()
         for question in request.data.get('questions'):
-            temp.questions.add(question)
+            if Question.objects.filter(owner=self.request.user.id).filter(id=question):
+                temp.questions.add(question)
         serializer = TestTemplateSerializer(temp, context={'request': request})
         return Response(serializer.data)
 
