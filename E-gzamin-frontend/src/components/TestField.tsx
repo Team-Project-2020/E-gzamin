@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 function TestField(props: TestFieldType) {
   const styles = useStyles();
   const { designate } = props;
-  console.log(designate);
   const { time, startDate, endDate, passReq } = designate;
   const history = useHistory();
   const field = (
