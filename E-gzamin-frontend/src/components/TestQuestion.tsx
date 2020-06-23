@@ -63,7 +63,9 @@ const _Answer = ({ isChecked, toggleAnswer, content }: _Answer) => {
         onChange={toggleAnswer}
         inputProps={{ "aria-label": "primary checkbox" }}
       />
-      {content}
+      <p style={{ cursor: "pointer" }} onClick={toggleAnswer}>
+        {content}
+      </p>
     </Grid>
   );
 };
