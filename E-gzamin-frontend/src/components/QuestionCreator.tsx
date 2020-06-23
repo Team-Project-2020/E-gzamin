@@ -66,10 +66,11 @@ const QuestionCreator = ({
   const [answers, setAnswers] = useState<Array<AnswerType>>(
     editedQuestion?.answers || []
   );
+  const [selectedCourses, setSelectedCourses] = useState([]);
   useEffect(() => {
     const newQuestion = editedQuestion?.content || "";
     const newAnswers = editedQuestion?.answers || [];
-
+    setSelectedCourses(editedQuestion?.courses || []);
     setQuestion(newQuestion);
     setAnswers(newAnswers);
   }, [editedQuestion]);
@@ -110,13 +111,23 @@ const QuestionCreator = ({
       })
     );
   };
-  const onSubmit = () =>
-    createQuestion({ question: { content: question, answers } });
+
+  const onCategoryClick = (categoryId) => () => {
+    if (selectedCourses.includes(categoryId))
+      setSelectedCourses(selectedCourses.filter((c) => c !== categoryId));
+    else setSelectedCourses([...selectedCourses, categoryId]);
+  };
+
+  const onSubmit = () => {
+    createQuestion({
+      question: { content: question, answers, courses: selectedCourses },
+    });
+  };
   return (
     <Paper elevation={2} className={styles.paper}>
       <CategoryFilter
-        // categories={categories}
-        onCategoryClick={(c) => () => {}}
+        selectedCategories={selectedCourses}
+        onCategoryClick={onCategoryClick}
       />
       <Grid
         container

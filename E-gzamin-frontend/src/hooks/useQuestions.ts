@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from 'react-query';
 
+import getQuestionCourses from '../actions/getQuestionCourses';
 import createAnswerAction from '../actions/createAnswer';
 import getAnswersAction from '../actions/getAnswers';
 import removeAnswerAction from '../actions/removeAnswer';
@@ -29,9 +30,11 @@ const useQuestions = () => {
             ...answer,
             createdAt: new Date(answer.createdAt),
           }));
+          const courses = await getQuestionCourses({ questionId: question.id });
           return {
             ...question,
             answers: answersWithCreatedAt,
+            courses: courses.map(c => c.id),
           };
         }),
       );
@@ -58,10 +61,10 @@ const useQuestions = () => {
 
   const [createQuestion] = useMutation<
     QuestionType,
-    { content: string; answers: Array<AnswerType> },
+    { content: string; answers: Array<AnswerType>; courses?: any },
     Error
-  >(async ({ content, answers }) => {
-    const response = await createQuestionAction({ content });
+  >(async ({ content, answers, courses }) => {
+    const response = await createQuestionAction({ content, courses });
     await createAnswer(
       answers.map(answer => ({ ...answer, question: response.id })),
     );

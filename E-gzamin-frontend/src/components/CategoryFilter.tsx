@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import useCategories from "../hooks/useCategories";
 import CourseSelect from "./CourseSelect";
 import { CourseType } from "../types";
+import classnames from "classnames";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -32,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "12px",
     color: theme.palette.text.secondary,
     "&:hover": {
+      color: theme.palette.primary.main,
+      borderColor: theme.palette.primary.main,
+    },
+    "&.isSelected": {
       color: theme.palette.primary.main,
       borderColor: theme.palette.primary.main,
     },
@@ -59,9 +64,13 @@ type CategoryType = {
 };
 type CategoriesType = {
   onCategoryClick: (categoryId: number) => (event: unknown) => unknown;
+  selectedCategories: Array<number>;
 };
 
-const CategoryFilter = ({ onCategoryClick }: CategoriesType) => {
+const CategoryFilter = ({
+  onCategoryClick,
+  selectedCategories,
+}: CategoriesType) => {
   const { categories, createCategory, removeCategory } = useCategories();
   const styles = useStyles();
   const [isAddCoursePopupOpened, setAddCoursePopupOpened] = useState<boolean>(
@@ -73,6 +82,8 @@ const CategoryFilter = ({ onCategoryClick }: CategoriesType) => {
   const [isRemoveCoursePopupOpened, setRemoveCoursePopupOpened] = useState<
     boolean
   >(false);
+
+  const isSelected = (id) => selectedCategories.includes(id);
 
   const toggleRemoveCoursePopup = (): void =>
     setRemoveCoursePopupOpened(!isRemoveCoursePopupOpened);
@@ -103,7 +114,9 @@ const CategoryFilter = ({ onCategoryClick }: CategoriesType) => {
 
       {categories.map(({ id, name }) => (
         <Box
-          className={styles.category}
+          className={classnames(styles.category, {
+            isSelected: isSelected(id),
+          })}
           component="span"
           key={id}
           m={1}

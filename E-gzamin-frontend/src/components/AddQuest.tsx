@@ -70,17 +70,23 @@ function AddQuest(): ReactElement {
           id: selectedQuestion.id,
           content: question.content,
           answers: question.answers,
+          courses: selectedQuestion.courses,
         },
       });
     } else
       newQuestion = await createQuestion({
         content: question.content,
         answers: question.answers,
+        courses: question.courses,
       });
 
     setSelectedQuestion(newQuestion);
   };
 
+  const filteredQuestions = !!selectedCourse
+    ? questions.filter((q) => q?.courses.includes(selectedCourse?.id))
+    : questions;
+    
   useEffect(() => {
     const question = questions.find((q) => q?.id === selectedQuestion?.id); //weird behaviour in case of answer delete
     question && setSelectedQuestion(question);
@@ -99,7 +105,7 @@ function AddQuest(): ReactElement {
               courses={courses}
             />
           }
-          questions={questions}
+          questions={filteredQuestions}
           selectedQuestions={[selectedQuestion]}
           onSelect={onQuestionSelect}
         />
