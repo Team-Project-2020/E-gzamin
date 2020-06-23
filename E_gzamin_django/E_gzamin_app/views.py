@@ -421,12 +421,15 @@ class DesignateViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         owned = self.request.query_params.get('owned', None)
+        results = [x.testTemplate.id for x in TestResult.objects.distinct().filter(user=self.request.user.id)]
         qs = super().get_queryset()
         if owned == 'True' or owned == 'true' or (str(self.request.path_info) != '/rest/designates/') :
             if self.request.user.is_superuser:
                 return qs
             return qs.distinct().filter(group__in=Group.objects.filter(owner=self.request.user.id))
-        return qs.distinct().filter(group__in=Group.objects.filter(members__in=[self.request.user.id]))
+        qs = qs.exclude(testTemplate_id__in=results)
+        return qs.distinct()\
+            .filter(group__in=Group.objects.filter(members__in=[self.request.user.id]))
 
     def retrieve(self, request, pk=None):
         qs = self.get_queryset()

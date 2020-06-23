@@ -1,184 +1,74 @@
-POST http://89.70.240.11:8000/rest/users/
+### adding test as user
+POST {{host}}/rest/testtemplates/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
+Authorization: Bearer {{user40}}
 
 {
-"username":"testuser@test.com",
-"password":"aaaaaa"
+  "name": "name",
+  "questions":["1", "2", "27", "28"]
 }
 
+### Get all tests as admin
+GET {{host}}/rest/testtemplates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{admin}}
+
+### Get all tests as user
+GET {{host}}/rest/testtemplates/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
 
 ###
 
-POST http://89.70.240.11:8000/api/token/
+GET {{host}}/rest/questions/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+### see specific test
+
+GET {{host}}/rest/testtemplates/24/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+### try to see someone elses test (should not be possible)
+
+GET {{host}}/rest/testtemplates/18/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
+
+### Update own test
+
+PUT {{host}}/rest/testtemplates/24/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer {{user40}}
 
 {
-"username":"testuser@test.com",
-"password":"aaaaaa"
+  "name": "new name",
+  "questions":["2", "27", "28", "20"]
 }
+### Update not owned test (should not work)
 
-###
-
-PATCH http://89.70.240.11:8000/rest/groups/add_user/
+PUT {{host}}/rest/testtemplates/18/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
-
+Authorization: Bearer {{user40}}
 
 {
-"groupCode":"1111"
+  "name": "new name",
+  "questions":["2", "27", "28", "20"]
 }
-
-###
-
-GET http://89.70.240.11:8000/rest/groups
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
-
-### admin
-
-POST http://89.70.240.11:8000/api/token/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-
-{
-"username":"admin",
-"password":"password"
-}
-
-### admin all groups
-
-GET http://89.70.240.11:8000/rest/groups
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMTk4LCJqdGkiOiI0NGRhNzY4MjVlNzY0YWQ2OTAwOTg2Y2QzYzcwZDMxMCIsInVzZXJfaWQiOjF9.no_9ESP5oe5kiBbWBhCklfAF3K_oHx0-hh1fpn0aCsg
-
-###
-
-POST http://89.70.240.11:8000/rest/groups/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
-
-{
-  "name" : "testing",
-  "groupCode" : "1410"
-}
-
-### user for test 2
-POST http://89.70.240.11:8000/rest/users/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-
-{
-"username":"testuser2@test.com",
-"password":"aaaaaa"
-}
-
-### user for test 2 token
-POST http://89.70.240.11:8000/api/token/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-
-{
-"username":"testuser2@test.com",
-"password":"aaaaaa"
-}
-
-### user test 2 add to test group
-
-PATCH http://89.70.240.11:8000/rest/groups/add_user/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyNjE0LCJqdGkiOiJkOThkMzA3MjUzNWE0OTMyOGQ2MGZjOWFhODRjYjNjMSIsInVzZXJfaWQiOjM4fQ.aF_-ZepoSsTI-oZhZAUL5oM1PD9-5cHnnzM_ATYrHxY
-
-
-{
-"groupCode":"1410"
-}
-
-### adding test
-POST http://89.70.240.11:8000/rest/testtemplates/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
-
-{
-  "name": "testing",
-  "questions":["1", "2"]
-}
-
-###
-
-GET http://89.70.240.11:8000/rest/questions/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
-
-
-### browsing all tests
-
-GET http://89.70.240.11:8000/rest/testtemplates/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMTk4LCJqdGkiOiI0NGRhNzY4MjVlNzY0YWQ2OTAwOTg2Y2QzYzcwZDMxMCIsInVzZXJfaWQiOjF9.no_9ESP5oe5kiBbWBhCklfAF3K_oHx0-hh1fpn0aCsg
-
-
-
-###
-
-POST http://89.70.240.11:8000/api/token/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-
-{
-"username":"jd@egzamin.pl",
-"password":"password"
-}
-
-### making test from someone elses questions
-
-POST http://89.70.240.11:8000/rest/testtemplates/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
-
-{
-  "name": "testing",
-  "questions":["1", "2"]
-}
-
-### see your tests
-
-GET http://89.70.240.11:8000/rest/testtemplates/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyODMxMTkzLCJqdGkiOiIyYjdmMmFjM2NmZGQ0ZjkyYmQ3ZTU1ZDQ1NGQ0YjM3ZCIsInVzZXJfaWQiOjM3fQ.iM0Qi5ARQwz2QWulJWRCgSTpcFVFI_7bxyz1QqVShNY
-
-### try to see someone elses test
-
-GET http://89.70.240.11:8000/rest/testtemplates/18/
-Content-Type: application/json
-Accept: */*
-Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQ1Mzk5LCJqdGkiOiI0ZjNhMWY1MTdiYjU0ZTZlYmVmOWIxZTIwNDkxY2M3OCIsInVzZXJfaWQiOjZ9.jLeXp4VUoPE8gUUII2vlfhfkwy14rjW4l4rFVxnakUg
-

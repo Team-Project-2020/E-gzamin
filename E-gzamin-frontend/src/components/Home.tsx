@@ -8,6 +8,8 @@ import TestField from "./TestField";
 import TestTemplateField from "./TestTemplateField";
 import useDesignates from "../hooks/useDesignates";
 import DesignateField from "./DesignateField";
+import useTestResults from "../hooks/useTestResults";
+import TestResultField from "./TestResultField";
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
@@ -29,6 +31,7 @@ function Home() {
   const styles = useStyles();
   const { testTemplates, refetch } = useTestTemplate();
   const { ownedDesignates, designates, refetchAll } = useDesignates();
+  const { testResults } = useTestResults();
   useEffect(() => {
     refetch();
     refetchAll();
@@ -51,21 +54,12 @@ function Home() {
       {designates.map((designate, index) => (
         <TestField key={index} designate={designate} />
       ))}
-      {"###PLACEHOLDER###".length > 0 && (
+      {testResults.length > 0 && (
         <Header content="COMPLETED" variant="h3" />
       )}
-      {/*test results not owned */}
-      {/* <TestField
-        subject="Demonologia"
-        owner="Seweryn"
-        pub_date="11.12.1499"
-        result="123/134"
-        result_positive
-        attempts={2}
-        available_attempts={3}
-        deadline="30.02.2021"
-        time={15}
-      /> */}
+      {testResults.map((testResult, index) => (
+          <TestResultField key={index} testResult={testResult} />
+      ))}
     </div>
   );
 }
