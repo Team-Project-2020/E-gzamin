@@ -4,6 +4,10 @@ import Loader from "./Loader";
 import Paper from "@material-ui/core/Paper";
 import TestQuestion from "./TestQuestion";
 import useTest from "../hooks/useTest";
+import Pagination from "@material-ui/lab/Pagination";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import LinearProgressWithLabel from "./LinearProgressWithLabel";
 
 type TestProps = {
   testId: string | undefined;
@@ -12,55 +16,58 @@ type TestProps = {
 const Test = (props) => {
   const { params } = props.match;
   const id = parseInt(params.id);
-  // const { status, progress, testResult, toggleResult, isChecked } = useTest(id);
   const {
-    createTestResult,
-    createStatus,
-    createdTestResult,
-    data,
-  } = useTestResult(id);
-  const designateId = id;
-  console.log(data)
+    status,
+    progress,
+    testResult,
+    toggleResult,
+    isChecked,
+    questions,
+    results,
+    setProgress,
+  } = useTest(id);
 
-  if (true) return <Loader />;
+  if (!status.isReady()) return <Loader />;
 
-  // const questions = [
-  //   {
-  //     id: 3,
-  //     content: "a",
-  //     answers: [
-  //       { id: 734, content: "1" },
-  //       { id: 54, content: "2" },
-  //       { id: 423, content: "3" },
-  //     ],
-  //   },
-  //   {
-  //     id: 4,
-  //     content: "b",
-  //     answers: [
-  //       { id: 1, content: "1" },
-  //       { id: 2, content: "2" },
-  //       { id: 3, content: "3" },
-  //     ],
-  //   },
-  //   {
-  //     id: 5,
-  //     content: "c",
-  //     answers: [
-  //       { id: 23, content: "1" },
-  //       { id: 11, content: "2" },
-  //       { id: 423, content: "3" },
-  //     ],
-  //   },
-  // ];
-  // const actualQuestion = questions[progress];
-  // return (
-  //   <TestQuestion
-  //     isChecked={isChecked(actualQuestion.id)}
-  //     toggleResult={toggleResult(actualQuestion.id)}
-  //     question={actualQuestion}
-  //   />
-  // );
+  const actualQuestion = questions[progress];
+  const isButtonDisabled = !results.every((r) => r.answers.length);
+  console.log(results);
+  return (
+    <Grid style={{ margin: "auto", width: "80%" }} container direction="column">
+      <LinearProgressWithLabel
+        color={"secondary"}
+        value={(progress * 100) / (questions.length - 1)}
+      />
+
+      <TestQuestion
+        isChecked={isChecked(actualQuestion.id)}
+        toggleResult={toggleResult(actualQuestion.id)}
+        question={actualQuestion}
+      />
+      <Grid
+        style={{ margin: "auto", marginTop: "15px" }}
+        container
+        direction="row"
+      >
+        <Pagination
+          style={{ marginLeft: "auto", marginRight: "auto" }}
+          count={questions.length}
+          color="secondary"
+          page={progress + 1}
+          onChange={(_, page) => setProgress(page - 1)}
+        />
+        <Button
+          style={{ marginLeft: "auto", marginRight: "auto" }}
+          onClick={() => {}}
+          variant="contained"
+          disabled={isButtonDisabled}
+          color="secondary"
+        >
+          Finish the test
+        </Button>
+      </Grid>
+    </Grid>
+  );
 };
 
 export default Test;

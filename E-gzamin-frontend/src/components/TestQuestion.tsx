@@ -5,10 +5,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Header from "./Header";
 import Checkbox from "@material-ui/core/Checkbox";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
-    width: "80%",
+    width: "100%",
     height: "400px",
     margin: "auto",
     // backgroundColor: theme.palette.background.default,
@@ -30,14 +31,16 @@ const TestQuestion = ({ question, isChecked, toggleResult }) => {
   return (
     <Paper className={styles.mainContent}>
       <Header content={content} variant="h5" />
-      {answers.map((answer, index) => (
-        <_Answer
-          isChecked={isChecked(answer.id)}
-          toggleAnswer={() => toggleResult(answer.id)}
-          key={index}
-          content={answer.content}
-        />
-      ))}
+      <Grid style={{ margin: "auto" }} container direction="column">
+        {answers.map((answer, index) => (
+          <_Answer
+            isChecked={isChecked(answer.id)}
+            toggleAnswer={() => toggleResult(answer.id)}
+            key={index}
+            content={answer.content}
+          />
+        ))}
+      </Grid>
     </Paper>
   );
 };
@@ -50,14 +53,18 @@ type _Answer = {
 
 const _Answer = ({ isChecked, toggleAnswer, content }: _Answer) => {
   return (
-    <>
+    <Grid
+      style={{ margin: "auto", alignItems: "center" }}
+      container
+      direction="row"
+    >
       <Checkbox
         checked={isChecked}
         onChange={toggleAnswer}
         inputProps={{ "aria-label": "primary checkbox" }}
       />
       {content}
-    </>
+    </Grid>
   );
 };
 

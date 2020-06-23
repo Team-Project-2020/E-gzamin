@@ -1,4 +1,5 @@
 import { useQuery, useMutation } from 'react-query';
+import React, { useState, useEffect } from 'react';
 
 import createTestResultAction from '../actions/createTestResult';
 import getTestResultAction from '../actions/getTestResult';
@@ -7,10 +8,13 @@ import getTestResultTemplateQuestionsAction from '../actions/getTestResultTempla
 import getTestResultTemplateQuestionAnswersAction from '../actions/getTestResultTemplateQuestionAnswers';
 
 const useTestResult = id => {
-  const { data, isFetching, refetch } = useQuery<any, any, Error>(
-    'getTestResult',
+  const [results, setResults] = useState([]);
+
+  const { data, isFetching, refetch, status } = useQuery<any, any, Error>(
+    `getTestResult${id}`,
     async () => {
       const testResultAction = await getTestResultAction({ testResultId: id });
+      console.log(testResultAction)
       const templates = await getTestResultTemplateAction({
         testResultId: id,
       });
@@ -35,6 +39,7 @@ const useTestResult = id => {
           answersPerQuestion.every(answer => answer.question === quest.id),
         ),
       }));
+      setResults(answersWithQuestions.map(q => ({ ...q, answers: [] })));
       return answersWithQuestions;
     },
     {
@@ -53,12 +58,13 @@ const useTestResult = id => {
     createTestResult({ designateId: id });
   }
   if (data === undefined && !isFetching) refetch();
-  // console.log(createdTestResult);
   return {
-    createTestResult,
     createStatus: { isIdle, isLoading },
     createdTestResult,
-    answers: data || [],
+    questions: data || [],
+    testResultStatus: status,
+    results,
+    setResults,
   };
 };
 

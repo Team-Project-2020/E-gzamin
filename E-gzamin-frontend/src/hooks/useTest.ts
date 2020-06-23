@@ -1,59 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useTestResult from '../hooks/useTestResult';
 
 const useTest = id => {
   const [progress, setProgress] = useState<number>(0);
-  const [results, setResults] = useState([{ questionId: 2, answers: [1] }]);
+  const {
+    createStatus,
+    createdTestResult,
+    questions,
+    testResultStatus,
+    results,
+    setResults,
+  } = useTestResult(id);
 
-  //unused
-  const updateResult = (questionId, { answers, answer }) => {
-    if (answers) {
-      const newResults = [
-        ...results.filter(q => q.questionId !== questionId),
-        { questionId, answers },
-      ];
-      setResults(newResults);
-    } else if (answer && answer.id) {
-      const oldResult = results.find(q => q.questionId === questionId);
-      const newResults = [
-        ...results.filter(q => q.questionId !== questionId),
-        { questionId, answers },
-      ];
-    }
+  const isChecked = questionId => answerId => {
+    return results.find(q => q.id === questionId).answers.includes(answerId);
   };
-  const isChecked = questionId => answerId =>
-    results.find(q => q.questionId === questionId).answers.includes(answerId);
 
   const toggleResult = questionId => answerId => {
-    const oldResult = results.find(q => q.questionId === questionId);
+    const oldResult = results.find(q => q.id === questionId);
+
     if (oldResult.answers.includes(answerId)) {
       setResults([
-        ...results.filter(q => q.questionId !== questionId),
+        ...results.filter(q => q.id !== questionId),
         {
-          questionId,
+          id: questionId,
           answers: oldResult.answers.filter(ans => ans !== answerId),
         },
       ]);
     } else {
       setResults([
-        ...results.filter(q => q.questionId !== questionId),
-        { questionId, answers: [...oldResult.answers, answerId] },
+        ...results.filter(q => q.id !== questionId),
+        { id: questionId, answers: [...oldResult.answers, answerId] },
       ]);
     }
   };
 
-  const {
-    createTestResult,
-    createStatus,
-    createdTestResult: testResult,
-  } = useTestResult(id);
-  if (createStatus.isIdle()) createTestResult({ designateId: id });
-
   const status = {
-    // isReady: () => !createStatus.isIdle() && !createStatus.isLoading(),
+    isReady: () =>
+      !createStatus.isIdle() &&
+      !createStatus.isLoading() &&
+      testResultStatus === 'success' &&
+      results.length &&
+      questions.length,
   };
 
-  return { status, progress, setProgress, testResult, toggleResult, isChecked };
+  return {
+    status,
+    progress,
+    setProgress,
+    testResult: createdTestResult,
+    toggleResult,
+    isChecked,
+    questions,
+    results,
+  };
 };
 
 export default useTest;
