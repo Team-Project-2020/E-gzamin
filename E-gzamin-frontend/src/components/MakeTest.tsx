@@ -57,9 +57,11 @@ function MakeTest(): ReactElement {
     undefined
   );
 
-  const onTestCreate = () => {
+  const onTestCreate = async () => {
     const questions = selectedQuestions.map(({ id }) => id);
-    createTestTemplate({ name: testName, questions });
+    await createTestTemplate({ name: testName, questions });
+    setTestName("");
+    setSelectedQuestions([]);
   };
 
   const updateSelectedQuestions = (question: QuestionType): void => {
@@ -72,8 +74,8 @@ function MakeTest(): ReactElement {
     }
   };
   const filteredQuestions = !!selectedCourse
-  ? questions.filter((q) => q?.courses.includes(selectedCourse?.id))
-  : questions;
+    ? questions.filter((q) => q?.courses.includes(selectedCourse?.id))
+    : questions;
 
   return (
     <div className={styles.makeTest}>
