@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Home.scss";
 import Header from "./Header";
 import { makeStyles } from "@material-ui/core/styles";
@@ -27,9 +27,12 @@ const useStyles = makeStyles((theme) => ({
 
 function Home() {
   const styles = useStyles();
-  const { testTemplates } = useTestTemplate();
-  const { ownedDesignates, designates } = useDesignates();
-  console.log(designates)
+  const { testTemplates, refetch } = useTestTemplate();
+  const { ownedDesignates, designates, refetchAll } = useDesignates();
+  useEffect(() => {
+    refetch();
+    refetchAll();
+  }, []);
   return (
     <div className="Home-content">
       {testTemplates.length > 0 && (

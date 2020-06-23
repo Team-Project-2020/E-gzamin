@@ -39,10 +39,16 @@ const useDesignates = () => {
   if (designates === undefined && !isFetching) refetch();
   if (ownedDesignates === undefined && !isFetchingOwned) refetchOwned();
 
+  const refetchAll = () => {
+    refetch();
+    refetchOwned();
+  };
+
   return {
     ownedDesignates: ownedDesignates || [],
     designates: designates || [],
     createDesignate,
+    refetchAll,
   };
 };
 
