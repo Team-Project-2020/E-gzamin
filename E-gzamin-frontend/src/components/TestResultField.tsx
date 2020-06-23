@@ -55,18 +55,6 @@ function TestResultField(props: TestResultFieldType) {
                 <TestFieldCell label="Result" value={`${result} points out of ${maxPoints} points`} />
                 <TestFieldCell label="Started at" value={formatDate(startedAt)} />
                 <TestFieldCell label="Finished at" value={formatDate(finishedAt)} />
-                {/* <TestFieldCell
-                    label="required"
-                    value={`${parseFloat(passReq) * 100}%`}
-                /> */}
-                {/* <Button
-                    className={styles.button}
-                    onClick={() => history.replace(`/test/${designate.id}`)}
-                    variant="contained"
-                    color="primary"
-                >
-                    USE Template
-        </Button> */}
             </Grid>
         </Paper>
     );

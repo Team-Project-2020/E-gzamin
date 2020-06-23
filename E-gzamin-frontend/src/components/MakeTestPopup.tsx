@@ -109,8 +109,8 @@ const MakeTestPopup = ({
           <TextField
             className={styles.input}
             id="standard-basic"
-            value={threshold}
-            onChange={({ target }) => setThreshold(Number(target.value))}
+            value={time}
+            onChange={({ target }) => setTime(Number(target.value))}
             type="number"
             label="time for test"
             InputProps={{
@@ -122,8 +122,8 @@ const MakeTestPopup = ({
           <TextField
             className={styles.input}
             id="standard-basic"
-            value={time}
-            onChange={({ target }) => setTime(Number(target.value))}
+            value={threshold}
+            onChange={({ target }) => setThreshold(Number(target.value))}
             label="passing threshold"
             type="number"
             InputProps={{
