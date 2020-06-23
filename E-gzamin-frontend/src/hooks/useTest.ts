@@ -10,6 +10,7 @@ const useTest = id => {
     testResultStatus,
     results,
     setResults,
+    updateTestResult,
   } = useTestResult(id);
 
   const isChecked = questionId => answerId => {
@@ -48,6 +49,7 @@ const useTest = id => {
     progress,
     setProgress,
     testResult: createdTestResult,
+    updateTestResult,
     toggleResult,
     isChecked,
     questions,

@@ -6,6 +6,7 @@ import getTestResultAction from '../actions/getTestResult';
 import getTestResultTemplateAction from '../actions/getTestResultTemplate';
 import getTestResultTemplateQuestionsAction from '../actions/getTestResultTemplateQuestions';
 import getTestResultTemplateQuestionAnswersAction from '../actions/getTestResultTemplateQuestionAnswers';
+import updateTestResultAction from '../actions/updateTestResult';
 
 const useTestResult = id => {
   const [results, setResults] = useState([]);
@@ -41,10 +42,20 @@ const useTestResult = id => {
         answersPerQuestion.every(answer => answer.question === quest.id),
       ),
     }));
-    console.log(answersWithQuestions);
     setResults(answersWithQuestions.map(q => ({ ...q, answers: [] })));
     return { questions: answersWithQuestions, testResult };
   });
+
+  const [updateTestResult] = useMutation<
+    any,
+    {
+      testResultId: number;
+      designateId: number;
+      questions: Array<{ questionId: number; answers: Array<number> }>;
+    },
+    Error
+  >(updateTestResultAction);
+
   useEffect(() => {
     reset();
   }, []);
@@ -61,6 +72,7 @@ const useTestResult = id => {
     results,
     createdTestResult: data?.testResult || {},
     setResults,
+    updateTestResult,
   };
 };
 
