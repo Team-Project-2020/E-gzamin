@@ -10,7 +10,9 @@ import updateTestResultAction from '../actions/updateTestResult';
 
 const useTestResult = id => {
   const [results, setResults] = useState([]);
-
+  const [isTestResultCreating, setTestResultCreating] = useState<boolean>(
+    false,
+  );
   const [createTestResult, { status, data, reset }] = useMutation<
     any,
     { designateId: number },
@@ -61,7 +63,8 @@ const useTestResult = id => {
   }, []);
   const isIdle = () => status === 'idle';
   const isLoading = () => status === 'loading';
-  if (isIdle() && !data) {
+  if (isIdle() && !data && !isTestResultCreating) {
+    setTestResultCreating(true);
     createTestResult({ designateId: id });
   }
 
