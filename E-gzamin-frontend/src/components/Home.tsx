@@ -29,13 +29,20 @@ const useStyles = makeStyles((theme) => ({
 
 function Home() {
   const styles = useStyles();
-  const { testTemplates, refetch } = useTestTemplate();
-  const { ownedDesignates, designates, refetchAll } = useDesignates();
-  const { testResults } = useTestResults();
+  const { testTemplates, refetch: refetchTestTemplates } = useTestTemplate();
+  const {
+    ownedDesignates,
+    designates,
+    refetchAll: refetchAllDesignates,
+  } = useDesignates();
+  const { testResults, refetch: refetchTestResults } = useTestResults();
+
   useEffect(() => {
-    refetch();
-    refetchAll();
+    refetchAllDesignates();
+    refetchTestResults();
+    refetchTestTemplates();
   }, []);
+
   return (
     <div className="Home-content">
       {testTemplates.length > 0 && (
@@ -54,15 +61,14 @@ function Home() {
       {designates.map((designate, index) => (
         <TestField key={index} designate={designate} />
       ))}
-      {testResults.length > 0 && (
-        <Header content="COMPLETED" variant="h3" />
-      )}
+      {testResults.length > 0 && <Header content="COMPLETED" variant="h3" />}
       {testResults.map((testResult, index) => (
-          <TestResultField key={index} testResult={testResult} />
+        <TestResultField key={index} testResult={testResult} />
       ))}
-      {testTemplates.length === 0 && ownedDesignates.length === 0 && designates.length === 0 && testResults.length === 0 && (
-        <Header content="No tests" variant="h3" />
-      )}
+      {testTemplates.length === 0 &&
+        ownedDesignates.length === 0 &&
+        designates.length === 0 &&
+        testResults.length === 0 && <Header content="No tests" variant="h3" />}
     </div>
   );
 }

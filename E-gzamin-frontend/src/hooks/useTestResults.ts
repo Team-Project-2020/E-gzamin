@@ -26,7 +26,7 @@ const useTestResults = () => {
 
   if (data === undefined && !isFetching) refetch();
 
-  return { testResults: data || [], createTestResult, getTestResult };
+  return { testResults: data || [], createTestResult, getTestResult, refetch };
 };
 
 export default useTestResults;
