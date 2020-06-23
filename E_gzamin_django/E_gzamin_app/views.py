@@ -97,7 +97,6 @@ class AnswerUserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
 class CoursesViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
@@ -250,6 +249,10 @@ class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         qs = self.get_queryset()
         question = get_object_or_404(qs, pk=pk)
         question.content = request.data.get("content", question.content)
+        if self.request.data.get('courses') is not None:
+            question.courses.clear()
+            for course in self.request.data.get('courses'):
+                question.courses.add(course)
         question.save()
         serializer = QuestionSerializer(question, context={'request': request})
         return Response(serializer.data)

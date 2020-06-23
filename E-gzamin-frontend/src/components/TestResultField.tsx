@@ -36,31 +36,36 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function TestResultField(props: TestFieldType) {
+function TestResultField(props: TestResultFieldType) {
     const styles = useStyles();
     const { testResult } = props;
-    const { time, startDate, endDate, passReq } = testResult;
+    const { id,
+        result,
+        maxPoints,
+        isPassed,
+        startedAt,
+        finishedAt, } = testResult;
     const history = useHistory();
     const field = (
         <Paper className={styles.mainContent} elevation={2}>
             <Grid container item xs={12} spacing={0}>
                 <TestIcon status={"todo"} />
 
-                <TestFieldCell label="Time for test" value={`${time} minutes`} />
-                <TestFieldCell label="Publicated" value={formatDate(startDate)} />
-                <TestFieldCell label="Deadline" value={formatDate(endDate)} />
-                <TestFieldCell
+                <TestFieldCell label="Result" value={`${result} points out of ${maxPoints} points`} />
+                <TestFieldCell label="Started at" value={formatDate(startedAt)} />
+                <TestFieldCell label="Finished at" value={formatDate(finishedAt)} />
+                {/* <TestFieldCell
                     label="required"
                     value={`${parseFloat(passReq) * 100}%`}
-                />
-                <Button
+                /> */}
+                {/* <Button
                     className={styles.button}
                     onClick={() => history.replace(`/test/${designate.id}`)}
                     variant="contained"
                     color="primary"
                 >
                     USE Template
-        </Button>
+        </Button> */}
             </Grid>
         </Paper>
     );
