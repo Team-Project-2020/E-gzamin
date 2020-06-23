@@ -8,6 +8,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
+import { useHistory } from "react-router-dom";
 
 type TestProps = {
   testId: string | undefined;
@@ -15,7 +16,8 @@ type TestProps = {
 
 const Test = (props) => {
   const { params } = props.match;
-  const id = parseInt(params.id);
+  const designateId = parseInt(params.id);
+  const history = useHistory();
   const {
     status,
     progress,
@@ -24,9 +26,29 @@ const Test = (props) => {
     questions,
     results,
     setProgress,
-  } = useTest(id);
+    updateTestResult,
+    testResult,
+  } = useTest(designateId);
 
   if (!status.isReady()) return <Loader />;
+
+  const onSubmit = async () => {
+    console.log(testResult);
+
+    const testResultQuestions: Array<{
+      questionId: number;
+      answers: Array<number>;
+    }> = results.map((q) => ({
+      questionId: q.id,
+      answers: q.answers,
+    }));
+    await updateTestResult({
+      testResultId: testResult.id,
+      designateId,
+      questions: testResultQuestions,
+    });
+    history.replace(`/egzamin`);
+  };
 
   const actualQuestion = questions[progress];
   const isButtonDisabled = !results.every((r) => r.answers.length);
@@ -35,7 +57,7 @@ const Test = (props) => {
     <Grid style={{ margin: "auto", width: "80%" }} container direction="column">
       <LinearProgressWithLabel
         color={"secondary"}
-        value={(progress * 100) / (questions.length - 1)}
+        value={(progress * 100) / (questions.length - 1 || 1)}
       />
 
       <TestQuestion
@@ -57,7 +79,7 @@ const Test = (props) => {
         />
         <Button
           style={{ marginLeft: "auto", marginRight: "auto" }}
-          onClick={() => {}}
+          onClick={onSubmit}
           variant="contained"
           disabled={isButtonDisabled}
           color="secondary"
