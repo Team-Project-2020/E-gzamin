@@ -12,6 +12,7 @@ type QuestionType = {
   id: number;
   content: string;
   answers?: Array<AnswerType>;
+  courses?: Array<CourseType>;
 };
 
 type CourseType = {
