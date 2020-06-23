@@ -49,6 +49,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     gridArea: "space",
     gridColumn: "1 / 4",
   },
+  collapse: {
+    borderTopWidth: "2px",
+    borderTopStyle: "solid",
+    borderTopColor: theme.palette.primary.main,
+  }
 }));
 const SingleGroupRow: React.FC<SingleGroupRowProps> = (props) => {
   const { name, code, members, onDelete, index, onDeletePrompt, groupId } = props;
@@ -96,8 +101,10 @@ const SingleGroupRow: React.FC<SingleGroupRowProps> = (props) => {
       )}
       {onDelete && (
         <Collapse
+          className={styles.collapse}
           style={{
-            gridColumn: "1 / 4", gridRow: index * 3 + 2, backgroundColor: "#f1f8e9" }}
+            gridColumn: "1 / 4", 
+            gridRow: index * 3 + 2,}}
           in={isOpen}
         >
           <GroupMembersTable groupId={groupId} />

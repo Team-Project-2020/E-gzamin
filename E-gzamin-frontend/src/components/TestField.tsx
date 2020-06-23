@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 function TestField(props: TestFieldType) {
   const styles = useStyles();
   const { designate } = props;
-  console.log(designate);
   const { time, startDate, endDate, passReq } = designate;
   const history = useHistory();
   const field = (
@@ -56,7 +55,7 @@ function TestField(props: TestFieldType) {
         />
         <Button
           className={styles.button}
-          onClick={() => history.push(`egzamin/test/${designate.id}`)}
+          onClick={() => history.replace(`/test/${designate.id}`)}
           variant="contained"
           color="primary"
         >

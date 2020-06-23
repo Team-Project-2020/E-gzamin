@@ -11,6 +11,7 @@ import TestFieldCell from "./TestFieldCell";
 import { Collapse } from "@material-ui/core";
 import QuestionContent from "./QuestionContent"
 import useQuestions from "../hooks/useQuestions"
+import formatDate from "../lib/formatDate";
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
@@ -62,7 +63,7 @@ const TestTemplateField = ({ testTemplate }) => {
   const [isPopupOpened, setIsPopupOpened] = useState<boolean>(false);
   const togglePopup = () => setIsPopupOpened(!isPopupOpened);
   const { createdAt, name, questions: questionIds, id } = testTemplate;
-  const createdDate = moment(createdAt).format("DD-mm-yyyy");
+  const createdDate = formatDate(createdAt);
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = (): void => setOpen(!isOpen);
   const { questions } = useQuestions();
@@ -92,7 +93,7 @@ const TestTemplateField = ({ testTemplate }) => {
       />
       <Collapse
         style={{
-          gridColumn: "1 / 4", gridRow: 2, backgroundColor: "#f1f8e9"
+          gridColumn: "1 / 4", gridRow: 2
         }}
         in={isOpen}
       >
