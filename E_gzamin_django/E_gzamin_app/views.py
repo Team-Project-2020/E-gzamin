@@ -297,7 +297,9 @@ class UserViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         user = User.objects.create_user(
             username=self.request.data.get('username'),
             password=self.request.data.get('password'),
-            email=self.request.data.get('username'))
+            email=self.request.data.get('username'),
+            first_name=self.request.data.get('first_name'),
+            last_name=self.request.data.get('last_name'))
         return Response({'status': 'user registered'})
 
     @action(detail=False, methods=['get'])
