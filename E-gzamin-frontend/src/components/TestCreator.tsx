@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Button from "@material-ui/core/Button";
+import QuestionContent from "./QuestionContent"
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -65,7 +66,7 @@ const TestCreator = ({
       />
       {selectedQuestions.map((question, index) => (
         <React.Fragment key={index}>
-          <_QuestionContent
+          <QuestionContent
             key={question.id}
             styles={styles}
             question={question.content}
@@ -87,44 +88,4 @@ const TestCreator = ({
   );
 };
 
-type _QuestionContentrPropsType = {
-  answers: Array<AnswerType>;
-  question: string;
-  onDelete: () => void;
-  styles: Record<
-    | "paper"
-    | "testName"
-    | "QuestionContent"
-    | "QuestionContentLeft"
-    | "QuestionContentRight",
-    string
-  >;
-};
-
-const _QuestionContent = ({
-  answers,
-  question,
-  onDelete,
-  styles,
-}: _QuestionContentrPropsType): ReactElement => {
-  const getLetter = (value: number): string => String.fromCharCode(97 + value);
-
-  return (
-    <div className={styles.QuestionContent}>
-      <div className={styles.QuestionContentLeft}>
-        <Typography variant="subtitle1">{question}</Typography>
-        {answers.map((answer, index) => (
-          <Typography key={index} variant="subtitle2">
-            {getLetter(index)}: {answer.content}
-          </Typography>
-        ))}
-      </div>
-      <div className={styles.QuestionContentRight}>
-        <IconButton aria-label="delete" color="primary" onClick={onDelete}>
-          <DeleteIcon />
-        </IconButton>
-      </div>
-    </div>
-  );
-};
 export default TestCreator;

@@ -1,10 +1,20 @@
 type DesignateType = {
+  id?:number,
   time:number,
   passReq:string,
   startDate:Date,
   endDate:Date,
   group_id:number,
   testTemplate_id:number,
+}
+
+type TestResultType = {
+  id:number,
+  result:number,
+  maxPoints:number,
+  isPassed:boolean,
+  startedAt:Date,
+  finishedAt:Date,
 }
 
 type QuestionType = {
@@ -45,4 +55,4 @@ type GroupMembers = {
   members: Array<Member>;
 };
 
-export type {DesignateType, QuestionType, CourseType, AnswerType, Member, GroupType, GroupMembers };
+export type {DesignateType, QuestionType, CourseType, AnswerType, Member, GroupType, GroupMembers, TestResultType };

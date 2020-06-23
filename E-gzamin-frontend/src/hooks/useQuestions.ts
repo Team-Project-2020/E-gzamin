@@ -62,8 +62,9 @@ const useQuestions = () => {
     Error
   >(async ({ content, answers }) => {
     const response = await createQuestionAction({ content });
+    console.log('response', response)
     await createAnswer(
-      answers.map(answer => ({ question: response.id, ...answer })),
+      answers.map(answer => ({ ...answer, question: response.id })),
     );
     refetch();
     return response;

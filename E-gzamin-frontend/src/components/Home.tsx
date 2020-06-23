@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Home.scss";
 import Header from "./Header";
-import {  makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import useTestTemplate from "../hooks/useTestTemplate";
 import TestField from "./TestField";
-import TestTemplateField from './TestTemplateField';
+import TestTemplateField from "./TestTemplateField";
+import useDesignates from "../hooks/useDesignates";
+import DesignateField from "./DesignateField";
+import useTestResults from "../hooks/useTestResults";
+import TestResultField from "./TestResultField";
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
@@ -25,63 +29,37 @@ const useStyles = makeStyles((theme) => ({
 
 function Home() {
   const styles = useStyles();
-  const { testTemplates } = useTestTemplate();
-  console.log(testTemplates);
+  const { testTemplates, refetch } = useTestTemplate();
+  const { ownedDesignates, designates, refetchAll } = useDesignates();
+  const { testResults } = useTestResults();
+  useEffect(() => {
+    refetch();
+    refetchAll();
+  }, []);
   return (
     <div className="Home-content">
-      <Header content="TEST TEMPLATES" variant="h3" />
+      {testTemplates.length > 0 && (
+        <Header content="TEST TEMPLATES" variant="h3" />
+      )}
       {testTemplates.map((testTemplate, index) => (
         <TestTemplateField testTemplate={testTemplate} key={index} />
       ))}
-
-      <Header content="DESIGNATED" variant="h3" />
-      <TestField
-        subject="Pszyrka"
-        owner="Janusz"
-        pub_date="21.37.1410"
-        result="123/1500"
-        result_positive={false}
-        attempts={3}
-        available_attempts={3}
-        deadline="29.02.2021"
-        time={20}
-      />
-      <Header content="TODO" variant="h3" />
-      <TestField
-        subject="Pszyrka"
-        owner="Janusz"
-        pub_date="21.37.1410"
-        result="123/1500"
-        result_positive={false}
-        attempts={3}
-        available_attempts={3}
-        deadline="29.02.2021"
-        time={20}
-      />
-      <Header content="COMPLETED" variant="h3" />
-      <TestField
-        subject="Demonologia"
-        owner="Seweryn"
-        pub_date="11.12.1499"
-        result="123/134"
-        result_positive
-        attempts={2}
-        available_attempts={3}
-        deadline="30.02.2021"
-        time={15}
-      />
-      <Header content="FAILED" variant="h3" />
-      <TestField
-        subject="Yerbomancja"
-        owner="Cejrowski"
-        pub_date="06.06.1944"
-        result="15/16"
-        result_positive={false}
-        attempts={1}
-        available_attempts={3}
-        deadline="31.10.2026"
-        time={99}
-      />
+      {ownedDesignates.length > 0 && (
+        <Header content="DESIGNATED" variant="h3" />
+      )}
+      {ownedDesignates.map((designate, index) => (
+        <DesignateField key={index} designate={designate} />
+      ))}
+      {designates.length > 0 && <Header content="TODO" variant="h3" />}
+      {designates.map((designate, index) => (
+        <TestField key={index} designate={designate} />
+      ))}
+      {testResults.length > 0 && (
+        <Header content="COMPLETED" variant="h3" />
+      )}
+      {testResults.map((testResult, index) => (
+          <TestResultField key={index} testResult={testResult} />
+      ))}
     </div>
   );
 }
