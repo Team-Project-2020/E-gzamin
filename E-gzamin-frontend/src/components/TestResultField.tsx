@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: "20px",
         paddingRight: "20px",
         marginLeft: "5%",
+        marginBottom: "20px",
+        marginTop: "20px",
     },
     mainHeaders: {
         color: theme.palette.text.primary,
@@ -49,8 +51,7 @@ function TestResultField(props: TestResultFieldType) {
     const field = (
         <Paper className={styles.mainContent} elevation={2}>
             <Grid container item xs={12} spacing={0}>
-                <TestIcon status={"todo"} />
-
+                {isPassed ? <TestIcon status={"passed"} /> : <TestIcon status={"failed"} />}
                 <TestFieldCell label="Result" value={`${result} points out of ${maxPoints} points`} />
                 <TestFieldCell label="Started at" value={formatDate(startedAt)} />
                 <TestFieldCell label="Finished at" value={formatDate(finishedAt)} />
