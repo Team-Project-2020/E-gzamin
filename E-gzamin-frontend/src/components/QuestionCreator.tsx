@@ -67,12 +67,15 @@ const QuestionCreator = ({
     editedQuestion?.answers || []
   );
   const [selectedCourses, setSelectedCourses] = useState([]);
-  useEffect(() => {
+  const refreshState = () => {
     const newQuestion = editedQuestion?.content || "";
     const newAnswers = editedQuestion?.answers || [];
     setSelectedCourses(editedQuestion?.courses || []);
     setQuestion(newQuestion);
     setAnswers(newAnswers);
+  }
+  useEffect(() => {
+    refreshState();
   }, [editedQuestion]);
 
   const updateAnswer = (id: number, createdAt: Date) => (
@@ -122,6 +125,7 @@ const QuestionCreator = ({
     createQuestion({
       question: { content: question, answers, courses: selectedCourses },
     });
+    refreshState();
   };
   return (
     <Paper elevation={2} className={styles.paper}>

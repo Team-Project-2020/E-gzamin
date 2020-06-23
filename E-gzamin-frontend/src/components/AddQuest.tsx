@@ -80,7 +80,7 @@ function AddQuest(): ReactElement {
         courses: question.courses,
       });
 
-    setSelectedQuestion(newQuestion);
+    setSelectedQuestion(undefined);
   };
 
   const filteredQuestions = !!selectedCourse
