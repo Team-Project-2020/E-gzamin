@@ -1,59 +1,51 @@
 import { useQuery, useMutation } from 'react-query';
+import React, { useState, useEffect } from 'react';
 
 import createTestResultAction from '../actions/createTestResult';
 import getTestResultAction from '../actions/getTestResult';
 import getTestResultTemplateAction from '../actions/getTestResultTemplate';
 import getTestResultTemplateQuestionsAction from '../actions/getTestResultTemplateQuestions';
 import getTestResultTemplateQuestionAnswersAction from '../actions/getTestResultTemplateQuestionAnswers';
-import { useDebugValue } from 'react';
 
 const useTestResult = id => {
-  const { data, isFetching, refetch } = useQuery<any, any, Error>(
-    'getTestResult',
-    async (id) => { 
-      const testResultAction = await getTestResultAction({testResultId: id});
+  const [results, setResults] = useState([]);
+
+  const { data, isFetching, refetch, status } = useQuery<any, any, Error>(
+    `getTestResult${id}`,
+    async () => {
+      const testResultAction = await getTestResultAction({ testResultId: id });
       console.log(testResultAction)
-      const template = await getTestResultTemplateAction({testResultId: id});
-      const questions = await getTestResultTemplateQuestionsAction({testResultId: id, testTemplateId: template.id});
-      const answers = await Promise.all(
+      const templates = await getTestResultTemplateAction({
+        testResultId: id,
+      });
+      const template = templates[0];
+      const questions = await getTestResultTemplateQuestionsAction({
+        testResultId: id,
+        testTemplateId: template.id,
+      });
+      const answers = await Promise.all<Array<{ question: string }>>(
         questions.map(
-          async (q) => await getTestResultTemplateQuestionAnswersAction(
-            { testResultId: id, testTemplateId: template.id, questionId: q.id })))
-    return {testResultAction,
-       testResultTemplate: template,
-       testResultTemplateQuestions: questions,
-       testResultTemplateQuestionAnswers: answers}},
+          async q =>
+            await getTestResultTemplateQuestionAnswersAction({
+              testResultId: id,
+              testTemplateId: template.id,
+              questionId: q.id,
+            }),
+        ),
+      );
+      const answersWithQuestions = questions.map(quest => ({
+        ...quest,
+        answers: answers.find(answersPerQuestion =>
+          answersPerQuestion.every(answer => answer.question === quest.id),
+        ),
+      }));
+      setResults(answersWithQuestions.map(q => ({ ...q, answers: [] })));
+      return answersWithQuestions;
+    },
     {
       manual: true,
     },
   );
-  // const { data: testTemplate, 
-  //   isFetching: isFetchingTemplate, 
-  //   refetch: refetchTemplate } = useQuery<any, any, Error>(
-  //   'getTestResultTemplate',
-  //   getTestResultTemplateAction,
-  //   {
-  //     manual: true,
-  //   },
-  // );
-  // const {data: testTemplateQuestions, 
-  //   isFetching: isFetchingTemplateQuestions, 
-  //   refetch: refetchTemplateQuestions} = useQuery<any, any, Error>(
-  //   'getTestResultTemplateQuestions',
-  //   getTestResultTemplateQuestionsAction,
-  //   {
-  //     manual: true,
-  //   },
-  // );
-  // const {data: testTemplateQuestionAnswers, 
-  //   isFetching: isFetchingTemplateQuestionAnswers, 
-  //   refetch: refetchTemplateQuestionAnswers} = useQuery<any, any, Error>(
-  //     'getTestResultTemplateQuestionAnswers',
-  //     getTestResultTemplateQuestionAnswersAction,
-  //     {
-  //       manual: true,
-  //     },
-  //   );
 
   const [
     createTestResult,
@@ -62,16 +54,17 @@ const useTestResult = id => {
 
   const isIdle = () => createStatus === 'idle';
   const isLoading = () => createStatus === 'loading';
-  if (isIdle() && !createdTestResult){
-    createTestResult({designateId: id});
+  if (isIdle() && !createdTestResult) {
+    createTestResult({ designateId: id });
   }
   if (data === undefined && !isFetching) refetch();
-  console.log(createdTestResult)
   return {
-    createTestResult,
     createStatus: { isIdle, isLoading },
     createdTestResult,
-    data: data || {},
+    questions: data || [],
+    testResultStatus: status,
+    results,
+    setResults,
   };
 };
 
