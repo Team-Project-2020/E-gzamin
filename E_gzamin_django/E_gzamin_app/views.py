@@ -398,8 +398,11 @@ class TestResultViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             if is_correct:
                 points += 1
         res.result = points
-        res.isPassed = True if \
-            points/res.maxPoints > Designate.objects.get(pk=self.request.data.get('designateId')).passReq else False
+        if res.maxPoints > 0:
+            res.isPassed = True if \
+                points/res.maxPoints > Designate.objects.get(pk=self.request.data.get('designateId')).passReq else False
+        else:
+            res.isPassed = True
         res.finishedAt = datetime.now()
         res.save()
         serializer = TestResultSerializer(res, context={'request': request})

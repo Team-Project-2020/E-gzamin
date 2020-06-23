@@ -67,7 +67,7 @@ const DesignateField = ({ designate }: DesignateFieldProps) => {
         />
         <TestFieldCell label="group name" value={group?.name} />
         <TestFieldCell label="group members" value={group?.members.length} />
-        <TestFieldCell label="template" value={testTemplate.name} />
+        <TestFieldCell label="template" value={testTemplate?.name} />
       </Grid>
     </Paper>
   );

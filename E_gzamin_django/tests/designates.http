@@ -1,17 +1,17 @@
 ### seeing designated test as group member
-GET http://89.70.240.11:8000/rest/designates/
+GET {{host}}/rest/designates/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyODMxMTkzLCJqdGkiOiIyYjdmMmFjM2NmZGQ0ZjkyYmQ3ZTU1ZDQ1NGQ0YjM3ZCIsInVzZXJfaWQiOjM3fQ.iM0Qi5ARQwz2QWulJWRCgSTpcFVFI_7bxyz1QqVShNY
+Authorization: Bearer {{user37}}
 
 ### designating test as a group member
 
-POST http://89.70.240.11:8000/rest/designates/
+POST {{host}}/rest/designates/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+Authorization: Bearer {{user37}}
 
 {
   "time": "01:00:00",
@@ -23,26 +23,26 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiY
 }
 
 ### seeing designated test as some random guy
-GET http://89.70.240.11:8000/rest/designates/37/
+GET {{host}}/rest/designates/37/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyNjE0LCJqdGkiOiJkOThkMzA3MjUzNWE0OTMyOGQ2MGZjOWFhODRjYjNjMSIsInVzZXJfaWQiOjM4fQ.aF_-ZepoSsTI-oZhZAUL5oM1PD9-5cHnnzM_ATYrHxY
+Authorization: Bearer {{user38}}
 
 ###checking your designated test
-GET http://89.70.240.11:8000/rest/designates/?owned=true
+GET {{host}}/rest/designates/?owned=true
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyODMxMzcwLCJqdGkiOiIyMTgzMTc0YThiODk0ZmEyOWU5YzZlMzZjMmNiZDEzNCIsInVzZXJfaWQiOjZ9._2PN9aGqbwk045l0sRnKSlCo3QynjNoLri4amW0dUoM
+Authorization: Bearer {{user37}}
 
 ### designating your test to your group
 
-POST http://89.70.240.11:8000/rest/designates/
+POST {{host}}/rest/designates/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyODMxMTkzLCJqdGkiOiIyYjdmMmFjM2NmZGQ0ZjkyYmQ3ZTU1ZDQ1NGQ0YjM3ZCIsInVzZXJfaWQiOjM3fQ.iM0Qi5ARQwz2QWulJWRCgSTpcFVFI_7bxyz1QqVShNY
+Authorization: Bearer {{user37}}
 
 {
   "time": "01:00:00",
@@ -55,19 +55,19 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiY
 
 ### checking all designates
 
-GET http://89.70.240.11:8000/rest/designates/
+GET {{host}}/rest/designates/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMTk4LCJqdGkiOiI0NGRhNzY4MjVlNzY0YWQ2OTAwOTg2Y2QzYzcwZDMxMCIsInVzZXJfaWQiOjF9.no_9ESP5oe5kiBbWBhCklfAF3K_oHx0-hh1fpn0aCsg
+Authorization: Bearer {{admin}}
 
 ### designating other pearsons test
 
-POST http://89.70.240.11:8000/rest/designates/
+POST {{host}}/rest/designates/
 Content-Type: application/json
 Accept: */*
 Cache-Control: no-cache
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkyNzQyMDgwLCJqdGkiOiJhNWQyN2RkMzg3ZTk0Njk0YmI3YTdhYmNhYTg2MDhlMyIsInVzZXJfaWQiOjM3fQ.-CMMdCza0to_Jkol1RdH9PFkCwQPkxElh6tiCSMDKKI
+Authorization: Bearer {{user37}}
 
 {
   "time": "02:00:00",
