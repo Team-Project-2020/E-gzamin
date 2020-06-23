@@ -19,7 +19,6 @@ const Test = (props) => {
   const {
     status,
     progress,
-    testResult,
     toggleResult,
     isChecked,
     questions,

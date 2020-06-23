@@ -23,8 +23,8 @@ function EgzaminRoute(): ReactElement {
       <PrivateRoute exact path="/egzamin/maketest" component={MakeTest} />
       <PrivateRoute exact path="/egzamin/settings" component={Settings} />
       <PrivateRoute exact path="/egzamin/tests" component={Tests} />
-      <PrivateRoute exact path="/egzamin/test/:id" component={Test} />
-      <Redirect to="/egzamin" />
+
+      <Redirect to="/egzamin/" />
     </CurrentUserContextProvider>
   );
 }
@@ -33,6 +33,7 @@ function MainRoute(): ReactElement {
   return (
     <Switch>
       <PrivateRoute path="/egzamin" component={EgzaminRoute} />
+      <PrivateRoute exact path="/test/:id" component={Test} />
       <PublicRoute path="/auth" component={AuthRoute} />
       <Redirect to="/auth" />
     </Switch>
