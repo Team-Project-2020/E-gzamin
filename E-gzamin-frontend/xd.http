@@ -1,0 +1,14 @@
+
+GET http://89.70.240.11:8000/rest/courses/34/questions/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjAxNDEzNzMzLCJqdGkiOiI5NjM2MzZkNzg1ZjU0OTlmOWU2M2U5MTJmM2EwZjExZSIsInVzZXJfaWQiOjQ0fQ.7UXPK8RU7AhJSE8_-2CQ6ystIC7i0VjW1Z_8M1LULIU
+
+###
+
+GET http://89.70.240.11:8000/rest/questions/123/courses/
+Content-Type: application/json
+Accept: */*
+Cache-Control: no-cache
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjAxNDEzNzMzLCJqdGkiOiI5NjM2MzZkNzg1ZjU0OTlmOWU2M2U5MTJmM2EwZjExZSIsInVzZXJfaWQiOjQ0fQ.7UXPK8RU7AhJSE8_-2CQ6ystIC7i0VjW1Z_8M1LULIU

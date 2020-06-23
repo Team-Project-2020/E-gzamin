@@ -71,6 +71,9 @@ function MakeTest(): ReactElement {
       setSelectedQuestions([...selectedQuestions, question]);
     }
   };
+  const filteredQuestions = !!selectedCourse
+  ? questions.filter((q) => q?.courses.includes(selectedCourse?.id))
+  : questions;
 
   return (
     <div className={styles.makeTest}>
@@ -85,7 +88,7 @@ function MakeTest(): ReactElement {
               courses={courses}
             />
           }
-          questions={questions}
+          questions={filteredQuestions}
           selectedQuestions={selectedQuestions}
           onSelect={updateSelectedQuestions}
         />
