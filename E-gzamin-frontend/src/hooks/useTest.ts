@@ -40,7 +40,6 @@ const useTest = id => {
       !createStatus.isIdle() &&
       !createStatus.isLoading() &&
       testResultStatus === 'success' &&
-      results.length &&
       questions.length,
   };
 

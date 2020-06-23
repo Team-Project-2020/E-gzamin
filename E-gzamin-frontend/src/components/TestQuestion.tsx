@@ -10,7 +10,7 @@ import Grid from "@material-ui/core/Grid";
 const useStyles = makeStyles((theme) => ({
   mainContent: {
     width: "100%",
-    height: "400px",
+    minHeight: "400px",
     margin: "auto",
     // backgroundColor: theme.palette.background.default,
   },

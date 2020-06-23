@@ -55,7 +55,7 @@ function TestField(props: TestFieldType) {
         />
         <Button
           className={styles.button}
-          onClick={() => history.push(`egzamin/test/${designate.id}`)}
+          onClick={() => history.replace(`/test/${designate.id}`)}
           variant="contained"
           color="primary"
         >

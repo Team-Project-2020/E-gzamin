@@ -29,14 +29,18 @@ function Home() {
   const styles = useStyles();
   const { testTemplates } = useTestTemplate();
   const { ownedDesignates, designates } = useDesignates();
-  
+  console.log(designates)
   return (
     <div className="Home-content">
-      {testTemplates.length > 0 && <Header content="TEST TEMPLATES" variant="h3" />}
+      {testTemplates.length > 0 && (
+        <Header content="TEST TEMPLATES" variant="h3" />
+      )}
       {testTemplates.map((testTemplate, index) => (
         <TestTemplateField testTemplate={testTemplate} key={index} />
       ))}
-      {ownedDesignates.length > 0 && <Header content="DESIGNATED" variant="h3" />}
+      {ownedDesignates.length > 0 && (
+        <Header content="DESIGNATED" variant="h3" />
+      )}
       {ownedDesignates.map((designate, index) => (
         <DesignateField key={index} designate={designate} />
       ))}
@@ -44,7 +48,9 @@ function Home() {
       {designates.map((designate, index) => (
         <TestField key={index} designate={designate} />
       ))}
-      {"###PLACEHOLDER###".length > 0 && <Header content="COMPLETED" variant="h3" />}
+      {"###PLACEHOLDER###".length > 0 && (
+        <Header content="COMPLETED" variant="h3" />
+      )}
       {/*test results not owned */}
       {/* <TestField
         subject="Demonologia"
