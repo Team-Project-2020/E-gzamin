@@ -10,7 +10,7 @@ import getQuestionsAction from '../actions/getQuestions';
 import removeQuestionAction from '../actions/removeQuestion';
 import updateQuestionAction from '../actions/updateQuestion';
 
-import { QuestionType, AnswerType, CourseType } from '../types';
+import { QuestionType, AnswerType } from '../types';
 
 const useQuestions = () => {
   const { status, data, error, isFetching, refetch } = useQuery<
@@ -58,10 +58,10 @@ const useQuestions = () => {
 
   const [createQuestion] = useMutation<
     QuestionType,
-    { content: string; answers: Array<AnswerType>; courses?: Array<CourseType>},
+    { content: string; answers: Array<AnswerType> },
     Error
-  >(async ({ content, answers, courses }) => {
-    const response = await createQuestionAction({ content, courses });
+  >(async ({ content, answers }) => {
+    const response = await createQuestionAction({ content });
     console.log('response', response)
     await createAnswer(
       answers.map(answer => ({ ...answer, question: response.id })),
@@ -72,10 +72,10 @@ const useQuestions = () => {
 
   const [updateQuestion] = useMutation<
     QuestionType,
-    { id: number; question: QuestionType; courses?: Array<CourseType> },
+    { id: number; question: QuestionType },
     Error
-  >(async ({ id, question, courses }) => {
-    const response = await updateQuestionAction({ id, question, courses });
+  >(async ({ id, question }) => {
+    const response = await updateQuestionAction({ id, question });
     await Promise.all(
       question.answers
         .filter(answer => answer.removedAt)

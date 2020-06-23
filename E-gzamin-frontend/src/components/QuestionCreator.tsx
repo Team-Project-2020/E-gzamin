@@ -9,11 +9,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { QuestionType, AnswerType, CourseType } from "../types";
+import { QuestionType, AnswerType } from "../types";
 import CategoryFilter from "./CategoryFilter";
-import { questions } from "../Constants";
+import { courses, questions, categories } from "../Constants";
 import Grid from "@material-ui/core/Grid";
-import useCategories from "../hooks/useCategories"
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -60,7 +59,6 @@ const QuestionCreator = ({
   createQuestion,
   onQuestionRemove,
 }: QuestionCreatorType): ReactElement => {
-  const courses = useCategories();
   const styles = useStyles();
   const [question, setQuestion] = useState<string | null>(
     editedQuestion?.content || ""
@@ -112,22 +110,13 @@ const QuestionCreator = ({
       })
     );
   };
-  const addCourse = (course: CourseType) => {
-    courses.categories.push(course);
-  }
   const onSubmit = () =>
-    createQuestion({ question: { content: question, answers, courses } });
-    console.log(courses)
+    createQuestion({ question: { content: question, answers } });
   return (
-    
     <Paper elevation={2} className={styles.paper}>
       <CategoryFilter
-        onCategoryClick={(c) => (c) => {
-          console.log('cats', courses.categories)
-          const cat = courses.categories.find((x) => x.id == c);
-          addCourse(cat);
-          console.log(courses)
-        }}
+        // categories={categories}
+        onCategoryClick={(c) => () => {}}
       />
       <Grid
         container
