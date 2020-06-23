@@ -8,6 +8,7 @@ import TestField from "./TestField";
 import TestTemplateField from "./TestTemplateField";
 import useDesignates from "../hooks/useDesignates";
 import DesignateField from "./DesignateField";
+import useTestResults from "../hooks/useTestResults";
 
 const useStyles = makeStyles((theme) => ({
   mainContent: {
@@ -29,6 +30,7 @@ function Home() {
   const styles = useStyles();
   const { testTemplates, refetch } = useTestTemplate();
   const { ownedDesignates, designates, refetchAll } = useDesignates();
+  const { testResults } = useTestResults();
   useEffect(() => {
     refetch();
     refetchAll();

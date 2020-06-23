@@ -8,6 +8,15 @@ type DesignateType = {
   testTemplate_id:number,
 }
 
+type TestResultType = {
+  id:number,
+  result:number,
+  maxPoints:number,
+  isPassed:boolean,
+  startedAt:Date,
+  finishedAt:Date,
+}
+
 type QuestionType = {
   id: number;
   content: string;
