@@ -63,7 +63,7 @@ const useQuestions = () => {
   >(async ({ content, answers }) => {
     const response = await createQuestionAction({ content });
     await createAnswer(
-      answers.map(answer => ({ question: response.id, ...answer })),
+      answers.map(answer => ({ ...answer, question: response.id })),
     );
     refetch();
     return response;
