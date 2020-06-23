@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "20px",
     paddingRight: "20px",
     marginLeft: "5%",
+    marginBottom: "20px",
+    marginTop: "20px",
   },
   mainHeaders: {
     color: theme.palette.text.primary,

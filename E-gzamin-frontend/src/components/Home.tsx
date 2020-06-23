@@ -60,6 +60,9 @@ function Home() {
       {testResults.map((testResult, index) => (
           <TestResultField key={index} testResult={testResult} />
       ))}
+      {testTemplates.length === 0 && ownedDesignates.length === 0 && designates.length === 0 && testResults.length === 0 && (
+        <Header content="No tests" variant="h3" />
+      )}
     </div>
   );
 }
