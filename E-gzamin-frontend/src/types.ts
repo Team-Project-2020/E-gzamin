@@ -21,6 +21,7 @@ type QuestionType = {
   id: number;
   content: string;
   answers?: Array<AnswerType>;
+  courses:Array<any>;
 };
 
 type CourseType = {
