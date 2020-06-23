@@ -55,4 +55,4 @@ type GroupMembers = {
   members: Array<Member>;
 };
 
-export type {DesignateType, QuestionType, CourseType, AnswerType, Member, GroupType, GroupMembers };
+export type {DesignateType, QuestionType, CourseType, AnswerType, Member, GroupType, GroupMembers, TestResultType };
