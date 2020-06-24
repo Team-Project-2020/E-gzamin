@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const backendURL = 'http://89.70.240.11:8000';
+const backendURL = 'http://0.0.0.0:8000';
 
 export function authHeader() {
   const token = localStorage.getItem('token');
